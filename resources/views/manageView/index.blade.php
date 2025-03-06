@@ -11,6 +11,7 @@
 @auth
 <a href="{{ route('products.create')}}">商品追加</a>
 <a href="{{route('cmart.index')}}" >ショップへ移動する</a>
+<a href="{{route('batch.index')}}">セット用缶バッチ管理</a>
    <div class='card'>
     <div class='card-header bg-primary text-white'>
         <h1 class='mb-0'>商品管理システム</h1>
@@ -25,6 +26,7 @@
                 <th>値段</th>
                 <th>在庫</th>
                 <th>画像</th>
+                <th>レビュー一覧</th>
                 <th>編集</th>
                 <th>削除</th>
             </tr>
@@ -38,6 +40,7 @@
             <td>{{ $product->price }}</td>
             <td>{{ $product->stock}}</td>
             <td><img src="{{ $product->img}}" width="100"></td>
+            <td><a href="{{route('products.adminReview',$product->id)}}">レビューを編集する</a></td>
             <td>
                     <form action="{{ route('products.destroy',$product->id) }}" method="POST">
                         <a href="{{ route('products.edit',$product->id) }}" class='btn btn-primary btn-sm'>編集する</a>

@@ -9,15 +9,7 @@
 <body>
 @extends('layouts.app')
 @section('content')
-
-<div class='dropdown-center'>
-<p>{{$product->name}}</p>
-<p>asa</p>
-    <div>
-        <img src="{{asset($product->img)}}" width="100">
-    </div>
     
-</div>
 @endsection
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>

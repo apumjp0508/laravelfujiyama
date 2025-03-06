@@ -28,6 +28,8 @@
                    </li>
                @else
                    <li class="nav-item mr-5">
+                        <a href="{{route('carts.index')}}">カートを見る</a>
+
                        <a href="{{ route('logout') }}" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
                            ログアウト
                        </a>
@@ -36,6 +38,16 @@
                            @csrf
                        </form>
                    </li>
+                   <li class="nav-item mr-5">
+                    <a class="nav-link" href="{{ route('mypage') }}">
+                        <i class="fas fa-user mr-1"></i><label>マイページ</label>
+                    </a>
+                    </li>
+                   <li class="nav-item mr-5">
+                    <a class="nav-link" href="{{ route('carts.index') }}">
+                        <i class="fas fa-shopping-cart"></i>
+                    </a>
+                    </li>
                @endguest
            </ul>
        </div>

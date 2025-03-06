@@ -14,6 +14,6 @@ class SearchController extends Controller
             $products=null;
         }
         
-        return view('mart.search', compact('products','keyword'));
+        return view('ec.search', compact('products','keyword'));
     }
 }

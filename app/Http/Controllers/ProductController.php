@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Product;
+use App\Models\Review;
 use Illuminate\Support\Facades\Storage; 
 use Illuminate\Http\Request;
 
@@ -17,8 +18,7 @@ class ProductController extends Controller
     {
         $products=Product::all();
 
-
-        return view('products.index' ,compact('products'));
+        return view('manageView.index' ,compact('products'));
     }
 
     /**
@@ -28,7 +28,7 @@ class ProductController extends Controller
      */
     public function create()
     {
-        return view('products.create');
+        return view('manageView.create');
     }
 
     /**
@@ -40,7 +40,7 @@ class ProductController extends Controller
     public function store(Request $request)
     {
         
-$validated = $request->validate([
+        $validated = $request->validate([
             'name' => 'required|string|max:255',
             'description' => 'required|string',
             'category'=>'required|string',
@@ -53,7 +53,6 @@ $validated = $request->validate([
             $validated['img'] = str_replace('public/', 'storage/', $path); // 表示用のパスに変換
         }
         Product::create($validated);
-
 
         return to_route('products.index');
     }
@@ -77,8 +76,8 @@ $validated = $request->validate([
      */
     public function edit(Product $product)
     {
-        
-        return view('products.edit', compact('product'));
+        dump($product);
+        return view('manageView.edit', compact('product'));
     }
 
     /**
@@ -123,5 +122,16 @@ $validated = $request->validate([
     {
         $product->delete();
         return to_route('products.index');
+    }
+
+    public function adminReview(Product $product){
+        $reviews = $product->reviews()->get();
+
+        return view('manageView.review',compact('product','reviews'));
+    }
+
+    public function deleteReview(Review $review){
+        $review->delete();
+        return back();
     }
 }

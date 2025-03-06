@@ -8,9 +8,16 @@ use Illuminate\Http\Request;
 
 class MartController extends Controller
 {
-    public function index(Request $request){
+    public function index(){
+
         $products=Product::all();
-        return view('mart.MartIndex',compact('products'));
+
+        $categories=$products->pluck('category')->toArray();
+        $keywords=[];
+       
+        $keywords=Product::where('category','like',"%セット%")->get();
+    
+        return view('ec.MartIndex',compact('products','categories','keywords'));
     }
 
     
@@ -37,7 +44,9 @@ class MartController extends Controller
     public function show(Product $product)
     {
         
-        return view('mart.show', compact('product'));
+        $reviews = $product->reviews()->get();
+ 
+        return view('ec.show', compact('product', 'reviews'));
     }
 
     /**
@@ -69,5 +78,12 @@ class MartController extends Controller
     public function destroy(Product $product)
     {
         //
+    }
+
+    public function categorySearch($category)
+    {
+        $products=Product::where('category',$category)->get();
+        
+        return view('ec.categorySearch',compact('products','category'));
     }
 }
