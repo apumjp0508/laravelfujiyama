@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers\admin_items;
 use App\Models\Product;
-use App\Models\Batch;
+use App\Models\Badge;
 use Illuminate\Support\Facades\Storage; 
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
@@ -11,13 +11,13 @@ class insert_PinbackButton_Controller extends Controller
 {
     public function index()
     {
-        $batches=Batch::all();
+        $badges=Badge::all();
 
-        return view('batch.index',compact('batches'));
+        return view('badge.index',compact('badges'));
     }
 
     public function create(){
-        return view('batch.create');
+        return view('badge.create');
     }
 
     public function store(Request $request){
@@ -31,14 +31,14 @@ class insert_PinbackButton_Controller extends Controller
             $path = $request->file('img')->store('public/images'); // storage/app/public/images/ に保存
             $validated['img'] = str_replace('public/', 'storage/', $path); // 表示用のパスに変換
         }
-        Batch::create($validated);
+        Badge::create($validated);
 
-        return to_route('batch.index');
+        return to_route('badge.index');
     }
 
-    public function edit(Batch $batch)
+    public function edit(Badge $badge)
     {
-        return view('batch.edit', compact('batch'));
+        return view('badge.edit', compact('badge'));
     }
 
     /**
@@ -48,7 +48,7 @@ class insert_PinbackButton_Controller extends Controller
      * @param  \App\Models\Product  $product
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request,Batch $batch)
+    public function update(Request $request,Badge $badge)
     {
         $validated=$request->validate([
             'name' => 'required|string|max:255',
@@ -59,16 +59,16 @@ class insert_PinbackButton_Controller extends Controller
 
         if ($request->hasFile('img')) {
             // 古い画像があれば削除
-            if ($batch->img) {
+            if ($badge->img) {
                 $oldImagePath = str_replace('storage/', 'public/', $batch->img);
                 Storage::delete($oldImagePath);
             }
             $path = $request->file('img')->store('public/images'); // storage/app/public/images/ に保存
             $validated['img'] = str_replace('public/', 'storage/', $path); // 表示用のパスに変換
         }
-        $batch->update($validated);
+        $badge->update($validated);
 
-        return to_route('batch.index');
+        return to_route('badge.index');
     }
 
     /**
@@ -77,10 +77,10 @@ class insert_PinbackButton_Controller extends Controller
      * @param  \App\Models\Product  $product
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Batch $batch)
+    public function destroy(Badge $badge)
     {
-        $batch->delete();
-        return to_route('batch.index');
+        $badge->delete();
+        return to_route('badge.index');
     }
 
 }

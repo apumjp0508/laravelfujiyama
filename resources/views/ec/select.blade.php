@@ -11,15 +11,15 @@
 
 @section('content')
 <h1>この中から{{$categoryNumber}}つ選んでください</h1>
-    <form action="{{route('select.store',$product->id)}}" method='POST'>
         <div class="row row-cols-1 row-cols-md-3 g-4">
-        @foreach($batches as $batch)
+        @foreach($badges as $badge)
+        <form action="{{route('select.store',$badge->id)}}" method='POST'>
         <div class="col">
             <div class="card h-100 shadow-sm">
-                <img src="{{ asset($batch->img) }}" class="card-img-top product-img" alt="{{ $product->name }}">
+                <img src="{{ asset($badge->img)}}" class="card-img-top product-img" alt="{{ $product->name }}">
                 <div class="card-body">
-                    <h5 class="card-title">{{ $batch->name }}</h5>
-                    <p class="card-text text-truncate" style="max-width: 100%;">{{ $batch->description }}</p>
+                    <h5 class="card-title">{{ $badge->name }}</h5>
+                    <p class="card-text text-truncate" style="max-width: 100%;">{{ $badge->description }}</p>
                         <input type="checkbox" name="select" class='checkbox'>
                 </div>
             </div>

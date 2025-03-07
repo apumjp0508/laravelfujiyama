@@ -84,7 +84,7 @@ Route::controller(UserController::class)->group(function () {
 });
 
 Route::controller(insert_PinbackButton_Controller::class)->group(function(){
-    Route::resource('batch',insert_PinbackButton_Controller::class);
+    Route::resource('badge',insert_PinbackButton_Controller::class);
 });
 
 Route::controller(SelectProductController::class)->group(function(){

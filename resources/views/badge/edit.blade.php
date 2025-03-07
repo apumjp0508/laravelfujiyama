@@ -7,26 +7,26 @@
 </head>
 <body>
 <a href="{{route('products.index')}}">トップへ戻る</a>
-    <form action="{{ route('batch.update',$batch->id)}}" method='POST' enctype="multipart/form-data">
+    <form action="{{ route('badge.update',$badge->id)}}" method='POST' enctype="multipart/form-data">
         @csrf
         @method('PUT')
 
         <div>
             <strong>名前変更</strong>
-            <input type="text" name='name' value='{{$batch->name}}'> 
+            <input type="text" name='name' value='{{$badge->name}}'> 
         </div>
         <div>
             <strong>商品説明変更</strong>
-            <textarea name="description" style="height:150px">{{ $batch->description}}</textarea>
+            <textarea name="description" style="height:150px">{{ $badge->description}}</textarea>
         </div>
         <div>
             <strong>在庫数変更</strong>
-            <input type="number" name='stock' value="{{$batch->stock}}">
+            <input type="number" name='stock' value="{{$badge->stock}}">
         </div>
         <div>
             <strong>画像変更</strong>
             <strong>変更前画像</strong>
-            <img src="{{asset($batch->img)}}" width="100">
+            <img src="{{asset($badge->img)}}" width="100">
             <input type="file" name='img'>
         </div>
         <div>

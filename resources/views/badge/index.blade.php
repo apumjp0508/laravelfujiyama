@@ -7,7 +7,7 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM" crossorigin="anonymous">
 </head>
 <body>
-    <a href="{{route('batch.create')}}">セット用缶バッチを追加する</a>
+    <a href="{{route('badge.create')}}">セット用缶バッチを追加する</a>
     <a href="{{route('products.index')}}">戻る</a>
     <div class='dropdown-center'>
         <table class='table table-bordered'>
@@ -22,15 +22,15 @@
             </tr>
         </div>
         
-        @foreach ($batches as $batch)
+        @foreach ($badges as $badge)
         <tr>
-            <td>{{ $batch->name }}</td>
-            <td>{{ $batch->description }}</td>
-            <td>{{ $batch->stock}}</td>
-            <td><img src="{{ $batch->img}}" width="100"></td>
+            <td>{{ $badge->name }}</td>
+            <td>{{ $badge->description }}</td>
+            <td>{{ $badge->stock}}</td>
+            <td><img src="{{ $badge->img}}" width="100"></td>
             <td>
-                    <form action="{{ route('batch.destroy',$batch->id) }}" method="POST">
-                        <a href="{{ route('batch.edit',$batch->id) }}" class='btn btn-primary btn-sm'>編集する</a>
+                    <form action="{{ route('badge.destroy',$badge->id) }}" method="POST">
+                        <a href="{{ route('badge.edit',$badge->id) }}" class='btn btn-primary btn-sm'>編集する</a>
                         @csrf
                         @method('DELETE')
                         <button type="submit" class="btn btn-danger btn-sm">削除する</button>

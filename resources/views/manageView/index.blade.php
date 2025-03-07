@@ -11,7 +11,7 @@
 @auth
 <a href="{{ route('products.create')}}">商品追加</a>
 <a href="{{route('cmart.index')}}" >ショップへ移動する</a>
-<a href="{{route('batch.index')}}">セット用缶バッチ管理</a>
+<a href="{{route('badge.index')}}">セット用缶バッチ管理</a>
    <div class='card'>
     <div class='card-header bg-primary text-white'>
         <h1 class='mb-0'>商品管理システム</h1>
