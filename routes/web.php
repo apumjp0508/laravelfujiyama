@@ -1,16 +1,16 @@
 <?php
 
 use App\Http\Controllers\ProfileController;
-use App\Http\Controllers\ProductController;
-use App\Http\Controllers\MartController;
-use App\Http\Controllers\CartController;
-use App\Http\Controllers\SearchController;
-use App\Http\Controllers\FavoriteController;
-use App\Http\Controllers\PayController;
-use App\Http\Controllers\ReviewController;
+use App\Http\Controllers\admin_items\insert_items_Controller;
+use App\Http\Controllers\EC\MarketHomeController;
+use App\Http\Controllers\EC\CartController;
+use App\Http\Controllers\EC\SearchController;
+use App\Http\Controllers\EC\FavoriteProductController;
+use App\Http\Controllers\EC\PayController;
+use App\Http\Controllers\EC\ReviewProductController;
 use App\Http\Controllers\UserController;
-use App\Http\Controllers\BatchController;
-use App\Http\Controllers\SelectProductController;
+use App\Http\Controllers\admin_items\insert_PinbackButton_Controller;
+use App\Http\Controllers\EC\SelectProductController;
 use App\Models\Product;
 use Illuminate\Support\Facades\Route;
 
@@ -43,8 +43,8 @@ require __DIR__.'/auth.php';
 Route::get('/', function(){
     return view('manageView.home');
 });
-Route::controller(MartController::class)->group(function () {
-    Route::resource('cmart',MartController::class);
+Route::controller(MarketHomeController::class)->group(function () {
+    Route::resource('cmart',MarketHomeController::class);
     Route::get('/mart/{product}', 'show')->name('mart.show');
     Route::get('/category/{product}','categorySearch')->name('categorySearch');
 });
@@ -52,13 +52,13 @@ Route::controller(MartController::class)->group(function () {
 Route::get('search',[SearchController::class,'search'])->name('search');
 
 
-Route::controller(ProductController::class)->group(function () {
-    Route::resource('products', ProductController::class);
+Route::controller(insert_items_Controller::class)->group(function () {
+    Route::resource('products', insert_items_Controller::class);
     Route::get('products/adminReview/{product}','adminReview')->name('products.adminReview');
     Route::delete('products/review/delete/{review}','deleteReview')->name('products.deleteReview');
 });
 
-Route::controller(FavoriteController::class)->group(function () {
+Route::controller(FavoriteProductController::class)->group(function () {
     Route::post('favorites/{products_id}','store')->name('favorites.store');
     Route::delete('favorites/{products_id}','destroy')->name('favorites.destroy');
 });
@@ -70,7 +70,7 @@ Route::controller(CartController::class)->group(function () {
     Route::post('carts/update', 'update')->name('carts.update');
 });
 
-Route::post('reviews', [ReviewController::class, 'store'])->name('reviews.store');
+Route::post('reviews', [ReviewProductController::class, 'store'])->name('reviews.store');
 
 Route::controller(PayController::class)->group(function(){
     Route::get('users/carts/pay','index')->name('pay.index');
@@ -83,8 +83,8 @@ Route::controller(UserController::class)->group(function () {
     Route::put('users/mypage', 'update')->name('mypage.update');
 });
 
-Route::controller(BatchController::class)->group(function(){
-    Route::resource('batch',BatchController::class);
+Route::controller(insert_PinbackButton_Controller::class)->group(function(){
+    Route::resource('batch',insert_PinbackButton_Controller::class);
 });
 
 Route::controller(SelectProductController::class)->group(function(){

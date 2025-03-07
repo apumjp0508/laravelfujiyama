@@ -1,12 +1,13 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\EC;
 
 use App\Models\Product;
 use Illuminate\Support\Facades\Storage; 
 use Illuminate\Http\Request;
+use App\Http\Controllers\Controller;
 
-class MartController extends Controller
+class MarketHomeController extends Controller
 {
     public function index(){
 

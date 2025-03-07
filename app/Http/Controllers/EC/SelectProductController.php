@@ -1,9 +1,10 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\EC;
 use App\Models\Product;
 use App\Models\Batch;
 use Illuminate\Http\Request;
+use App\Http\Controllers\Controller;
 
 class SelectProductController extends Controller
 {

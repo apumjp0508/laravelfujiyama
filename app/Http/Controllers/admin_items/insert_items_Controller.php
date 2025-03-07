@@ -1,13 +1,15 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\admin_items;
 
 use App\Models\Product;
 use App\Models\Review;
 use Illuminate\Support\Facades\Storage; 
 use Illuminate\Http\Request;
-
-class ProductController extends Controller
+use App\Http\Controllers\Controller;/*extends Controllerというのはココを
+参照しているnamespaceを変えたら要注意
+*/
+class insert_items_Controller extends Controller
 {
     /**
      * Display a listing of the resource.
