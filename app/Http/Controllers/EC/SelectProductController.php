@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\EC;
 use App\Models\Product;
+use App\Models\SelectedBadge;
 use App\Models\Badge;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
@@ -17,10 +18,24 @@ class SelectProductController extends Controller
         return view('ec.select',compact('badges','product','categoryNumber'));
     }
 
-    public function store(Request $request){
-        $selectProduct=$request->select;
+    public function store(Request $request)
+    {
+        // 選択されたバッジIDの配列
+        $selectedBadges = $request->input('select', []); 
+        $productId=$request->input('product_id');
+        // デバッグ用: 選択されたIDを表示
+        dd($productId);
 
-        return view('ec.show');
+        // 選択したバッジを保存する（例: `selected_badges` テーブルに保存）
+        foreach ($selectedBadges as $badgeId) {
+            SelectedBadge::create([
+                'badge_id' => $badgeId,
+                'product_id'=>$productId
+            ]);
+        }
+
+        return redirect()->route('ec.show')->with('success', '選択したバッジを保存しました');
     }
-
 }
+
+

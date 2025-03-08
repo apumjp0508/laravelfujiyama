@@ -11,23 +11,28 @@
 
 @section('content')
 <h1>この中から{{$categoryNumber}}つ選んでください</h1>
-        <div class="row row-cols-1 row-cols-md-3 g-4">
+
+<form action="{{ route('select.store') }}" method="POST">
+    @csrf
+    <div class="row row-cols-1 row-cols-md-3 g-4">
         @foreach($badges as $badge)
-        <form action="{{route('select.store',$badge->id)}}" method='POST'>
-        <div class="col">
-            <div class="card h-100 shadow-sm">
-                <img src="{{ asset($badge->img)}}" class="card-img-top product-img" alt="{{ $product->name }}">
-                <div class="card-body">
-                    <h5 class="card-title">{{ $badge->name }}</h5>
-                    <p class="card-text text-truncate" style="max-width: 100%;">{{ $badge->description }}</p>
-                        <input type="checkbox" name="select" class='checkbox'>
+            <div class="col">
+                <div class="card h-100 shadow-sm">
+                    <img src="{{ asset($badge->img) }}" class="card-img-top product-img" alt="{{ $badge->name }}">
+                    <div class="card-body">
+                        <h5 class="card-title">{{ $badge->name }}</h5>
+                        <p class="card-text text-truncate" style="max-width: 100%;">{{ $badge->description }}</p>
+                        <input type="checkbox" name="select[]" value="{{ $badge->id }}" class="checkbox">
+                        <input type="hidden" name="product_id" value="{{$product->id}}">
+                    </div>
                 </div>
             </div>
-        </div>
         @endforeach
-        <button type='submit'>決定</button>
-    </form>
-</div>
+    </div>
+    
+    <button type="submit" id="submitBtn">決定</button>
+</form>
+
 <script src="{{asset('js/checkbox.js')}}"></script>
 @endsection
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-geWF76RCwLtnZ8qwWowPQNguL3RmwHVBC9FhGdlKrxdiJJigb/j/68SIy3Te4Bkz" crossorigin="anonymous"></script>

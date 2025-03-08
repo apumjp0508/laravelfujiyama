@@ -89,5 +89,5 @@ Route::controller(insert_PinbackButton_Controller::class)->group(function(){
 
 Route::controller(SelectProductController::class)->group(function(){
     Route::get('mart/select/{product}','index')->name('select.index');
-    Route::post('mart/select/decide/{product}','store')->name('select.store');
+    Route::post('mart/select/decide','store')->name('select.store');
 });

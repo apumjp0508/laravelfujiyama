@@ -9,4 +9,9 @@ class Badge extends Model
 {
     protected $fillable = ['name', 'description', 'stock', 'img'];
     use HasFactory;
+
+    public function products()
+    {
+        return $this->belongsToMany(Product::class, 'selectedBadge');
+    }
 }
