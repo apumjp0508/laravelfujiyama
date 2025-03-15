@@ -24,17 +24,18 @@ class SelectProductController extends Controller
         $selectedBadges = $request->input('select', []); 
         $productId=$request->input('product_id');
         // デバッグ用: 選択されたIDを表示
-        dd($productId);
+      
 
         // 選択したバッジを保存する（例: `selected_badges` テーブルに保存）
         foreach ($selectedBadges as $badgeId) {
             SelectedBadge::create([
                 'badge_id' => $badgeId,
-                'product_id'=>$productId
+                'product_id'=>$productId,
+                'user_id'=>$userId
             ]);
         }
 
-        return redirect()->route('ec.show')->with('success', '選択したバッジを保存しました');
+        return redirect()->route('mart.show', ['product' => $productId])->with('success', '選択したバッジを保存しました');
     }
 }
 

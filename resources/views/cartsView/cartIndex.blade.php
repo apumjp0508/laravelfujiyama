@@ -42,7 +42,6 @@
                 @csrf
                 @method('POST')
                 <input type="hidden" id="cart-update-url" value="{{ route('carts.update') }}">
-
                 <input type="hidden" name="product_id" value="{{$product->id}}">
                 <input type="number" name='qty' value="{{$product->qty}}">
             </form>
@@ -52,12 +51,16 @@
            </div>
            <div class="col-md-2">
                 <form id="carts-destroy-form" action="{{route('carts.destroy',$product->id)}}" method="POST">
+                    @foreach($keywords as $keyword)
+                        @if($product->id==$keyword->id)
+                            <a href="{{route('carts.confirmItems',$product->id)}}" class="btn btn-primary w-100">セット内容を見る</a>
+                        @endif
+                    @endforeach
                     @csrf
                     @method('DELETE')
                     <button type='submit'class="btn btn-danger btn-sm">削除する</button>
                 </form>
-            </div>
-           
+            </div>    
            @endforeach
        </div>
 

@@ -5,6 +5,7 @@ namespace App\Http\Controllers\EC;
 use Illuminate\Http\Request;
 use App\Models\Product;
 use Gloudemans\Shoppingcart\Facades\Cart;
+use App\Models\Badge;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
@@ -26,8 +27,16 @@ class CartController extends Controller
         foreach ($cart as $c) {
             $total += $c->qty * $c->price;
         }
+        $products=Product::all();
 
-        return view('cartsView.cartIndex', compact('cart', 'total'));
+        $categories=$products->pluck('category')->toArray();
+        $keywords=[];
+       
+        $keywords=Product::where('category','like',"%セット%")->get();
+
+       
+
+        return view('cartsView.cartIndex', compact('cart', 'total','products','keywords','categories'));
     }
 
     public function store(Request $request)
@@ -103,5 +112,10 @@ class CartController extends Controller
     ]);
     
 }
+
+    public function confirmItems(Product $product){
+        $user=Auth::user();
+        return view('ec.confirmItems');
+    }
 }
 

@@ -39,7 +39,7 @@
             <td>{{ $product->category}}</td>
             <td>{{ $product->price }}</td>
             <td>{{ $product->stock}}</td>
-            <td><img src="{{ $product->img}}" width="100"></td>
+            <td><img src="{{ asset($product->img)}}" width="100"></td>
             <td><a href="{{route('products.adminReview',$product->id)}}">レビューを編集する</a></td>
             <td>
                     <form action="{{ route('products.destroy',$product->id) }}" method="POST">

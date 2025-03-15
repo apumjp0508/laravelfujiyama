@@ -9,9 +9,14 @@ use App\Http\Controllers\EC\FavoriteProductController;
 use App\Http\Controllers\EC\PayController;
 use App\Http\Controllers\EC\ReviewProductController;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\AdminController;
+use App\Http\Controllers\CustomerController;
+use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\admin_items\insert_PinbackButton_Controller;
 use App\Http\Controllers\EC\SelectProductController;
 use App\Models\Product;
+use App\Http\Controllers\Admin\AdminLoginController;
+use App\Http\Controllers\Admin\AdminRegisterController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -27,10 +32,7 @@ use Illuminate\Support\Facades\Route;
 
 
 
-Route::get('/dashboard', function () {
-    $products=Product::all();
-    return view('manageView.index',compact('products'));
-})->middleware(['auth', 'verified'])->name('dashboard');
+
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
@@ -40,9 +42,52 @@ Route::middleware('auth')->group(function () {
 
 require __DIR__.'/auth.php';
 
-Route::get('/', function(){
-    return view('manageView.home');
+//顧客用ログイン画面
+Route::get('/',function(){
+    return view('manageView.custmerLogin');
 });
+
+
+
+Route::middleware(['auth', 'admin'])->group(function () {
+    Route::get('/admin/dashboard', [AdminController::class, 'index'])->name('admin.dashboard');
+});
+
+/*
+|--------------------------------------------------------------------------
+| 管理者用ルーティング
+|--------------------------------------------------------------------------
+*/
+Route::group(['prefix' => 'admin'], function () {
+    // 登録
+    Route::get('register', [AdminRegisterController::class, 'create'])
+        ->name('admin.register');
+
+    Route::post('register', [AdminRegisterController::class, 'store']);
+
+    // ログイン
+    Route::get('login', [AdminLoginController::class, 'showLoginPage'])
+        ->name('admin.login');
+
+    Route::post('login', [AdminLoginController::class, 'login']);
+
+    // 以下の中は認証必須のエンドポイントとなる
+    Route::middleware(['auth:admin'])->group(function () {
+        // ダッシュボード
+        Route::get('dashboard', fn() => view('auth.adminLogin.dashboard'))
+            ->name('admin.dashboard');
+            Route::get('products/index',[insert_items_Controller::class,'index'])->name('products.index');
+            Route::resource('products', insert_items_Controller::class);
+            Route::get('products/adminReview/{product}',[insert_items_Controller::class,'adminReview'])->name('products.adminReview');
+            Route::delete('products/review/delete/{review}',[insert_items_Controller::class,'deleteReview'])->name('products.deleteReview');
+            Route::controller(insert_PinbackButton_Controller::class)->group(function(){
+                Route::resource('badge',insert_PinbackButton_Controller::class);
+            });
+    });
+});
+
+
+//ここから上ログイン関係
 Route::controller(MarketHomeController::class)->group(function () {
     Route::resource('cmart',MarketHomeController::class);
     Route::get('/mart/{product}', 'show')->name('mart.show');
@@ -52,11 +97,7 @@ Route::controller(MarketHomeController::class)->group(function () {
 Route::get('search',[SearchController::class,'search'])->name('search');
 
 
-Route::controller(insert_items_Controller::class)->group(function () {
-    Route::resource('products', insert_items_Controller::class);
-    Route::get('products/adminReview/{product}','adminReview')->name('products.adminReview');
-    Route::delete('products/review/delete/{review}','deleteReview')->name('products.deleteReview');
-});
+
 
 Route::controller(FavoriteProductController::class)->group(function () {
     Route::post('favorites/{products_id}','store')->name('favorites.store');
@@ -68,6 +109,7 @@ Route::controller(CartController::class)->group(function () {
     Route::post('users/carts/add', 'store')->name('carts.store');
     Route::delete('users/carts/{product}','destroy')->name('carts.destroy');
     Route::post('carts/update', 'update')->name('carts.update');
+    Route::get('carts/confirm/{product}','confirmItems')->name('carts.confirmItems');
 });
 
 Route::post('reviews', [ReviewProductController::class, 'store'])->name('reviews.store');
@@ -81,10 +123,6 @@ Route::controller(UserController::class)->group(function () {
     Route::get('users/mypage', 'mypage')->name('mypage');
     Route::get('users/mypage/edit', 'edit')->name('mypage.edit');
     Route::put('users/mypage', 'update')->name('mypage.update');
-});
-
-Route::controller(insert_PinbackButton_Controller::class)->group(function(){
-    Route::resource('badge',insert_PinbackButton_Controller::class);
 });
 
 Route::controller(SelectProductController::class)->group(function(){

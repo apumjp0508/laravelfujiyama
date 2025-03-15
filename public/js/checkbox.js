@@ -5,6 +5,7 @@ document.addEventListener("DOMContentLoaded", function () {
     const maxSelection = 4;
     let checkedCount = document.querySelectorAll(".checkbox:checked").length;
     submitBtn.disabled=true;
+
     checkboxes.forEach(checkbox => {
         checkbox.addEventListener("change", function () {
             checkedCount+=1;
