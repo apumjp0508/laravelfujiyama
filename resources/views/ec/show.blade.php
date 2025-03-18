@@ -28,6 +28,13 @@
                             <input type="hidden" name="name" value="{{ $product->name }}">
                             <input type="hidden" name="price" value="{{ $product->price }}">
                             <input type="hidden" name="weight" value="1"> <!-- 重量が必要なら適切な値を設定 -->
+                            @foreach($keywords as $keyword)
+                            <form method='POST'>
+                                @if($product==$keyword)
+                                    <a href="{{route('confirmItems',$product->id)}}" class="btn btn-primary w-100">詳細を見る</a>
+                                @endif
+                            </form>
+                            @endforeach
                             
                             <label for="quantity">数量</label>
                             <input type="number" id="quantity" name="qty" min="1" value="1" class="form-control w-25">

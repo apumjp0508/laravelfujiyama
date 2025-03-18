@@ -44,10 +44,14 @@ class MarketHomeController extends Controller
      */
     public function show(Product $product)
     {
-        
+        $products=Product::all();
+        $categories=$products->pluck('category')->toArray();
+        $keywords=[];
+       
+        $keywords=Product::where('category','like',"%セット%")->get();
         $reviews = $product->reviews()->get();
  
-        return view('ec.show', compact('product', 'reviews'));
+        return view('ec.show', compact('product', 'reviews','categories','keywords'));
     }
 
     /**

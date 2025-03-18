@@ -11,6 +11,7 @@ use App\Http\Controllers\EC\ReviewProductController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\CustomerController;
+use App\Http\Controllers\EC\ConfirmItemsController;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\admin_items\insert_PinbackButton_Controller;
 use App\Http\Controllers\EC\SelectProductController;
@@ -97,7 +98,7 @@ Route::controller(MarketHomeController::class)->group(function () {
 Route::get('search',[SearchController::class,'search'])->name('search');
 
 
-
+Route::get('confirm',[ConfirmItemsController::class,'confirmItems'])->name('confirmItems');
 
 Route::controller(FavoriteProductController::class)->group(function () {
     Route::post('favorites/{products_id}','store')->name('favorites.store');

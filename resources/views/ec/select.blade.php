@@ -24,6 +24,7 @@
                         <p class="card-text text-truncate" style="max-width: 100%;">{{ $badge->description }}</p>
                         <input type="checkbox" name="select[]" value="{{ $badge->id }}" class="checkbox">
                         <input type="hidden" name="product_id" value="{{$product->id}}">
+                        <input type="hidden" name="user_id" value="{{$user->id}}">
                     </div>
                 </div>
             </div>
