@@ -22,31 +22,29 @@
                     <p class="fw-bold text-danger fs-4">¥{{ number_format($product->price) }}</p>
                     <!-- ボタンエリア -->
                     <div class="d-grid gap-2 mt-3">
-                         <form method="POST" action="{{route('carts.store')}}" class="m-3 align-items-end" id="cartForm">
+                        <form method="POST" action="{{route('carts.store')}}" class="m-3 align-items-end" id="cartForm">
                             @csrf
                             <input type="hidden" name="id" value="{{ $product->id }}">
                             <input type="hidden" name="name" value="{{ $product->name }}">
                             <input type="hidden" name="price" value="{{ $product->price }}">
                             <input type="hidden" name="weight" value="1"> <!-- 重量が必要なら適切な値を設定 -->
                             @foreach($keywords as $keyword)
-                            <form method='POST'>
                                 @if($product==$keyword)
-                                    <a href="{{route('confirmItems',$product->id)}}" class="btn btn-primary w-100">詳細を見る</a>
+                                    <a href="{{route('confirmItems',['product' => $product->id, 'selectedBadges' => $selectedBadges])}}" class="btn btn-primary w-100">詳細を見る</a>
                                 @endif
-                            </form>
                             @endforeach
-                            
+                
                             <label for="quantity">数量</label>
                             <input type="number" id="quantity" name="qty" min="1" value="1" class="form-control w-25">
                             <button type="submit" id='cartBtn'class="btn btn-primary btn-lg">カートに追加する</button>
                         </form>
                         @if(Auth::user()->favorite_products()->where('product_id', $product->id)->exists())
-                                <a href="{{ route('favorites.destroy', $product->id) }}" class="btn samuraimart-favorite-button text-favorite w-100" onclick="event.preventDefault(); document.getElementById('favorites-destroy-form').submit();">
+                                <a href="{{ route('favorites.destroy', ['products_id' => $product->id]) }}" class="btn samuraimart-favorite-button text-favorite w-100" onclick="event.preventDefault(); document.getElementById('favorites-destroy-form').submit();">
                                     <i class="fa fa-heart"></i>
                                     お気に入り解除
                                 </a>
                             @else
-                                <a href="{{ route('favorites.store', $product->id) }}" class="btn samuraimart-favorite-button text-favorite w-100" onclick="event.preventDefault(); document.getElementById('favorites-store-form').submit();">
+                                <a href="{{ route('favorites.store',['products_id' => $product->id]) }}" class="btn samuraimart-favorite-button text-favorite w-100" onclick="event.preventDefault(); document.getElementById('favorites-store-form').submit();">
                                     <i class="fa fa-heart"></i>
                                     お気に入り
                                 </a>

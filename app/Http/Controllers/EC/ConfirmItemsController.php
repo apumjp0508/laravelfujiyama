@@ -10,7 +10,13 @@ use App\Http\Controllers\Controller;
 
 class ConfirmItemsController extends Controller
 {
-    public function confirmItems(Product $product){
-        return view('ec.confirmItems',compact());
-    }
+    public function confirmItems(Request $request, Product $product)
+{
+    $selectedBadgeIds = $request->query('selectedBadges'); // クエリパラメータから取得
+    $badges = Badge::whereIn('id', $selectedBadgeIds)->get(); // 選択されたIDに対応するデータを取得
+
+    return view('ec.confirmItems', compact('product', 'badges'));
 }
+
+    
+    }

@@ -20,7 +20,7 @@ class CartController extends Controller
         
         $cart = Cart::instance(Auth::user()->id)->content();
 
-        
+    
        
         $total = 0;
 
@@ -33,7 +33,7 @@ class CartController extends Controller
         $keywords=[];
        
         $keywords=Product::where('category','like',"%セット%")->get();
-
+       
        
 
         return view('cartsView.cartIndex', compact('cart', 'total','products','keywords','categories'));
@@ -51,12 +51,12 @@ class CartController extends Controller
                 'weight' => $request->weight, 
             ] 
         );
-
         return response()->json([
             'success' => true,
             'message' => 'カートに追加しました！',
             'cart_count' => Cart::instance(Auth::id())->count(), // カート内の商品数を返す
         ]);
+
     }
 
     public function destroy(Request $request,Product $product)

@@ -42,16 +42,19 @@ class MarketHomeController extends Controller
      * @param  \App\Models\Product  $product
      * @return \Illuminate\Http\Response
      */
-    public function show(Product $product)
+    public function show(Request $request,Product $product)
     {
+        $selectedBadges = $request->query('selectedBadges'); // クエリパラメータから取得
+        $userId = $request->query('userId');
+        $setId = $request->query('setId');
         $products=Product::all();
         $categories=$products->pluck('category')->toArray();
         $keywords=[];
        
         $keywords=Product::where('category','like',"%セット%")->get();
         $reviews = $product->reviews()->get();
- 
-        return view('ec.show', compact('product', 'reviews','categories','keywords'));
+        
+        return view('ec.show', compact('userId','setId','selectedBadges','product', 'reviews','categories','keywords'));
     }
 
     /**

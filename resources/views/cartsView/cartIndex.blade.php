@@ -51,11 +51,6 @@
            </div>
            <div class="col-md-2">
                 <form id="carts-destroy-form" action="{{route('carts.destroy',$product->id)}}" method="POST">
-                    @foreach($keywords as $keyword)
-                        @if($product->id==$keyword->id)
-                            <a href="{{route('carts.confirmItems',$product->id)}}" class="btn btn-primary w-100">セット内容を見る</a>
-                        @endif
-                    @endforeach
                     @csrf
                     @method('DELETE')
                     <button type='submit'class="btn btn-danger btn-sm">削除する</button>
