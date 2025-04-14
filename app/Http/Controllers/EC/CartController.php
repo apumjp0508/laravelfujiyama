@@ -19,8 +19,8 @@ class CartController extends Controller
         }
         
         $cart = Cart::instance(Auth::user()->id)->content();
-
-    
+      
+        $userId = Auth::user()->id;
        
         $total = 0;
 
@@ -36,7 +36,7 @@ class CartController extends Controller
        
        
 
-        return view('cartsView.cartIndex', compact('cart', 'total','products','keywords','categories'));
+        return view('cartsView.cartIndex', compact('userId','cart', 'total','products','keywords','categories'));
     }
 
     public function store(Request $request)
@@ -44,13 +44,19 @@ class CartController extends Controller
         Cart::instance(Auth::id())->add(
             [
                 'id' => $request->id, 
-                'img'=>$request->img,
                 'name' => $request->name, 
                 'qty' => $request->qty, 
                 'price' => $request->price, 
                 'weight' => $request->weight, 
+                'options' => [
+                'img'=>$request->img,
+                'setNum'=>$request->setNum,
+                'productType'=>$request->productType,
+                'selectedBadges'=>$request->selectedBadges
+                ]
             ] 
         );
+        
         return response()->json([
             'success' => true,
             'message' => 'カートに追加しました！',
@@ -59,22 +65,7 @@ class CartController extends Controller
 
     }
 
-    public function destroy(Request $request,Product $product)
-    {
-        $cart = Cart::instance(Auth::user()->id)->content();
-       
-        // リクエストから送られてきた商品ID
-        $productId = $product->id;
-        // カートの中から一致する商品を探す
-        $cartItem = $cart->firstWhere('id', $productId);
-    
-        if ($cartItem) {
-            // 見つかったら、その商品だけ削除
-            Cart::instance(Auth::user()->id)->remove($cartItem->rowId);
-        }
-       return to_route('carts.index');
-   }
-
+  
    public function update(Request $request)
 {
     $productId = $request->product_id;
@@ -112,6 +103,15 @@ class CartController extends Controller
     ]);
     
 }
+
+public function destroy($rowId)
+    {
+        
+        Cart::instance(Auth::user()->id);
+
+        Cart::remove($rowId);
+        return back();
+    }
 
     public function confirmItems(Product $product){
         $user=Auth::user();

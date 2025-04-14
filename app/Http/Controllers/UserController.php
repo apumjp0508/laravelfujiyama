@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\User;
+use App\Models\OrderItem;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
 
@@ -15,6 +16,16 @@ class UserController extends Controller
         return view('users.mypage', compact('user'));
     }
 
+    public function ConfirmOrder(){
+        $user_id = Auth::id();
+
+        $orderItems = OrderItem::where('user_id', $user_id)
+        ->with('product') // リレーションも同時に取得！
+        ->get();
+
+        return view('users.confirmOrder',compact('orderItems'));
+    }
+
     /**
      * Show the form for editing the specified resource.
      *
@@ -23,7 +34,6 @@ class UserController extends Controller
      */
     public function edit(User $user)
     {
-        $user = Auth::user();
 
         return view('users.edit', compact('user'));
     }

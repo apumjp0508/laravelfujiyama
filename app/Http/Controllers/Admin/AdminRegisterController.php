@@ -40,6 +40,6 @@ class AdminRegisterController extends Controller
 
         Auth::guard('admin')->login($admin);
 
-        return redirect()->route('products');
+        return redirect()->route('products.index');
     }
 }

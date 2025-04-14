@@ -12,13 +12,11 @@ class MarketHomeController extends Controller
     public function index(){
 
         $products=Product::all();
-
+      
         $categories=$products->pluck('category')->toArray();
-        $keywords=[];
-       
-        $keywords=Product::where('category','like',"%セット%")->get();
-    
-        return view('ec.MartIndex',compact('products','categories','keywords'));
+      
+
+        return view('ec.MartIndex',compact('products','categories'));
     }
 
     

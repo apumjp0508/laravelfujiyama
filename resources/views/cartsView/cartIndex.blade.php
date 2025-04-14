@@ -36,8 +36,14 @@
                 <a href="{{route('mart.show', $product->id)}}">
                    <h3 class="mt-4">{{$product->name}}</h3>
                </a>
-               
            </div>
+           <div class="col-md-3">
+                <a href="{{ route('products.show', $product->id) }}">
+                    @if ($product->options->img)
+                        <img src="{{ asset($product->options->img) }}" class="img-thumbnail">
+                    @endif
+                </a>
+            </div>
            <form method="POST" action="{{route('carts.update')}}" class="m-3 align-items-end" id="cartForm">
                 @csrf
                 @method('POST')
@@ -50,7 +56,7 @@
             <h3 id="total-price-{{$product->id}}" class="w-100 mt-4">￥{{$product->qty * $product->price}}</h3>
            </div>
            <div class="col-md-2">
-                <form id="carts-destroy-form" action="{{route('carts.destroy',$product->id)}}" method="POST">
+                <form id="carts-destroy-form" action="{{route('carts.destroy',$product->rowId)}}" method="POST">
                     @csrf
                     @method('DELETE')
                     <button type='submit'class="btn btn-danger btn-sm">削除する</button>

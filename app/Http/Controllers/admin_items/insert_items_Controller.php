@@ -41,14 +41,18 @@ class insert_items_Controller extends Controller
      */
     public function store(Request $request)
     {
-        
+        $request->merge([
+            'setNum' => $request->input('setNum') === '' ? null : $request->input('setNum'),
+        ]);
         $validated = $request->validate([
             'name' => 'required|string|max:255',
             'description' => 'required|string',
             'category'=>'required|string',
             'price' => 'required|numeric|min:0',
             'stock' => 'required|integer|min:0',
-            'img' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048'
+            'img' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048',
+            'productType'=>'required|string',
+            'setNum'=>'nullable|integer'
         ]);
         if ($request->hasFile('img')) {
             $path = $request->file('img')->store('public/images'); // storage/app/public/images/ に保存
@@ -91,13 +95,18 @@ class insert_items_Controller extends Controller
      */
     public function update(Request $request, Product $product)
     {
+        $request->merge([
+            'setNum' => $request->input('setNum') === '' ? null : $request->input('setNum'),
+        ]);
         $validated=$request->validate([
             'name' => 'required|string|max:255',
             'description' => 'required|string',
             'category'=>'required|string',
             'price' => 'required|numeric|min:0',
             'stock' => 'required|integer|min:0',
-            'img' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048'
+            'img' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048',
+            'productType'=>'required|string',
+            'setNum'=>'nullable|integer'
         ]);
 
         if ($request->hasFile('img')) {

@@ -10,7 +10,7 @@
 @extends('layouts.app')
 
 @section('content')
-<h1>この中から{{$categoryNumber}}つ選んでください</h1>
+<h1>この中から{{$product->setNum}}つ選んでください</h1>
 
 <form action="{{ route('select.store') }}" method="POST">
     @csrf

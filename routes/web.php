@@ -13,8 +13,10 @@ use App\Http\Controllers\AdminController;
 use App\Http\Controllers\CustomerController;
 use App\Http\Controllers\EC\ConfirmItemsController;
 use App\Http\Controllers\Auth\LoginController;
+use App\Http\Controllers\CheckoutController;
 use App\Http\Controllers\admin_items\insert_PinbackButton_Controller;
 use App\Http\Controllers\EC\SelectProductController;
+use App\Http\Controllers\Admin\ConfirmOrderController;
 use App\Models\Product;
 use App\Http\Controllers\Admin\AdminLoginController;
 use App\Http\Controllers\Admin\AdminRegisterController;
@@ -75,14 +77,13 @@ Route::group(['prefix' => 'admin'], function () {
     // 以下の中は認証必須のエンドポイントとなる
     Route::middleware(['auth:admin'])->group(function () {
         // ダッシュボード
-        Route::get('dashboard', fn() => view('auth.adminLogin.dashboard'))
-            ->name('admin.dashboard');
-            Route::get('products/index',[insert_items_Controller::class,'index'])->name('products.index');
-            Route::resource('products', insert_items_Controller::class);
-            Route::get('products/adminReview/{product}',[insert_items_Controller::class,'adminReview'])->name('products.adminReview');
-            Route::delete('products/review/delete/{review}',[insert_items_Controller::class,'deleteReview'])->name('products.deleteReview');
-            Route::controller(insert_PinbackButton_Controller::class)->group(function(){
-                Route::resource('badge',insert_PinbackButton_Controller::class);
+    Route::get('dashboard', fn() => view('auth.adminLogin.dashboard'))->name('admin.dashboard');
+    Route::get('products/index',[insert_items_Controller::class,'index'])->name('products.index');
+    Route::resource('products', insert_items_Controller::class);
+    Route::get('products/adminReview/{product}',[insert_items_Controller::class,'adminReview'])->name('products.adminReview');
+    Route::delete('products/review/delete/{review}',[insert_items_Controller::class,'deleteReview'])->name('products.deleteReview');
+    Route::controller(insert_PinbackButton_Controller::class)->group(function(){
+    Route::resource('badge',insert_PinbackButton_Controller::class);
             });
     });
 });
@@ -95,12 +96,20 @@ Route::controller(MarketHomeController::class)->group(function () {
     Route::get('/category/{product}','categorySearch')->name('categorySearch');
 });
 
+
+Route::controller(ConfirmOrderController::class)->group(function () {
+   Route::get('confirm/order','index')->name('order.index');
+   Route::get('confirm/oreder/ship/{orderItem}','shipping')->name('order.ship');
+   Route::get('confirm/order/shipped','shipped')->name('order.shipped');
+   Route::get('confirm/order/selected/{orderItem}','confirmSet')->name('order.confirmSet');
+});
 Route::get('search',[SearchController::class,'search'])->name('search');
 
 
 Route::get('confirm',[ConfirmItemsController::class,'confirmItems'])->name('confirmItems');
 
 Route::controller(FavoriteProductController::class)->group(function () {
+    Route::get('favorites/show','show')->name('favorites.show');
     Route::post('favorites/{products_id}','store')->name('favorites.store');
     Route::delete('favorites/{products_id}','destroy')->name('favorites.destroy');
 });
@@ -117,11 +126,19 @@ Route::post('reviews', [ReviewProductController::class, 'store'])->name('reviews
 
 Route::controller(PayController::class)->group(function(){
     Route::get('users/carts/pay','index')->name('pay.index');
+    Route::post('users/carts/pay/store','store')->name('pay.store');
+});
+
+Route::controller(CheckoutController::class)->group(function () {
+    Route::get('checkout', 'index')->name('checkout.index');
+    Route::post('checkout', 'store')->name('checkout.store');
+    Route::get('checkout/success', 'success')->name('checkout.success');
 });
 
 
 Route::controller(UserController::class)->group(function () {
     Route::get('users/mypage', 'mypage')->name('mypage');
+    Route::get('users/confirmOrder','ConfirmOrder')->name('confirmOrder');
     Route::get('users/mypage/edit', 'edit')->name('mypage.edit');
     Route::put('users/mypage', 'update')->name('mypage.update');
 });

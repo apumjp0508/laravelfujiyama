@@ -27,7 +27,7 @@
             <td>{{ $badge->name }}</td>
             <td>{{ $badge->description }}</td>
             <td>{{ $badge->stock}}</td>
-            <td><img src="{{ $badge->img}}" width="100"></td>
+            <td><img src="{{ asset($badge->img)}}" width="100"></td>
             <td>
                     <form action="{{ route('badge.destroy',$badge->id) }}" method="POST">
                         <a href="{{ route('badge.edit',$badge->id) }}" class='btn btn-primary btn-sm'>編集する</a>

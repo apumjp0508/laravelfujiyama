@@ -55,6 +55,20 @@
                         <label for="img" class="form-label"><strong>商品画像</strong></label>
                         <input type="file" id="img" name="img" class="form-control">
                     </div>
+                    <div class="mb-3">
+                        <label for="productType" class="form-label"><strong>商品形式</strong></label><br>
+
+                        <input type="radio" id="normal" name="productType" value="normal">
+                        <label for="normal">普通</label><br>
+
+                        <input type="radio" id="setProduct" name="productType" value="set">
+                        <label for="setProduct">セット商品</label>
+                    </div>
+                    <div class="mb-3">
+                        <label for="setNum" class="form-label"><strong>セット商品選択個数（通常商品の場合は選択しなくてよい）</strong></label>
+                        <input type="number" id="stock" name="setNum" class="form-control" placeholder="セット商品選択個数を入力">
+                    </div>
+
                     <div class="text-center">
                         <button type="submit" class="btn btn-success">追加</button>
                     </div>

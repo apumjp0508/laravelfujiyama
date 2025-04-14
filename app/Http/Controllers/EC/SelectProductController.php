@@ -15,15 +15,14 @@ class SelectProductController extends Controller
     public function index(Product $product){
         $badges=Badge::all();
         $user=Auth::user();
-        preg_match_all('/\d+/', $product->category, $matches);
-        $categoryNumbers = $matches[0]; // 数字を格納
-        $categoryNumber=$categoryNumbers[0];
-        return view('ec.select',compact('badges','product','categoryNumber','user'));
+        
+        return view('ec.select',compact('badges','product','user'));
     }
 
     public function store(Request $request)
     {
         // 選択されたバッジIDの配列
+    
         $selectedBadges = $request->input('select', []); 
         $productId=$request->input('product_id');
         $userId=$request->input('user_id');

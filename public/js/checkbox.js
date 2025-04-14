@@ -11,7 +11,7 @@ document.addEventListener("DOMContentLoaded", function () {
             checkedCount+=1;
             
             console.log(checkedCount);
-            if (checkedCount > maxSelection) {
+            if (checkedCount >= maxSelection) {
                 this.checked = false;
                 submitBtn.disabled=false; // これ以上チェックできない
                 return;

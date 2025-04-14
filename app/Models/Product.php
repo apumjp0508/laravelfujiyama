@@ -3,11 +3,12 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use App\Models\OrderItem;
 use Illuminate\Database\Eloquent\Model;
 
 class Product extends Model
 {
-    protected $fillable = ['name', 'description','category', 'price', 'stock', 'img'];
+    protected $fillable = ['name', 'description','category', 'price', 'stock','productType','setNum', 'img'];
     
     use HasFactory;
 
@@ -18,5 +19,10 @@ class Product extends Model
     public function reviews()
     {
         return $this->hasMany(Review::class);
+    }
+
+    public function orderItems()
+    {
+        return $this->hasMany(OrderItem::class, 'product_id', 'id');
     }
 }
