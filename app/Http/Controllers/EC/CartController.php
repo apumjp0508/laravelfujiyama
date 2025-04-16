@@ -74,9 +74,14 @@ class CartController extends Controller
     // カートの該当商品を取得
     $cartItem = Cart::instance(Auth::user()->id)->content()->where('id', $productId)->first();
 
-    
     if ($cartItem) {
-        Cart::instance(Auth::user()->id)->update($cartItem->rowId, $qty);
+        if ($qty == 0) {
+            // 数量が0の場合はカートから削除
+            Cart::instance(Auth::user()->id)->remove($cartItem->rowId);
+        } else {
+            // 数量が0でない場合は更新
+            Cart::instance(Auth::user()->id)->update($cartItem->rowId, $qty);
+        }
     }
 
     
@@ -92,7 +97,8 @@ class CartController extends Controller
     }, 0);
     */
     $cartTotal = Cart::instance(Auth::user()->id)->content()->sum(function ($cartItem) {
-        return $cartItem->price * $cartItem->qty;
+        // qtyが0の場合、その商品は合計金額に含めない
+        return $cartItem->qty > 0 ? $cartItem->price * $cartItem->qty : 0;
     });
     
 

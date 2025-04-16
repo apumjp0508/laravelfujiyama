@@ -1,58 +1,13 @@
-
 $(document).ready(function () {
-    // 初期化：数量が1のときは、−ボタン非表示、削除ボタン表示
-    $('.form-product').each(function () {
-        const $row = $(this);
-        const $form = $row.closest('form');
-        const $input = $form.find('input[name="qty"]');
-        let qty=$input.val();
-        const $decrementBtn = $form.find('.decrement-btn');
-        const $deleteBtn = $row.find('.delete-form .delete-btn');
-        if (qty == 1) {
-            $decrementBtn.hide();
-            $deleteBtn.show();
-        } else {
-            $decrementBtn.show();
-            $deleteBtn.hide();
-        }
-    });
-    $('.number-change').on('click', function () {
-        const $btn = $(this);
-        const $form = $btn.closest('form');
-        const $input = $form.find('input[name="qty"]');
-        const $productIdInput = $form.find('input[name="product_id"]');
-        const updateUrl = $form.find('#cart-update-url').val();
-        const token = $('meta[name="csrf-token"]').attr('content');
-        
+    let updateUrl = $('#cart-update-url').val(); // ここでルートを取得
 
-        let qty = parseInt($input.val(), 10);
-        const productId = $productIdInput.val();
-        
-        if ($btn.data('role') === 'increment') {
-            qty++;
-        } else if ($btn.data('role') === 'decrement' && qty > 0) {
-            qty--;
-        }
-
-        $input.val(qty);
-
-    // ボタン切り替え処理
-        const $decrementBtn = $form.find('.decrement-btn');
-        const $deleteBtn = $form.siblings('.delete-form').find('.delete-btn');
-
-        if (qty === 1) {
-            $decrementBtn.hide();       // − ボタン隠す
-            $deleteBtn.show();          // 削除ボタン表示
-        } else {
-            $decrementBtn.show();
-            $deleteBtn.hide();
-        }
-
-
-        
+    $('number-change').on('click', function () {
+        let qty = $('input[name="qty"]').val();
+        let productId = $('input[name="qty"]').closest('form').find('input[name="product_id"]').val();
+        let token = $('meta[name="csrf-token"]').attr('content');
 
         $.ajax({
-            url: updateUrl,
+            url: updateUrl,  // ここが修正ポイントそのまま最初は文字列を埋め込んでいたからエラーになったらしい
             type: "POST",
             data: {
                 _token: token,
@@ -61,8 +16,13 @@ $(document).ready(function () {
             },
             success: function (response) {
                 if (response.success) {
+                    
                     $('#total-price-' + productId).text('￥' + response.product_total);
                     $('#cart-total').text('￥' + response.cart_total);
+                    if (qty == 0) {
+                        console.log('aaa');
+                    }
+                    
                 }
             },
             error: function (xhr, status, error) {
@@ -91,4 +51,3 @@ $(document).ready(function () {
         });
     });
 });
-

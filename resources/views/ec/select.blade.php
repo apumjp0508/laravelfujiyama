@@ -31,7 +31,7 @@
         @endforeach
     </div>
     
-    <button type="submit" id="submitBtn">決定</button>
+    <button type="submit" id="submitBtn" >決定</button>
 </form>
 
 <script src="{{asset('js/checkbox.js')}}"></script>
