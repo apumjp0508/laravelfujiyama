@@ -25,6 +25,8 @@ class insert_PinbackButton_Controller extends Controller
             'name' => 'required|string|max:255',
             'description' => 'required|string',
             'stock' => 'required|integer|min:0',
+            'widthSize' => 'required|integer|min:0',
+            'heightSize' =>  'required|integer|min:0', 
             'img' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048'
         ]);
         if ($request->hasFile('img')) {
@@ -54,6 +56,8 @@ class insert_PinbackButton_Controller extends Controller
             'name' => 'required|string|max:255',
             'description' => 'required|string',
             'stock' => 'required|integer|min:0',
+            'widthSize' => 'required|integer|min:0',
+            'heightSize' =>  'required|integer|min:0', 
             'img' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048'
         ]);
 

@@ -34,12 +34,14 @@ class SelectProductController extends Controller
                 'set_id'=>$setId,
                 'badge_id' => $badgeId,
                 'product_id'=>$productId,
-                'user_id'=>$userId
+                'user_id'=>$userId,
+                'widthSize'=>$width,
+                'heightSize'=>$height
             ]);
         }
 
         return redirect()->route('mart.show', ['product' => $productId ,'selectedBadges' => $selectedBadges,
-        'userId' => $userId, 'setId' => $setId])->with('success', '選択したバッジを保存しました');
+        'userId' => $userId, 'setId' => $setId, 'widthSize'=>$width, 'height'=>$height])->with('success', '選択したバッジを保存しました');
     }
 }
 

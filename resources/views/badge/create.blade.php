@@ -22,6 +22,14 @@
             <input type="number" id="stock" name="stock" class="form-control" placeholder="在庫数を入力">
         </div>
         <div class="mb-3">
+            <label for="widthSize" class="form-label"><strong>横幅(mm)</strong></label>
+            <input type="number" id="widthSize" name="widthSize" class="form-control" placeholder="横幅を入力">
+        </div>
+        <div class="mb-3">
+            <label for="heightSize" class="form-label"><strong>縦幅(mm)</strong></label>
+            <input type="number" id="heightSize" name="heightSize" class="form-control" placeholder="縦幅を入力">
+        </div>
+        <div class="mb-3">
             <label for="img" class="form-label"><strong>商品画像</strong></label>
             <input type="file" id="img" name="img" class="form-control">
         </div>

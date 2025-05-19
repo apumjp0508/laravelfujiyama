@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Badge extends Model
 {
-    protected $fillable = ['name', 'description', 'stock', 'img'];
+    protected $fillable = ['name', 'description', 'stock', 'img', 'widthSize', 'heightSize'];
     use HasFactory;
 
     public function products()

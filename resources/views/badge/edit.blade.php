@@ -30,6 +30,14 @@
             <input type="file" name='img'>
         </div>
         <div>
+            <strong>横幅変更</strong>
+            <input type="number" name='widhtSize' value="{{$badge->widthSize}}">
+        </div>
+        <div>
+            <strong>縦幅変更</strong>
+            <input type="number" name='heightSize' value="{{$badge->heightSize}}">
+        </div>
+        <div>
             <button type='submit'>変更適用</button>
         </div>
     </form>

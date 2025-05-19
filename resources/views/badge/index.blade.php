@@ -17,6 +17,8 @@
                 <th>商品説明</th>
                 <th>在庫</th>
                 <th>画像</th>
+                <th>横幅</th>
+                <th>縦幅</th>
                 <th>編集</th>
                 <th>削除</th>
             </tr>
@@ -28,6 +30,8 @@
             <td>{{ $badge->description }}</td>
             <td>{{ $badge->stock}}</td>
             <td><img src="{{ asset($badge->img)}}" width="100"></td>
+            <td>{{$badge->widthSize}}</td>
+            <td>{{$badge->heightSize}}</td>
             <td>
                     <form action="{{ route('badge.destroy',$badge->id) }}" method="POST">
                         <a href="{{ route('badge.edit',$badge->id) }}" class='btn btn-primary btn-sm'>編集する</a>

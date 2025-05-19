@@ -22,6 +22,8 @@
                     <div class="card-body">
                         <h5 class="card-title">{{ $badge->name }}</h5>
                         <p class="card-text text-truncate" style="max-width: 100%;">{{ $badge->description }}</p>
+                        <p>{{$badge->widthSize}}</p>
+                        <p>{{$badge->heightSize}}</p>
                         <input type="checkbox" name="select[]" value="{{ $badge->id }}" class="checkbox">
                         <input type="hidden" name="product_id" value="{{$product->id}}">
                         <input type="hidden" name="user_id" value="{{$user->id}}">
