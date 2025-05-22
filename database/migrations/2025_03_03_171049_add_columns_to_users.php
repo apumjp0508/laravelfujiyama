@@ -14,11 +14,16 @@ return new class extends Migration
     public function up()
     {
         Schema::table('users', function (Blueprint $table) {
-            //
-            $table->string('postal_code')->default('');
-            $table->text('address');
-            $table->string('phone')->default('');
-        });
+    if (!Schema::hasColumn('users', 'address')) {
+        $table->text('address')->default('');
+    }
+    if (!Schema::hasColumn('users', 'postal_code')) {
+        $table->string('postal_code')->default('');
+    }
+    if (!Schema::hasColumn('users', 'phone')) {
+        $table->string('phone')->default('');
+    }
+});
     }
 
     /**
