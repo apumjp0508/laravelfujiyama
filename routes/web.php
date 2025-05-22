@@ -78,7 +78,6 @@ Route::group(['prefix' => 'admin'], function () {
     Route::middleware(['auth:admin'])->group(function () {
         // ダッシュボード
     Route::get('dashboard', fn() => view('auth.adminLogin.dashboard'))->name('admin.dashboard');
-    Route::get('products/index',[insert_items_Controller::class,'index'])->name('products.index');
     Route::resource('products', insert_items_Controller::class);
     Route::get('products/adminReview/{product}',[insert_items_Controller::class,'adminReview'])->name('products.adminReview');
     Route::delete('products/review/delete/{review}',[insert_items_Controller::class,'deleteReview'])->name('products.deleteReview');
