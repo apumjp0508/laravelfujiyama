@@ -9,7 +9,7 @@
 <body>
 
 @auth
-<a href="{{ route('products.create')}}">商品追加</a>
+<a href="{{ route('admin.products.create')}}">商品追加</a>
 <a href="{{route('cmart.index')}}" >ショップへ移動する</a>
 <a href="{{route('badge.index')}}">セット用缶バッチ管理</a>
    <div class='card'>
@@ -51,8 +51,8 @@
             <td><img src="{{ asset($product->img)}}" width="100"></td>
             <td><a href="{{route('products.adminReview',$product->id)}}">レビューを編集する</a></td>
             <td>
-                    <form action="{{ route('products.destroy',$product->id) }}" method="POST">
-                        <a href="{{ route('products.edit',$product->id) }}" class='btn btn-primary btn-sm'>編集する</a>
+                    <form action="{{ route('admin.products.destroy',$product->id) }}" method="POST">
+                        <a href="{{ route('admin.products.edit',$product->id) }}" class='btn btn-primary btn-sm'>編集する</a>
                         @csrf
                         @method('DELETE')
                         <button type="submit" class="btn btn-danger btn-sm">削除する</button>
