@@ -8,7 +8,7 @@
 </head>
 <body>
     <a href="{{route('badge.create')}}">セット用缶バッチを追加する</a>
-    <a href="{{route('products.index')}}">戻る</a>
+    <a href="{{route('admin.products.index')}}">戻る</a>
     <div class='dropdown-center'>
         <table class='table table-bordered'>
         <div  class='bg-dark-subtle'>

@@ -6,7 +6,7 @@
     <title>Document</title>
 </head>
 <body>
-<a href="{{route('products.index')}}">トップへ戻る</a>
+<a href="{{route('admin.products.index')}}">トップへ戻る</a>
     <form action="{{ route('badge.update',$badge->id)}}" method='POST' enctype="multipart/form-data">
         @csrf
         @method('PUT')

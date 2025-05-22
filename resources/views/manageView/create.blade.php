@@ -21,7 +21,7 @@
         @endif
 
         <div class="text-end mb-3">
-            <a href="{{ route('products.index') }}" class="btn btn-secondary">戻る</a>
+            <a href="{{ route('admin.products.index') }}" class="btn btn-secondary">戻る</a>
         </div>
 
         <div class="card">
@@ -29,7 +29,7 @@
                 <h5 class="mb-0">商品追加</h5>
             </div>
             <div class="card-body">
-                <form action="{{ route('products.store') }}" method="POST" enctype="multipart/form-data">
+                <form action="{{ route('admin.products.store') }}" method="POST" enctype="multipart/form-data">
                     @csrf
                     <div class="mb-3">
                         <label for="name" class="form-label"><strong>商品名</strong></label>

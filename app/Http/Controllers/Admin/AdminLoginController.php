@@ -22,7 +22,7 @@ class AdminLoginController extends Controller
         $credentials = $request->only(['email', 'password']);
 
         if (Auth::guard('admin')->attempt($credentials)) {
-            return redirect()->route('products.index')->with([
+            return redirect()->route('admin.products.index')->with([
                 'login_msg' => 'ログインしました。',
             ]);
         }

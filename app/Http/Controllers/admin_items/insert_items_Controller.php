@@ -60,7 +60,7 @@ class insert_items_Controller extends Controller
         }
         Product::create($validated);
 
-        return to_route('products.index');
+        return to_route('admin.products.index');
     }
 
     /**
@@ -120,7 +120,7 @@ class insert_items_Controller extends Controller
         }
         $product->update($validated);
 
-        return to_route('products.index');
+        return to_route('admin.products.index');
     }
 
     /**
@@ -132,7 +132,7 @@ class insert_items_Controller extends Controller
     public function destroy(Product $product)
     {
         $product->delete();
-        return to_route('products.index');
+        return to_route('admin.products.index');
     }
 
     public function adminReview(Product $product){

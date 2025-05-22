@@ -38,7 +38,7 @@
                </a>
            </div>
            <div class="col-md-3" id="cart-row-{{ $product->id }}">
-                <a href="{{ route('products.show', $product->id) }}">
+                <a href="{{ route('mart.show', $product->id) }}">
                     @if ($product->options->img)
                         <img src="{{ asset($product->options->img) }}" class="img-thumbnail">
                     @endif
