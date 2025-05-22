@@ -1,38 +1,31 @@
-FROM ubuntu:22.04
+# PHP公式の軽量なFPMベースイメージを使用
+FROM php:8.2-fpm
 
-# タイムゾーン設定と必要なパッケージのインストール
-ENV TZ=UTC
+# 必要なPHP拡張とツールをインストール
 RUN apt-get update && apt-get install -y \
-    php \
-    php-cli \
-    php-mbstring \
-    php-xml \
-    php-bcmath \
-    php-curl \
-    php-mysql \
-    php-zip \
-    php-tokenizer \
-    php-fileinfo \
-    curl \
-    unzip \
     git \
-    zip \
-    && apt-get clean
+    unzip \
+    curl \
+    libzip-dev \
+    libonig-dev \
+    libpng-dev \
+    libxml2-dev \
+    libjpeg-dev \
+    libfreetype6-dev \
+    && docker-php-ext-install pdo_mysql mbstring zip bcmath xml
 
-# Composer をインストール
+# Composerのインストール
 RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
 
-# 作業ディレクトリを作成
+# 作業ディレクトリ
 WORKDIR /var/www/html
 
-# Laravel プロジェクトファイルをコピー（docker-compose側でマウントするなら不要）
-COPY . .
+# ホストとマウントするためCOPYは不要
+# COPY . .
 
-# Composer install（初回ビルド時のみ。以降はボリューム上でやる方が良い）
-RUN composer install
+# ポート（PHP-FPMは直接ポート使わないのでこれは任意）
+EXPOSE 9000
 
-# Laravel のポート
-EXPOSE 8000
+# CMDはFPMが起動するようになっているので不要だが明示するならこちら
+CMD ["php-fpm"]
 
-# 起動時コマンド（任意：ここではLaravel開発サーバを起動）
-CMD ["php", "artisan", "serve", "--host=0.0.0.0", "--port=8000"]
