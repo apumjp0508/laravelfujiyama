@@ -79,7 +79,7 @@ Route::group(['prefix' => 'admin'], function () {
         // ダッシュボード
     Route::get('dashboard', fn() => view('auth.adminLogin.dashboard'))->name('admin.dashboard');
     Route::resource('products', insert_items_Controller::class)->names([
-    'index' => 'admin.products.index',
+    'index' => 'admin.products.list',
     'create' => 'admin.products.create',
     'store' => 'admin.products.store',
     'show' => 'admin.products.show',

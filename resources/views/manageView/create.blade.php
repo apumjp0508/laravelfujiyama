@@ -21,7 +21,7 @@
         @endif
 
         <div class="text-end mb-3">
-            <a href="{{ route('admin.products.index') }}" class="btn btn-secondary">戻る</a>
+            <a href="{{ route('admin.products.list') }}" class="btn btn-secondary">戻る</a>
         </div>
 
         <div class="card">
