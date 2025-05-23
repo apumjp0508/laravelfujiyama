@@ -78,9 +78,15 @@ Route::group(['prefix' => 'admin'], function () {
     Route::middleware(['auth:admin'])->group(function () {
         // ダッシュボード
     Route::get('dashboard', fn() => view('auth.adminLogin.dashboard'))->name('admin.dashboard');
-    Route::resource('products', insert_items_Controller::class, [
-        'as' => 'admin'  // ★ これを追加することで `admin.products.index` などの名前が付く
-    ]);
+    Route::resource('products', insert_items_Controller::class)->names([
+    'index' => 'admin.products.index',
+    'create' => 'admin.products.create',
+    'store' => 'admin.products.store',
+    'show' => 'admin.products.show',
+    'edit' => 'admin.products.edit',
+    'update' => 'admin.products.update',
+    'destroy' => 'admin.products.destroy',
+]);
     Route::get('products/adminReview/{product}',[insert_items_Controller::class,'adminReview'])->name('products.adminReview');
     Route::delete('products/review/delete/{review}',[insert_items_Controller::class,'deleteReview'])->name('products.deleteReview');
     Route::controller(insert_PinbackButton_Controller::class)->group(function(){
