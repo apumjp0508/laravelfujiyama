@@ -26,6 +26,6 @@ WORKDIR /var/www/html
 # ポート（PHP-FPMは直接ポート使わないのでこれは任意）
 EXPOSE 9000
 
-# CMDはFPMが起動するようになっているので不要だが明示するならこちら
-CMD ["php-fpm"]
+# CMDをフォアグラウンドモードで起動（-F）
+CMD ["php-fpm", "-F"]
 
