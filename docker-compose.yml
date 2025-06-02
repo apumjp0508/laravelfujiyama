@@ -1,6 +1,6 @@
 services:
   app:
-    build: .
+    build: . #カレントディレクトリにあるdockerfileをymlファイルと同時にビルドする
     container_name: laravel_app
     working_dir: /var/www/html
     volumes:

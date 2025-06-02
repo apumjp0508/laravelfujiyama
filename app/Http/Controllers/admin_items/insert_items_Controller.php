@@ -55,8 +55,8 @@ class insert_items_Controller extends Controller
             'setNum'=>'nullable|integer'
         ]);
         if ($request->hasFile('img')) {
-            $path = $request->file('img')->store('public/images'); // storage/app/public/images/ に保存
-            $validated['img'] = str_replace('public/', 'storage/', $path); // 表示用のパスに変換
+            $path = $request->file('img')->store('images', 's3');
+            $validated['img'] = Storage::disk('s3')->url($path);
         }
         Product::create($validated);
 
@@ -112,11 +112,14 @@ class insert_items_Controller extends Controller
         if ($request->hasFile('img')) {
             // 古い画像があれば削除
             if ($product->img) {
-                $oldImagePath = str_replace('storage/', 'public/', $product->img);
-                Storage::delete($oldImagePath);
+                $parsedUrl = parse_url($product->img);
+                if (isset($parsedUrl['path'])) {
+                    $s3Path = ltrim($parsedUrl['path'], '/'); // s3パスからバケット名を除いた部分
+                    Storage::disk('s3')->delete($s3Path);
+                }
             }
-            $path = $request->file('img')->store('public/images'); // storage/app/public/images/ に保存
-            $validated['img'] = str_replace('public/', 'storage/', $path); // 表示用のパスに変換
+            $path = $request->file('img')->store('images', 's3'); // storage/app/public/images/ に保存
+            $validated['img'] = Storage::disk('s3')->url($path);
         }
         $product->update($validated);
 
