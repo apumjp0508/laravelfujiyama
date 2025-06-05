@@ -12,4 +12,5 @@
 また、このECサイトはプログラミングスクール侍のlaravelでAmazon風アプリを作ろうを参考にしています。<br/>
 友人の方から、缶バッチをセット形式で販売したいため、数ある缶バッチの中から、4つ選んで購入できるようにしてほしいとの要望があり、それを実装しました。
 # ECサイト　画面遷移図
-![]("C:\xamppakihisatengshan\htdocs\laravel-coolmart\storage\app\public\images\スクリーンショット 2025-06-05 205829.png")
+![スクリーンショット 2025-06-05 205829](https://github.com/user-attachments/assets/9c399c16-03a1-4afc-9d9a-de771f653d27)
+
