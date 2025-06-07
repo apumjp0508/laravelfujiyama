@@ -52,7 +52,7 @@ Get-ChildItem "your-project-path" -Recurse |
 <br/>
 リレーションシップについてや外部キーについて実際に実装することでより詳しく学ぶことができました<br/>
 # 本番環境図　
-![スクリーンショット 2025-06-06 001343](https://github.com/user-attachments/assets/9fee2d12-45b3-46c8-a0ed-508eb1e10ce4)
+![スクリーンショット 2025-06-06 001343](https://github.com/user-attachments/assets/9fee2d12-45b3-46c8-a0ed-508eb1e10ce4)<br/>
 クラウドからデプロイしてみたかったので一番一般的であろうAWSでデプロイを試みました。<br/>
 
 
