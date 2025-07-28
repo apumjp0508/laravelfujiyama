@@ -2,30 +2,70 @@
 
 namespace App\Http\Controllers\EC;
 
-use Illuminate\Http\Request;
-use App\Models\Product;
-use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\Controller;
-
+use App\Services\FavoriteService;
+use App\Traits\ErrorHandlingTrait;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class FavoriteProductController extends Controller
 {
-    public function show(){
-        $products = Auth::user()->favorite_products()->get();
-        return view('ec.favorite',compact('products'));
+    use ErrorHandlingTrait;
+
+    protected $favoriteService;
+
+    public function __construct(FavoriteService $favoriteService)
+    {
+        $this->favoriteService = $favoriteService;
     }
 
-    public function store($product_id)
+    public function show()
     {
-        Auth::user()->favorite_products()->attach($product_id);
-
-        return back();
+        return $this->executeControllerWithErrorHandling(
+            function() {
+                $userId = Auth::user()->id;
+                $result = $this->favoriteService->getUserFavorites($userId);
+                
+                return view('ec.favorite', [
+                    'products' => $result['products']
+                ]);
+            },
+            'favorites_display',
+            ['user_id' => Auth::user()->id ?? null]
+        );
     }
 
-    public function destroy($product_id)
+    public function store($productId)
     {
-        Auth::user()->favorite_products()->detach($product_id);
+        return $this->executeControllerWithErrorHandling(
+            function() use ($productId) {
+                $userId = Auth::user()->id;
+                $result = $this->favoriteService->addToFavorites($userId, $productId);
+                
+                return back()->with('success', $result['message']);
+            },
+            'add_to_favorites',
+            [
+                'user_id' => Auth::user()->id ?? null,
+                'product_id' => $productId
+            ]
+        );
+    }
 
-        return back();
+    public function destroy($productId)
+    {
+        return $this->executeControllerWithErrorHandling(
+            function() use ($productId) {
+                $userId = Auth::user()->id;
+                $result = $this->favoriteService->removeFromFavorites($userId, $productId);
+                
+                return back()->with('success', $result['message']);
+            },
+            'remove_from_favorites',
+            [
+                'user_id' => Auth::user()->id ?? null,
+                'product_id' => $productId
+            ]
+        );
     }
 }

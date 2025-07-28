@@ -2,94 +2,85 @@
 
 namespace App\Http\Controllers\EC;
 
-use App\Models\Product;
-use Illuminate\Support\Facades\Storage; 
-use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use App\Services\ProductDisplayService;
+use App\Traits\ErrorHandlingTrait;
+use Illuminate\Http\Request;
 
 class MarketHomeController extends Controller
 {
-    public function index(){
+    use ErrorHandlingTrait;
 
-        $products=Product::all();
-      
-        $categories=$products->pluck('category')->toArray();
-      
+    protected $productDisplayService;
 
-        return view('ec.MartIndex',compact('products','categories'));
+    public function __construct(ProductDisplayService $productDisplayService)
+    {
+        $this->productDisplayService = $productDisplayService;
     }
 
-    
-
-    
-
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(Request $request)
+    public function index()
     {
-        //
+        return $this->executeControllerWithErrorHandling(
+            function() {
+                $result = $this->productDisplayService->getAllProducts();
+                
+                return view('ec.MartIndex', [
+                    'products' => $result['products'],
+                    'categories' => $result['categories']
+                ]);
+            },
+            'products_display'
+        );
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\Models\Product  $product
-     * @return \Illuminate\Http\Response
-     */
-    public function show(Request $request,Product $product)
+    public function show(Request $request, $productId)
     {
-        $selectedBadges = $request->query('selectedBadges'); // クエリパラメータから取得
-        $userId = $request->query('userId');
-        $setId = $request->query('setId');
-        $products=Product::all();
-        $categories=$products->pluck('category')->toArray();
-        $keywords=[];
-       
-        $keywords=Product::where('category','like',"%セット%")->get();
-        $reviews = $product->reviews()->get();
-        
-        return view('ec.show', compact('userId','setId','selectedBadges','product', 'reviews','categories','keywords'));
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Models\Product  $product
-     * @return \Illuminate\Http\Response
-     */
-    
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\User  $user
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request,Product $product )
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  \App\Models\User  $user
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy(Product $product)
-    {
-        //
+        return $this->executeControllerWithErrorHandling(
+            function() use ($request, $productId) {
+                $selectedBadges = $request->query('selectedBadges');
+                $userId = $request->query('userId');
+                $setId = $request->query('setId');
+                
+                $result = $this->productDisplayService->getProductDetails(
+                    $productId, 
+                    $selectedBadges, 
+                    $userId, 
+                    $setId
+                );
+                
+                return view('ec.show', [
+                    'product' => $result['product'],
+                    'products' => $result['products'],
+                    'categories' => $result['categories'],
+                    'keywords' => $result['keywords'],
+                    'reviews' => $result['reviews'],
+                    'selectedBadges' => $result['selectedBadges'],
+                    'userId' => $result['userId'],
+                    'setId' => $result['setId']
+                ]);
+            },
+            'product_details_display',
+            [
+                'product_id' => $productId,
+                'selected_badges' => $request->query('selectedBadges'),
+                'user_id' => $request->query('userId')
+            ]
+        );
     }
 
     public function categorySearch($category)
     {
-        $products=Product::where('category',$category)->get();
-        
-        return view('ec.categorySearch',compact('products','category'));
+        return $this->executeControllerWithErrorHandling(
+            function() use ($category) {
+                $result = $this->productDisplayService->getProductsByCategory($category);
+                
+                return view('ec.categorySearch', [
+                    'products' => $result['products'],
+                    'category' => $result['category']
+                ]);
+            },
+            'category_products_display',
+            ['category' => $category]
+        );
     }
 }

@@ -2,126 +2,99 @@
 
 namespace App\Http\Controllers\EC;
 
-use Illuminate\Http\Request;
-use App\Models\Product;
-use Gloudemans\Shoppingcart\Facades\Cart;
-use App\Models\Badge;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Cart\AddToCartRequest;
+use App\Http\Requests\Cart\UpdateCartItemRequest;
+use App\Services\CartService;
+use App\Traits\ErrorHandlingTrait;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class CartController extends Controller
 {
+    use ErrorHandlingTrait;
+
+    protected $cartService;
+
+    public function __construct(CartService $cartService)
+    {
+        $this->cartService = $cartService;
+    }
+
     public function index()
     {
-        if (!Auth::check()) {
-            return redirect()->route('login'); // ログインしていなければログインページへリダイレクト
-        }
-        
-        $cart = Cart::instance(Auth::user()->id)->content();
-      
-        $userId = Auth::user()->id;
-       
-        $total = 0;
-
-        foreach ($cart as $c) {
-            $total += $c->qty * $c->price;
-        }
-        $products=Product::all();
-
-        $categories=$products->pluck('category')->toArray();
-        $keywords=[];
-       
-        $keywords=Product::where('category','like',"%セット%")->get();
-       
-       
-
-        return view('cartsView.cartIndex', compact('userId','cart', 'total','products','keywords','categories'));
-    }
-
-    public function store(Request $request)
-    {
-        Cart::instance(Auth::id())->add(
-            [
-                'id' => $request->id, 
-                'name' => $request->name, 
-                'qty' => $request->qty, 
-                'price' => $request->price, 
-                'weight' => $request->weight, 
-                'options' => [
-                'img'=>$request->img,
-                'setNum'=>$request->setNum,
-                'productType'=>$request->productType,
-                'selectedBadges'=>$request->selectedBadges
-                ]
-            ] 
+        return $this->executeControllerWithErrorHandling(
+            function() {
+                $userId = Auth::user()->id;
+                $data = $this->cartService->getCartViewData($userId);
+                return view('cartsView.cartIndex', $data);
+            },
+            'cart_page_display',
+            ['user_id' => Auth::user()->id ?? null]
         );
-        
-        return response()->json([
-            'success' => true,
-            'message' => 'カートに追加しました！',
-            'cart_count' => Cart::instance(Auth::id())->count(), // カート内の商品数を返す
-        ]);
-
     }
 
-  
-   public function update(Request $request)
-{
-    $productId = $request->product_id;
-    $qty = $request->qty;
-
-    // カートの該当商品を取得
-    $cartItem = Cart::instance(Auth::user()->id)->content()->where('id', $productId)->first();
-
-    if ($cartItem) {
-        if ($qty == 0) {
-            // 数量が0の場合はカートから削除
-            Cart::instance(Auth::user()->id)->remove($cartItem->rowId);
-        } else {
-            // 数量が0でない場合は更新
-            Cart::instance(Auth::user()->id)->update($cartItem->rowId, $qty);
-        }
-    }
-
-    
-    // 商品の新しい合計金額
-    $product = Product::find($productId);
-    $productTotal = $product->price * $qty;
-
-   
-    // カート全体の合計金額を再計算
-    /*失敗例::これはクエリビルだではない、Gloudemans\Shoppingcart ライブラリ のメソッドdearu 
-    $cartTotal = Cart::content()->reduce(function ($total, $cartItem) {
-        return $total + ($cartItem->price * $cartItem->qty);
-    }, 0);
-    */
-    $cartTotal = Cart::instance(Auth::user()->id)->content()->sum(function ($cartItem) {
-        // qtyが0の場合、その商品は合計金額に含めない
-        return $cartItem->qty > 0 ? $cartItem->price * $cartItem->qty : 0;
-    });
-    
-
-    return response()->json([
-        'success' => true,
-        'product_total' => $productTotal,
-        'cart_total' => $cartTotal
-    ]);
-    
-}
-
-public function destroy($rowId)
+    public function store(AddToCartRequest $request)
     {
-        
-        Cart::instance(Auth::user()->id);
-
-        Cart::remove($rowId);
-        return back();
+        return $this->executeControllerWithErrorHandling(
+            function() use ($request) {
+                $userId = Auth::user()->id;
+                $validated = $request->validated();
+                $result = $this->cartService->addToCart($userId, $validated);
+                return response()->json($result);
+            },
+            'add_to_cart',
+            [
+                'user_id' => Auth::user()->id ?? null,
+                'validated_data' => $request->validated()
+            ]
+        );
     }
 
-    public function confirmItems(Product $product){
-        $user=Auth::user();
-        return view('ec.confirmItems');
+    public function update(UpdateCartItemRequest $request, $productId)
+    {
+        return $this->executeControllerWithErrorHandling(
+            function() use ($request, $productId) {
+                $userId = Auth::user()->id;
+                $qty = $request->validated()['qty'];
+                $result = $this->cartService->updateCartItem($userId, $productId, $qty);
+                return response()->json($result);
+            },
+            'cart_item_update',
+            [
+                'user_id' => Auth::user()->id ?? null,
+                'product_id' => $productId,
+                'qty' => $request->validated()['qty'] ?? null
+            ]
+        );
+    }
+
+    public function destroy($rowId)
+    {
+        return $this->executeControllerWithErrorHandling(
+            function() use ($rowId) {
+                $userId = Auth::user()->id;
+                $this->cartService->removeCartItem($userId, $rowId);
+                return redirect()->back()->with('success', '商品をカートから削除しました。');
+            },
+            'cart_item_removal',
+            [
+                'user_id' => Auth::user()->id ?? null,
+                'row_id' => $rowId
+            ]
+        );
+    }
+
+    public function confirmItems()
+    {
+        return $this->executeControllerWithErrorHandling(
+            function() {
+                $userId = Auth::user()->id;
+                $data = $this->cartService->getCartViewData($userId);
+                return view('ec.confirmItems', $data);
+            },
+            'cart_page_display',
+            ['user_id' => Auth::user()->id ?? null]
+        );
     }
 }
-

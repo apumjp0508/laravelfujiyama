@@ -3,24 +3,34 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
-use App\Models\User;
-use App\Providers\RouteServiceProvider;
-use Illuminate\Auth\Events\Registered;
+use App\Http\Requests\Auth\User\RegisterUserRequest;
+use App\Services\UserAuthService;
+use App\Traits\ErrorHandlingTrait;
 use Illuminate\Http\RedirectResponse;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Hash;
-use Illuminate\Validation\Rules;
 use Illuminate\View\View;
 
 class RegisteredUserController extends Controller
 {
+    use ErrorHandlingTrait;
+
+    protected $userAuthService;
+
+    public function __construct(UserAuthService $userAuthService)
+    {
+        $this->userAuthService = $userAuthService;
+    }
+
     /**
      * Display the registration view.
      */
     public function create(): View
     {
-        return view('auth.userLogin.register');
+        return $this->executeControllerWithErrorHandling(
+            function() {
+                return view('auth.userLogin.register');
+            },
+            'user_registration_page_display'
+        );
     }
 
     /**
@@ -28,30 +38,20 @@ class RegisteredUserController extends Controller
      *
      * @throws \Illuminate\Validation\ValidationException
      */
-    public function store(Request $request): RedirectResponse
+    public function store(RegisterUserRequest $request): RedirectResponse
     {
-        $request->validate([
-            'name' => ['required', 'string', 'max:255'],
-            'email' => ['required', 'string', 'email', 'max:255', 'unique:'.User::class],
-            'postal_code' => ['required', 'string', 'max:20'],
-            'address' => ['required', 'string', 'max:255'],
-            'phone' => ['required', 'string', 'max:20'],
-            'password' => ['required', 'confirmed', Rules\Password::defaults()],
-        ]);
-
-        $user = User::create([
-            'name' => $request->name,
-            'email' => $request->email,
-            'postal_code' => $request->postal_code,
-            'address' => $request->address,
-            'phone' => $request->phone,
-            'password' => Hash::make($request->password),
-        ]);
-
-        event(new Registered($user));
-
-        Auth::login($user);
-
-        return redirect('/verify-email');
+        return $this->executeControllerWithErrorHandlingAndInput(
+            function() use ($request) {
+                $validated = $request->validated();
+                $result = $this->userAuthService->register($validated);
+                
+                return redirect($result['redirect']);
+            },
+            'user_registration',
+            [
+                'name' => $request->validated()['name'] ?? null,
+                'email' => $request->validated()['email'] ?? null
+            ]
+        );
     }
 }

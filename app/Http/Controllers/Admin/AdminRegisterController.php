@@ -3,43 +3,49 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
-use App\Models\Admin;
-use App\Providers\RouteServiceProvider;
-use Illuminate\Auth\Events\Registered;
+use App\Http\Requests\Auth\Admin\AdminRegisterRequest;
+use App\Services\AdminAuthService;
+use App\Traits\ErrorHandlingTrait;
 use Illuminate\Http\RedirectResponse;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Hash;
-use Illuminate\Validation\Rules;
 use Illuminate\View\View;
 
 class AdminRegisterController extends Controller
 {
+    use ErrorHandlingTrait;
+
+    protected $adminAuthService;
+
+    public function __construct(AdminAuthService $adminAuthService)
+    {
+        $this->adminAuthService = $adminAuthService;
+    }
+
     // 登録画面呼び出し
     public function create(): View
     {
-        return view('auth.adminLogin.register');
+        return $this->executeControllerWithErrorHandling(
+            function() {
+                return view('auth.adminLogin.register');
+            },
+            'admin_registration_page_display'
+        );
     }
 
     // 登録実行
-    public function store(Request $request): RedirectResponse
+    public function store(AdminRegisterRequest $request): RedirectResponse
     {
-        $request->validate([
-            'name' => ['required', 'string', 'max:255'],
-            'email' => ['required', 'string', 'email', 'max:255', 'unique:'.Admin::class],
-            'password' => ['required', 'confirmed', Rules\Password::defaults()],
-        ]);
-
-        $admin = Admin::create([
-            'name' => $request->name,
-            'email' => $request->email,
-            'password' => Hash::make($request->password),
-        ]);
-
-        event(new Registered($admin));
-
-        Auth::guard('admin')->login($admin);
-
-        return redirect()->route('admin.products.list');
+        return $this->executeControllerWithErrorHandlingAndInput(
+            function() use ($request) {
+                $validated = $request->validated();
+                $result = $this->adminAuthService->register($validated);
+                
+                return redirect($result['redirect']);
+            },
+            'admin_registration',
+            [
+                'name' => $request->validated()['name'] ?? null,
+                'email' => $request->validated()['email'] ?? null
+            ]
+        );
     }
 }

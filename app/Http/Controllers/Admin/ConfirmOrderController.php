@@ -1,50 +1,67 @@
 <?php
 
 namespace App\Http\Controllers\Admin;
-use App\Models\Order;
-use App\Models\Badge;
-use App\Models\OrderItem;
-use Illuminate\Http\Request;
+
 use App\Http\Controllers\Controller;
+use App\Models\OrderItem;
+use App\Services\ConfirmOrderService;
+use App\Traits\ErrorHandlingTrait;
+use Illuminate\Http\Request;
 
 class ConfirmOrderController extends Controller
 {
-    public function index(){
-        
-        $orderItems=OrderItem::where('statusItem','paid')->get();
+    use ErrorHandlingTrait;
 
-        
-    // 二重配列に整形
-    $selectedBadgesArray = $orderItems->map(function ($item) {
-        return is_array($item->selected_badges)
-            ? $item->selected_badges
-            : json_decode($item->selected_badges, true) ?? [];
-    })->all(); // ->all() でコレクションから通常の配列に変換
-    
-        return view('manageView.confirmOrder',compact('orderItems','selectedBadgesArray'));
+    protected $confirmOrderService;
+
+    public function __construct(ConfirmOrderService $confirmOrderService)
+    {
+        $this->confirmOrderService = $confirmOrderService;
     }
 
-    public function shipping(OrderItem $orderItem){
-        
-        $orderItem->statusItem='shipped';
-        $orderItem->save();
-        return to_route('order.index');
+    public function index()
+    {
+        return $this->executeControllerWithErrorHandling(
+            function() {
+                $orderItems = $this->confirmOrderService->getPaidOrderItemsWithBadges();
+                return view('manageView.confirmOrder', compact('orderItems'));
+            },
+            'order_confirmation_page_display'
+        );
     }
 
-    public function shipped(){
-        $orderItems=OrderItem::where('statusItem','shipped')->get();
-
-        return view('manageView.shipped',compact('orderItems'));
+    public function shipping($orderItemId)
+    {
+        return $this->executeControllerWithErrorHandling(
+            function() use ($orderItemId) {
+                $this->confirmOrderService->shipOrderItem($orderItemId);
+                return redirect()->back()->with('success', '商品を発送しました。');
+            },
+            'order_item_shipping',
+            ['order_item_id' => $orderItemId]
+        );
     }
 
-    public function confirmSet(OrderItem $orderItem){
-        $selectedBadges=[];
-        
-        $Badges=$orderItem->selected_badges;
-        foreach($Badges as $Badge){
-            $selectedBadges[]=Badge::find($Badge);
-        }
-       
-        return view('manageView.confirmSelectedBadges',compact('selectedBadges'));
+    public function shipped()
+    {
+        return $this->executeControllerWithErrorHandling(
+            function() {
+                $orderItems = $this->confirmOrderService->getShippedOrderItems();
+                return view('manageView.shipped', compact('orderItems'));
+            },
+            'shipped_orders_page_display'
+        );
+    }
+
+    public function confirmSet($orderItemId)
+    {
+        return $this->executeControllerWithErrorHandling(
+            function() use ($orderItemId) {
+                $selectedBadges = $this->confirmOrderService->getSelectedBadgesForOrderItem($orderItemId);
+                return view('manageView.confirmSelectedBadges', compact('selectedBadges'));
+            },
+            'selected_badges_page_display',
+            ['order_item_id' => $orderItemId]
+        );
     }
 }
