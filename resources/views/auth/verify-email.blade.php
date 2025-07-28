@@ -1,31 +1,50 @@
-<x-guest-layout>
-    <div class="mb-4 text-sm text-gray-600">
-        {{ __('Thanks for signing up! Before getting started, could you verify your email address by clicking on the link we just emailed to you? If you didn\'t receive the email, we will gladly send you another.') }}
-    </div>
+@extends('layouts.app') {{-- 必要に応じて layout を変更 --}}
 
-    @if (session('status') == 'verification-link-sent')
-        <div class="mb-4 font-medium text-sm text-green-600">
-            {{ __('A new verification link has been sent to the email address you provided during registration.') }}
-        </div>
-    @endif
+@section('content')
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
 
-    <div class="mt-4 flex items-center justify-between">
-        <form method="POST" action="{{ route('verification.send') }}">
-            @csrf
+            {{-- エラー表示 --}}
+            @if (session('error'))
+                <div class="alert alert-danger">
+                    {{ session('error') }}
+                </div>
+            @endif
 
-            <div>
-                <x-primary-button>
-                    {{ __('Resend Verification Email') }}
-                </x-primary-button>
+            {{-- メッセージ --}}
+            <div class="alert alert-info">
+                登録ありがとうございます！<br>
+                メールアドレスの確認リンクを送信しました。<br>
+                メールが届かない場合は、以下のボタンから再送信してください。
             </div>
-        </form>
 
-        <form method="POST" action="{{ route('logout') }}">
-            @csrf
+            {{-- 再送信成功時のメッセージ --}}
+            @if (session('status') == 'verification-link-sent')
+                <div class="alert alert-success">
+                    登録されたメールアドレスに、新しい確認リンクを送信しました。
+                </div>
+            @endif
 
-            <button type="submit" class="underline text-sm text-gray-600 hover:text-gray-900 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
-                {{ __('Log Out') }}
-            </button>
-        </form>
+            <div class="d-flex justify-content-between mt-4">
+                {{-- 確認メール再送信 --}}
+                <form method="POST" action="{{ route('verification.send') }}">
+                    @csrf
+                    <button type="submit" class="btn btn-primary">
+                        確認メールを再送信する
+                    </button>
+                </form>
+
+                {{-- ログアウト --}}
+                <form method="POST" action="{{ route('logout') }}">
+                    @csrf
+                    <button type="submit" class="btn btn-link text-danger">
+                        ログアウト
+                    </button>
+                </form>
+            </div>
+
+        </div>
     </div>
-</x-guest-layout>
+</div>
+@endsection

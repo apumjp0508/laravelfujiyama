@@ -42,6 +42,7 @@
                     <p class="fw-bold text-danger fs-4">¥{{ number_format($product->price) }}</p>
 
                     <div class="d-grid gap-2 mt-4">
+                        @auth
                         <form method="POST" action="{{ route('carts.store') }}" id="cartForm">
                             @csrf
                             <input type="hidden" name="id" value="{{ $product->id }}">
@@ -59,28 +60,48 @@
                             <input type="hidden" name="weight" value="1">
 
                             @if($product->productType === 'set')
-                                <a href="{{ route('confirmItems', ['product' => $product->id, 'selectedBadges' => $selectedBadges]) }}" class="btn btn-secondary mb-3">セット内容を見る</a>
+                                <a href="{{ route('confirmItems', ['product' => $product->id, 'selectedBadges' => $selectedBadges]) }}" class="btn btn-secondary mb-3">
+                                    セット内容を見る
+                                </a>
                             @endif
 
                             <div class="mb-3">
                                 <label for="quantity" class="form-label">数量</label>
                                 <input type="number" id="quantity" name="qty" min="1" value="1" class="form-control w-25 mx-auto">
                             </div>
-                            <button type="submit" class="btn btn-primary btn-lg w-100">カートに追加する</button>
-                        </form>
 
-                        {{-- お気に入り --}}
-                        @if(Auth::user()->favorite_products()->where('product_id', $product->id)->exists())
-                            <a href="{{ route('favorites.destroy', ['products_id' => $product->id]) }}" class="btn btn-outline-danger w-100 mt-2"
-                                onclick="event.preventDefault(); document.getElementById('favorites-destroy-form').submit();">
-                                <i class="fa fa-heart"></i> お気に入り解除
+                            <button type="submit" class="btn btn-primary btn-lg w-100" id="cartBtn">カートに追加する</button>
+                        </form>
+                        @endauth
+
+                        @guest
+                            <div class="mt-4">
+                                <p class="text-center text-danger">カートに追加するにはログインが必要です。</p>
+                                <a href="{{ route('login') }}" class="btn btn-outline-primary btn-lg w-100">ログインしてカートに追加</a>
+                            </div>
+                        @endguest
+
+                      {{-- お気に入り機能：ログインユーザーのみ表示 --}}
+                        @auth
+                            @if(Auth::user()->favorite_products()->where('product_id', $product->id)->exists())
+                                <a href="{{ route('favorites.destroy', ['products_id' => $product->id]) }}" class="btn btn-outline-danger w-100 mt-2"
+                                    onclick="event.preventDefault(); document.getElementById('favorites-destroy-form').submit();">
+                                    <i class="fa fa-heart"></i> お気に入り解除
+                                </a>
+                            @else
+                                <a href="{{ route('favorites.store', ['products_id' => $product->id]) }}" class="btn btn-outline-danger w-100 mt-2"
+                                    onclick="event.preventDefault(); document.getElementById('favorites-store-form').submit();">
+                                    <i class="fa fa-heart"></i> お気に入りに追加
+                                </a>
+                            @endif
+                        @endauth
+
+                        @guest
+                            {{-- ゲストにはハートボタンを表示せず、ログイン誘導する等も可能 --}}
+                            <a href="{{ route('login') }}" class="btn btn-outline-secondary w-100 mt-2">
+                                <i class="fa fa-heart"></i> お気に入り登録にはログインが必要です
                             </a>
-                        @else
-                            <a href="{{ route('favorites.store', ['products_id' => $product->id]) }}" class="btn btn-outline-danger w-100 mt-2"
-                                onclick="event.preventDefault(); document.getElementById('favorites-store-form').submit();">
-                                <i class="fa fa-heart"></i> お気に入りに追加
-                            </a>
-                        @endif
+                        @endguest
                     </div>
                 </div>
             </div>

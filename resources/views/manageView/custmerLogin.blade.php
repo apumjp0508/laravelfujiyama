@@ -18,6 +18,7 @@
                     <div class="d-grid gap-3">
                         <a href="{{ route('login') }}" class="btn btn-primary btn-lg">ログイン</a>
                         <a href="{{ route('register') }}" class="btn btn-outline-primary btn-lg">新規会員登録</a>
+                        <a href="{{ route('cmart.index')}}" class="btn btn-outline-primary btn-lg">ゲストログイン</a>
                     </div>
                 </div>
             </div>

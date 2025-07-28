@@ -31,7 +31,7 @@
         </div>
         <div>
             <strong>横幅変更</strong>
-            <input type="number" name='widhtSize' value="{{$badge->widthSize}}">
+            <input type="number" name='widthSize' value="{{$badge->widthSize}}">
         </div>
         <div>
             <strong>縦幅変更</strong>
