@@ -5,7 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class SelectedBadge extends Model
+class BeforeBuySelectedBadge extends Model
 {
     use HasFactory;
     protected $fillable = ['product_id', 'badge_id','user_id', 'widthSize', 'heightSize'];
