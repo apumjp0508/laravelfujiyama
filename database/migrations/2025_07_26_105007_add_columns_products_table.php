@@ -13,11 +13,9 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('before_buy_selected_badges', function (Blueprint $table) {
-            $table->id();
-            $table->foreignId('product_id')->constrained()->onDelete('cascade'); // セットID
-            $table->foreignId('badge_id')->constrained()->onDelete('cascade');
-            $table->timestamps();
+        Schema::table('products', function (Blueprint $table) {
+            $table->string('productType')->nullable();
+            $table->integer('setNum')->nullable();
         });
     }
 
@@ -28,6 +26,8 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('before_buy_selected_badges');
+        Schema::table('products', function (Blueprint $table) {
+            $table->dropColumn(['productType', 'setNum']);
+        });
     }
 };
