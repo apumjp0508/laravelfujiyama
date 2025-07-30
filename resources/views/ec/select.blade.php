@@ -27,7 +27,7 @@
 
                             @auth
                             <div class="form-check">
-                                <input type="checkbox" name="select[]" value="{{ $badge->id }}" class="form-check-input checkbox" id="badge-{{ $badge->id }}">
+                                <input type="checkbox" name="selected_badges[]" value="{{ $badge->id }}" class="form-check-input checkbox" id="badge-{{ $badge->id }}">
                                 <label class="form-check-label" for="badge-{{ $badge->id }}">選択する</label>
                             </div>
                             @endauth

@@ -41,6 +41,8 @@
                     <p class="card-text">{{ $product->description }}</p>
                     <p class="fw-bold text-danger fs-4">¥{{ number_format($product->price) }}</p>
 
+                        <p class="text-muted">送料：¥{{ number_format($product->shippingFee) }}</p>
+
                     <div class="d-grid gap-2 mt-4">
                         @auth
                         <form method="POST" action="{{ route('carts.store') }}" id="cartForm">
@@ -49,6 +51,7 @@
                             <input type="hidden" name="img" value="{{ $product->img }}">
                             <input type="hidden" name="name" value="{{ $product->name }}">
                             <input type="hidden" name="price" value="{{ $product->price }}">
+                            <input type="hidden" name="shipping_fee" value="{{ $product->shippingFee ?? 0 }}">
                             <input type="hidden" name="stock" value="{{ $product->stock }}">
                             <input type="hidden" name="setNum" value="{{ $product->setNum }}">
                             <input type="hidden" name="productType" value="{{ $product->productType }}">

@@ -26,6 +26,9 @@ class CheckoutService
 
                 foreach ($cart as $c) {
                     $total += $c->qty * $c->price;
+                    if (isset($c->options->shippingFee)) {
+                        $total += $c->qty * $c->options->shippingFee;
+                    }
                     if ($c->options->carriage) {
                         $hasCarriageCost = true;
                     }
@@ -59,13 +62,17 @@ class CheckoutService
                     if ($product->options->carriage) {
                         $hasCarriageCost = true;
                     }
+                    $unitAmount = $product->price;
+                    if (isset($product->options->shippingFee)) {
+                        $unitAmount += $product->options->shippingFee;
+                    }
                     $line_items[] = [
                         'price_data' => [
                             'currency' => 'jpy',
                             'product_data' => [
                                 'name' => $product->name,
                             ],
-                            'unit_amount' => $product->price,
+                            'unit_amount' => $unitAmount,
                         ],
                         'quantity' => $product->qty,
                     ];
@@ -130,6 +137,9 @@ class CheckoutService
                 $has_carriage_cost = false;
                 foreach ($cart as $c) {
                     $price_total += $c->qty * $c->price;
+                    if (isset($c->options->shippingFee)) {
+                        $price_total += $c->qty * $c->options->shippingFee;
+                    }
                     $qty_total += $c->qty;
                     if ($c->options->carriage) {
                         $has_carriage_cost = true;
@@ -144,6 +154,7 @@ class CheckoutService
                         'product_id'   => $product->id,
                         'product_name' => $product->name,
                         'price'        => $product->price,
+                        'shipping_fee' => $product->options->shippingFee ?? 0,
                         'quantity'     => $product->qty,
                         'user_id'      => $userId,
                         'total_price'  => $price_total,

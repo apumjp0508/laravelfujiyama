@@ -20,7 +20,7 @@
            <h1 class="mt-3 mb-3">会員情報の編集</h1>
            <hr>
 
-           <form method="POST" action="{{ route('mypage') }}">
+           <form method="POST" action="{{ route('mypage.update') }}">
                @csrf
                <input type="hidden" name="_method" value="PUT">
                <div class="form-group">

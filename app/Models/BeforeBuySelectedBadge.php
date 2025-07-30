@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class BeforeBuySelectedBadge extends Model
 {
     use HasFactory;
-    protected $fillable = ['product_id', 'badge_id','user_id', 'widthSize', 'heightSize'];
+    protected $fillable = ['product_id', 'badge_id','user_id', 'widthSize', 'heightSize', 'set_id'];
     
     public function badges()
     {

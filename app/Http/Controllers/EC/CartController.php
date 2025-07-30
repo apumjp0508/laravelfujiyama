@@ -41,7 +41,14 @@ class CartController extends Controller
                 $userId = Auth::user()->id;
                 $validated = $request->validated();
                 $result = $this->cartService->addToCart($userId, $validated);
-                return response()->json($result);
+                
+                // AJAX requestの場合はJSONを返す
+                if ($request->expectsJson()) {
+                    return response()->json($result);
+                }
+                
+                // 通常のHTTPリクエストの場合はリダイレクト
+                return redirect()->back()->with('success', $result['message']);
             },
             'add_to_cart',
             [
@@ -51,19 +58,21 @@ class CartController extends Controller
         );
     }
 
-    public function update(UpdateCartItemRequest $request, $productId)
+    public function update(UpdateCartItemRequest $request)
     {
         return $this->executeControllerWithErrorHandling(
-            function() use ($request, $productId) {
+            function() use ($request) {
                 $userId = Auth::user()->id;
-                $qty = $request->validated()['qty'];
+                $validated = $request->validated();
+                $productId = $validated['product_id'];
+                $qty = $validated['qty'];
                 $result = $this->cartService->updateCartItem($userId, $productId, $qty);
                 return response()->json($result);
             },
             'cart_item_update',
             [
                 'user_id' => Auth::user()->id ?? null,
-                'product_id' => $productId,
+                'product_id' => $request->validated()['product_id'] ?? null,
                 'qty' => $request->validated()['qty'] ?? null
             ]
         );

@@ -25,6 +25,7 @@ class UserController extends Controller
         return $this->executeControllerWithErrorHandling(
             function() {
                 $result = $this->userService->getCurrentUser();
+                $user = $result['user'];
                 return view('users.mypage', compact('user'));
             },
             'user_mypage_display',
@@ -38,6 +39,7 @@ class UserController extends Controller
             function() {
                 $userId = Auth::id();
                 $result = $this->userService->getUserOrders($userId);
+                $orderItems = $result['orderItems'];
                 
                 return view('users.confirmOrder', compact('orderItems'));
             },
@@ -52,14 +54,16 @@ class UserController extends Controller
      * @param  \App\Models\User  $user
      * @return \Illuminate\Http\Response
      */
-    public function edit(User $user)
+    public function edit()
     {
         return $this->executeControllerWithErrorHandling(
-            function() use ($user) {
+            function() {
+                $result = $this->userService->getCurrentUser();
+                $user = $result['user'];
                 return view('users.edit', compact('user'));
             },
             'user_edit_page_display',
-            ['user_id' => $user->id]
+            ['user_id' => Auth::user()->id ?? null]
         );
     }
 
@@ -70,10 +74,11 @@ class UserController extends Controller
      * @param  \App\Models\User  $user
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, User $user)
+    public function update(Request $request)
     {
         return $this->executeControllerWithErrorHandlingAndInput(
-            function() use ($request, $user) {
+            function() use ($request) {
+                $user = Auth::user();
                 $data = [
                     'name' => $request->input('name'),
                     'email' => $request->input('email'),
@@ -88,7 +93,7 @@ class UserController extends Controller
             },
             'user_update',
             [
-                'user_id' => $user->id,
+                'user_id' => Auth::user()->id ?? null,
                 'updated_fields' => array_keys(array_filter($request->only(['name', 'email', 'postal_code', 'address', 'phone'])))
             ]
         );

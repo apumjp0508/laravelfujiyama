@@ -22,6 +22,9 @@ class PayService
 
                 foreach ($cart as $c) {
                     $total += $c->qty * $c->price;
+                    if (isset($c->options->shippingFee)) {
+                        $total += $c->qty * $c->options->shippingFee;
+                    }
                     if ($c->options->carriage) {
                         $hasCarriageCost = true;
                     }
@@ -55,13 +58,17 @@ class PayService
                     if ($product->options->carriage) {
                         $hasCarriageCost = true;
                     }
+                    $unitAmount = $product->price;
+                    if (isset($product->options->shippingFee)) {
+                        $unitAmount += $product->options->shippingFee;
+                    }
                     $line_items[] = [
                         'price_data' => [
                             'currency' => 'jpy',
                             'product_data' => [
                                 'name' => $product->name,
                             ],
-                            'unit_amount' => $product->price,
+                            'unit_amount' => $unitAmount,
                         ],
                         'quantity' => $product->qty,
                     ];

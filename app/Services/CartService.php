@@ -19,6 +19,9 @@ class CartService
                 $total = 0;
                 foreach ($cart as $c) {
                     $total += $c->qty * $c->price;
+                    if (isset($c->options->shippingFee)) {
+                        $total += $c->qty * $c->options->shippingFee;
+                    }
                 }
                 $products = Product::all();
                 $categories = $products->pluck('category')->toArray();
@@ -52,6 +55,7 @@ class CartService
                         'setNum' => $itemData['setNum'] ?? null,
                         'productType' => $itemData['productType'] ?? null,
                         'selectedBadges' => $itemData['selectedBadges'] ?? null,
+                        'shippingFee' => $itemData['shipping_fee'] ?? 0,
                     ]
                 ]);
                 return [
@@ -83,7 +87,11 @@ class CartService
                 $product = Product::find($productId);
                 $productTotal = $product ? $product->price * $qty : 0;
                 $cartTotal = Cart::instance($userId)->content()->sum(function ($cartItem) {
-                    return $cartItem->qty > 0 ? $cartItem->price * $cartItem->qty : 0;
+                    $itemTotal = $cartItem->qty > 0 ? $cartItem->price * $cartItem->qty : 0;
+                    if (isset($cartItem->options->shippingFee)) {
+                        $itemTotal += $cartItem->qty * $cartItem->options->shippingFee;
+                    }
+                    return $itemTotal;
                 });
                 return [
                     'success' => true,

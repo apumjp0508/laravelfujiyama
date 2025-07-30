@@ -35,6 +35,12 @@
            <div class="col-md-6 mt-4" id="cart-row-{{ $product->id }}">
                 <a href="{{route('mart.show', $product->id)}}">
                    <h3 class="mt-4">{{$product->name}}</h3>
+                   @if($product->options->productType == 'set' && $product->options->setNum)
+                       <p class="text-muted">セット商品 ({{ $product->options->setNum }}個選択)</p>
+                   @endif
+                   @if($product->options->selectedBadges)
+                       <p class="text-info small">選択済みバッジ: {{ count($product->options->selectedBadges) }}個</p>
+                   @endif
                </a>
            </div>
            <div class="col-md-3" id="cart-row-{{ $product->id }}">
@@ -62,6 +68,9 @@
            
            <div class="col-md-2" id="cart-row-{{ $product->id }}">
             <h3 id="total-price-{{$product->id}}" class="w-100 mt-4">￥{{$product->qty * $product->price}}</h3>
+            @if($product->options->shippingFee > 0)
+                <p class="text-muted small">送料：￥{{ number_format($product->options->shippingFee) }}</p>
+            @endif
            </div> 
            @endforeach
        </div>

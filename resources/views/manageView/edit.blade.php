@@ -29,6 +29,10 @@
             <input type="number" name="price" value="{{$product->price}}">
         </div>
         <div>
+            <strong>送料変更</strong>
+            <input type="number" name="shippingFee" value="{{$product->shippingFee ?? 0}}" min="0" placeholder="送料を入力（無料の場合は0）">
+        </div>
+        <div>
             <strong>在庫数変更</strong>
             <input type="number" name='stock' value="{{$product->stock}}">
         </div>

@@ -50,6 +50,9 @@
                                                </div>
                                                <div class="col-xxl-9">
                                                    合計：￥{{ number_format($product->qty * $product->price) }}
+                                                   @if($product->options->shippingFee > 0)
+                                                       <br><small class="text-muted">送料：￥{{ number_format($product->options->shippingFee) }}</small>
+                                                   @endif
                                                </div>
                                            </div>
                                        </div>
@@ -101,9 +104,9 @@
                    </div>
 
                    <div class="mb-4">
-                           <form action="{{ route('checkout.success') }}" method="GET">
+                           <form action="{{ route('checkout.store') }}" method="POST">
                                @csrf
-                               <button type="submit" >お支払い</button>
+                               <button type="submit" class="btn btn-primary btn-lg w-100">お支払い</button>
                            </form>
                    </div>
                </div>

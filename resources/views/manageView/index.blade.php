@@ -54,6 +54,7 @@
                     <th>説明</th>
                     <th>カテゴリー</th>
                     <th>値段</th>
+                    <th>送料</th>
                     <th>在庫</th>
                     <th>商品形式</th>
                     <th>セット個数</th>
@@ -70,6 +71,7 @@
                     <td class="text-truncate" style="max-width: 200px;">{{ $product->description }}</td>
                     <td>{{ $product->category }}</td>
                     <td>¥{{ number_format($product->price) }}</td>
+                    <td>¥{{ number_format($product->shippingFee ?? 0) }}</td>
                     <td>{{ $product->stock }}</td>
                     <td>
                         <span class="badge {{ $product->productType === 'set' ? 'bg-info' : 'bg-secondary' }}">

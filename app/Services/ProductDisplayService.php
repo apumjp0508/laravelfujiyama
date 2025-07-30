@@ -2,8 +2,10 @@
 
 namespace App\Services;
 
+use App\Models\BeforeBuySelectedBadge;
 use App\Models\Product;
 use App\Traits\ErrorHandlingTrait;
+use Illuminate\Support\Facades\Auth;
 
 class ProductDisplayService
 {
@@ -36,6 +38,20 @@ class ProductDisplayService
                 $keywords = Product::where('category', 'like', "%セット%")->get();
                 $reviews = $product->reviews()->get();
 
+                // For set products, get selected badges from database if user is logged in
+                $finalSelectedBadges = $selectedBadges;
+                if ($product->productType === 'set' && Auth::check()) {
+                    $userSelectedBadges = BeforeBuySelectedBadge::where('product_id', $productId)
+                        ->where('user_id', Auth::id())
+                        ->pluck('badge_id')
+                        ->toArray();
+                    
+                    // Use database badges if available, otherwise fall back to query parameter
+                    if (!empty($userSelectedBadges)) {
+                        $finalSelectedBadges = $userSelectedBadges;
+                    }
+                }
+
                 return [
                     'success' => true,
                     'product' => $product,
@@ -43,7 +59,7 @@ class ProductDisplayService
                     'categories' => $categories,
                     'keywords' => $keywords,
                     'reviews' => $reviews,
-                    'selectedBadges' => $selectedBadges,
+                    'selectedBadges' => $finalSelectedBadges,
                     'userId' => $userId,
                     'setId' => $setId
                 ];

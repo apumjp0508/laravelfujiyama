@@ -18,6 +18,7 @@ class UpdateProductRequest extends FormRequest
             'description' => 'required|string',
             'category' => 'required|string',
             'price' => 'required|numeric|min:0',
+            'shippingFee' => 'required|integer|min:0',
             'stock' => 'required|integer|min:0',
             'img' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048',
             'productType' => 'required|string',
@@ -25,6 +26,7 @@ class UpdateProductRequest extends FormRequest
         ];
     }
 }
+
 
 
 

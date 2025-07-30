@@ -11,7 +11,7 @@ class OrderItem extends Model
     use HasFactory;
     
 
-    protected $fillable = ['product_id','product_name','price','quantity','user_id','total_price','statusItem','productType','selected_badges'];
+    protected $fillable = ['product_id','product_name','price','shipping_fee','quantity','user_id','total_price','statusItem','productType','selected_badges'];
     protected $casts = [
         'selected_badges' => 'array',
     ];

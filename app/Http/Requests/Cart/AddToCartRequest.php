@@ -18,6 +18,7 @@ class AddToCartRequest extends FormRequest
             'name' => 'required|string',
             'qty' => 'required|integer|min:1',
             'price' => 'required|numeric|min:0',
+            'shipping_fee' => 'nullable|integer|min:0',
             'weight' => 'nullable|numeric',
             'img' => 'nullable|string',
             'setNum' => 'nullable|integer',
@@ -26,6 +27,7 @@ class AddToCartRequest extends FormRequest
         ];
     }
 }
+
 
 
 

@@ -264,6 +264,7 @@ trait ErrorHandlingTrait
         } catch (\Illuminate\Database\QueryException $e) {
             $this->handleDatabaseError($e, $operationName, $context);
         } catch (\Stripe\Exception\ApiErrorException $e) {
+
             $this->handleStripeError($e, $operationName, $context);
         } catch (\Exception $e) {
             if ($e->getCode() == 400) {

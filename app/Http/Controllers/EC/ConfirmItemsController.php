@@ -24,8 +24,8 @@ class ConfirmItemsController extends Controller
         return $this->executeControllerWithErrorHandling(
             function() use ($request, $product) {
                 $selectedBadgeIds = $request->query('selectedBadges');
-                $result = $this->confirmItemsService->getConfirmItemsData($product->id, $selectedBadgeIds);
-                
+                $setId = $request->query('setId');
+                $result = $this->confirmItemsService->getConfirmItemsData($product->id, $selectedBadgeIds, $setId);
                 return view('ec.confirmItems', [
                     'product' => $result['product'],
                     'badges' => $result['badges']
@@ -34,7 +34,8 @@ class ConfirmItemsController extends Controller
             'confirm_items_display',
             [
                 'product_id' => $product->id,
-                'selected_badge_ids' => $request->query('selectedBadges')
+                'selected_badge_ids' => $request->query('selectedBadges'),
+                'set_id' => $request->query('setId')
             ]
         );
     }
