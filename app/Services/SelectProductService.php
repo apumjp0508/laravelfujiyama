@@ -34,12 +34,12 @@ class SelectProductService
         return $this->executeWithErrorHandling(
             function() use ($selectedBadgeIds, $productId, $userId, $setId) {
                 $selectedBadges = [];
-                foreach ($selectedBadgeIds as $badgeId) {
-                    $badge = Badge::find($badgeId);
+                foreach ($selectedBadgeIds as $selectedBadgeId) {
+                    $badge = Badge::find($selectedBadgeId);
                     if ($badge) {
                         $selectedBadges[] = BeforeBuySelectedBadge::create([
                             'product_id' => $productId,
-                            'badge_id' => $badgeId,
+                            'badge_id' => $selectedBadgeId,
                             'user_id' => $userId,
                             'widthSize' => $badge->widthSize,
                             'heightSize' => $badge->heightSize,

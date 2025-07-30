@@ -12,6 +12,45 @@ class ConfirmItemsService
 {
     use ErrorHandlingTrait;
 
+    public function updateSelectedBadgesForSet($productId, $selectedBadgeIds, $setId)
+    {
+        return $this->executeWithErrorHandling(
+            function() use ($productId, $selectedBadgeIds, $setId) {
+                if (!Auth::check()) {
+                    return ['success' => false, 'message' => 'User not authenticated'];
+                }
+
+                // Clear previous selections for this specific set
+                BeforeBuySelectedBadge::where('product_id', $productId)
+                    ->where('user_id', Auth::id())
+                    ->where('set_id', $setId)
+                    ->delete();
+
+                // Add new selections for this set
+                if (!empty($selectedBadgeIds)) {
+                    $badgeIdsArray = is_string($selectedBadgeIds) ? explode(',', $selectedBadgeIds) : $selectedBadgeIds;
+                    
+                    foreach ($badgeIdsArray as $badgeId) {
+                        BeforeBuySelectedBadge::create([
+                            'product_id' => $productId,
+                            'badge_id' => intval(trim($badgeId)),
+                            'user_id' => Auth::id(),
+                            'set_id' => $setId
+                        ]);
+                    }
+                }
+
+                return ['success' => true];
+            },
+            'update_selected_badges_for_set',
+            [
+                'product_id' => $productId,
+                'selected_badge_ids' => $selectedBadgeIds,
+                'set_id' => $setId
+            ]
+        );
+    }
+
     public function getConfirmItemsData($productId, $selectedBadgeIds = null, $setId = null)
     {
         return $this->executeWithErrorHandling(
@@ -26,8 +65,6 @@ class ConfirmItemsService
                     
                     // If setId is provided, filter by specific set
                     if ($setId !== null) {
-                        // Assuming there's a set_id column in BeforeBuySelectedBadge table
-                        // If not, we might need to add this column or use a different approach
                         $query->where('set_id', $setId);
                     }
                     
