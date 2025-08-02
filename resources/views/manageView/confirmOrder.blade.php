@@ -23,7 +23,7 @@
                 <th>金額</th>
                 <th>購入者名</th>
                 <th>商品形式</th>
-                <th>選択内容確認(badgeId)</th>
+                <th>選択内容確認(productSetId)</th>
                 <th>発送状況</th>
                 <th>編集</th>
             </tr>
@@ -39,7 +39,7 @@
                 <td>{{ $orderItem->productType}}</td>
                 @if($orderItem->productType==='set')
                 <td>
-                    {{implode(', ',$orderItem->selected_badges)}}
+                    {{implode(', ',$orderItem->selected_product_sets)}}
                     <a href="{{route('order.confirmSet',$orderItem->id)}}">詳細確認</a>
                 </td>
                 @else

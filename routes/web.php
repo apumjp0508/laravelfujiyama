@@ -75,7 +75,12 @@ Route::middleware(['auth:admin'])->group(function () {
     Route::get('products/adminReview/{product}',[ReviewProductController::class,'adminReview'])->name('products.adminReview');
     Route::delete('products/review/delete/{review}',[AdminReviewController::class,'deleteReview'])->name('products.deleteReview');
     Route::controller(InsertPinbackButtonController::class)->group(function(){
-    Route::resource('badge',InsertPinbackButtonController::class);
+        Route::get('productSets', 'index')->name('productSets.index'); // 一覧表示
+        Route::get('productSets/create', 'create')->name('productSets.create'); // 作成ページ表示
+        Route::post('productSets', 'store')->name('productSets.store'); // 新規保存
+        Route::get('productSets/{productSet}/edit', 'edit')->name('productSets.edit'); // 編集ページ表示
+        Route::put('productSets/{productSet}', 'update')->name('productSets.update'); // 更新（PUT or PATCH）
+        Route::delete('productSets/{productSet}', 'destroy')->name('productSets.destroy'); // 削除
     });
     Route::controller(ConfirmOrderController::class)->group(function () {
         Route::get('confirm/order','index')->name('order.index');
@@ -99,7 +104,7 @@ Route::get('search',[SearchController::class,'search'])->name('search');
 
 
 Route::middleware(['verified'])->group(function () {
-    Route::get('confirm',[ConfirmItemsController::class,'confirmItems'])->name('confirmItems');
+    Route::get('confirm/{product}',[ConfirmItemsController::class,'confirmItems'])->name('confirmItems');
 
     Route::controller(FavoriteProductController::class)->group(function () {
         Route::get('favorites/show','show')->name('favorites.show');

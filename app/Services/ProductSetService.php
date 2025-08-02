@@ -2,64 +2,64 @@
 
 namespace App\Services;
 
-use App\Models\Badge;
+use App\Models\ProductSet;
 use App\Traits\ErrorHandlingTrait;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Http\Request;
 
-class BadgeService
+class ProductSetService
 {
     use ErrorHandlingTrait;
 
-    public function getAllBadges()
+    public function getAllProductSets()
     {
         return $this->executeWithErrorHandling(
-            fn() => Badge::all(),
-            'badge_retrieval'
+            fn() => ProductSet::all(),
+            'product_set_retrieval'
         );
     }
 
-    public function createBadge(array $data)
+    public function createProductSet(array $data)
     {
         return $this->executeWithErrorHandling(
-            fn() => Badge::create($data),
-            'badge_creation',
+            fn() => ProductSet::create($data),
+            'product_set_creation',
             ['data' => $data]
         );
     }
 
-    public function updateBadge(Badge $badge, array $data)
+    public function updateProductSet(ProductSet $productSet, array $data)
     {
         return $this->executeWithErrorHandling(
-            function() use ($badge, $data) {
-                $badge->update($data);
-                return $badge;
+            function() use ($productSet, $data) {
+                $productSet->update($data);
+                return $productSet;
             },
-            'badge_update',
+            'product_set_update',
             [
-                'badge_id' => $badge->id,
+                'product_set_id' => $productSet->id,
                 'data' => $data
             ]
         );
     }
 
-    public function deleteBadge(Badge $badge)
+    public function deleteProductSet(ProductSet $productSet)
     {
         return $this->executeWithErrorHandling(
-            fn() => $badge->delete(),
-            'badge_deletion',
-            ['badge_id' => $badge->id]
+            fn() => $productSet->delete(),
+            'product_set_deletion',
+            ['product_set_id' => $productSet->id]
         );
     }
 
-    public function handleImageUpload(Request $request, ?Badge $badge = null)
+    public function handleImageUpload(Request $request, ?ProductSet $productSet = null)
     {
         return $this->executeWithErrorHandling(
-            function() use ($request, $badge) {
+            function() use ($request, $productSet) {
                 if ($request->hasFile('img')) {
                     // 古い画像があれば削除
-                    if ($badge && $badge->img) {
-                        $parsedPath = parse_url($badge->img, PHP_URL_PATH);
+                    if ($productSet && $productSet->img) {
+                        $parsedPath = parse_url($productSet->img, PHP_URL_PATH);
                         $path = ltrim($parsedPath, '/');
 
                         if (app()->environment('production')) {
@@ -79,11 +79,11 @@ class BadgeService
                         return str_replace('public/', 'storage/', $path);
                     }
                 }
-                return $badge ? $badge->img : null;
+                return $productSet ? $productSet->img : null;
             },
-            'badge_image_upload',
+            'product_set_image_upload',
             [
-                'badge_id' => $badge ? $badge->id : null,
+                'product_set_id' => $productSet ? $productSet->id : null,
                 'has_file' => $request->hasFile('img'),
                 'environment' => app()->environment()
             ]

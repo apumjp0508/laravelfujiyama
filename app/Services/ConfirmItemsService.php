@@ -2,8 +2,8 @@
 
 namespace App\Services;
 
-use App\Models\Badge;
-use App\Models\BeforeBuySelectedBadge;
+use App\Models\ProductSet;
+use App\Models\BeforeBuySelectedProductSet;
 use App\Models\Product;
 use App\Traits\ErrorHandlingTrait;
 use Illuminate\Support\Facades\Auth;
@@ -12,28 +12,41 @@ class ConfirmItemsService
 {
     use ErrorHandlingTrait;
 
-    public function updateSelectedBadgesForSet($productId, $selectedBadgeIds, $setId)
+    public function clearSelectedProductSets($productId, $userId)
     {
         return $this->executeWithErrorHandling(
-            function() use ($productId, $selectedBadgeIds, $setId) {
+            function() use ($productId, $userId) {
+                BeforeBuySelectedProductSet::where('product_id', $productId)
+                    ->where('user_id', $userId)
+                    ->delete();
+            },
+            'clear_selected_product_sets',
+            ['product_id' => $productId, 'user_id' => $userId]
+        );
+    }
+
+    public function updateSelectedProductSetsForSet($productId, $selectedProductSetIds, $setId)
+    {
+        return $this->executeWithErrorHandling(
+            function() use ($productId, $selectedProductSetIds, $setId) {
                 if (!Auth::check()) {
                     return ['success' => false, 'message' => 'User not authenticated'];
                 }
 
                 // Clear previous selections for this specific set
-                BeforeBuySelectedBadge::where('product_id', $productId)
+                BeforeBuySelectedProductSet::where('product_id', $productId)
                     ->where('user_id', Auth::id())
                     ->where('set_id', $setId)
                     ->delete();
 
                 // Add new selections for this set
-                if (!empty($selectedBadgeIds)) {
-                    $badgeIdsArray = is_string($selectedBadgeIds) ? explode(',', $selectedBadgeIds) : $selectedBadgeIds;
+                if (!empty($selectedProductSetIds)) {
+                    $productSetIdsArray = is_string($selectedProductSetIds) ? explode(',', $selectedProductSetIds) : $selectedProductSetIds;
                     
-                    foreach ($badgeIdsArray as $badgeId) {
-                        BeforeBuySelectedBadge::create([
+                    foreach ($productSetIdsArray as $productSetId) {
+                        BeforeBuySelectedProductSet::create([
                             'product_id' => $productId,
-                            'badge_id' => intval(trim($badgeId)),
+                            'product_set_id' => intval(trim($productSetId)),
                             'user_id' => Auth::id(),
                             'set_id' => $setId
                         ]);
@@ -42,25 +55,25 @@ class ConfirmItemsService
 
                 return ['success' => true];
             },
-            'update_selected_badges_for_set',
+            'update_selected_product_sets_for_set',
             [
                 'product_id' => $productId,
-                'selected_badge_ids' => $selectedBadgeIds,
+                'selected_product_set_ids' => $selectedProductSetIds,
                 'set_id' => $setId
             ]
         );
     }
 
-    public function getConfirmItemsData($productId, $selectedBadgeIds = null, $setId = null)
+    public function getConfirmItemsData($productId, $selectedProductSetIds = null, $setId = null)
     {
         return $this->executeWithErrorHandling(
-            function() use ($productId, $selectedBadgeIds, $setId) {
+            function() use ($productId, $selectedProductSetIds, $setId) {
                 $product = Product::findOrFail($productId);
                 
-                // Get selected badges from database if user is logged in and no badges provided via parameter
-                $finalSelectedBadgeIds = $selectedBadgeIds;
-                if (Auth::check() && (empty($selectedBadgeIds) || $selectedBadgeIds === null)) {
-                    $query = BeforeBuySelectedBadge::where('product_id', $productId)
+                // Get selected product sets from database if user is logged in and no product sets provided via parameter
+                $finalSelectedProductSetIds = $selectedProductSetIds;
+                if (Auth::check() && (empty($selectedProductSetIds) || $selectedProductSetIds === null)) {
+                    $query = BeforeBuySelectedProductSet::where('product_id', $productId)
                         ->where('user_id', Auth::id());
                     
                     // If setId is provided, filter by specific set
@@ -68,30 +81,30 @@ class ConfirmItemsService
                         $query->where('set_id', $setId);
                     }
                     
-                    $userSelectedBadgeIds = $query->pluck('badge_id')->toArray();
+                    $userSelectedProductSetIds = $query->pluck('product_set_id')->toArray();
                     
-                    if (!empty($userSelectedBadgeIds)) {
-                        $finalSelectedBadgeIds = $userSelectedBadgeIds;
+                    if (!empty($userSelectedProductSetIds)) {
+                        $finalSelectedProductSetIds = $userSelectedProductSetIds;
                     }
                 }
                 
-                // Get badges based on the final selected badge IDs
-                $badges = [];
-                if (!empty($finalSelectedBadgeIds)) {
-                    $badges = Badge::whereIn('id', $finalSelectedBadgeIds)->get();
+                // Get product sets based on the final selected product set IDs
+                $productSets = [];
+                if (!empty($finalSelectedProductSetIds)) {
+                    $productSets = ProductSet::whereIn('id', $finalSelectedProductSetIds)->get();
                 }
 
                 return [
                     'success' => true,
                     'product' => $product,
-                    'badges' => $badges,
+                    'productSets' => $productSets,
                     'setId' => $setId
                 ];
             },
             'confirm_items_data_retrieval',
             [
                 'product_id' => $productId,
-                'selected_badge_ids' => $selectedBadgeIds,
+                'selected_product_set_ids' => $selectedProductSetIds,
                 'set_id' => $setId
             ]
         );

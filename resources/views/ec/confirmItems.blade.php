@@ -8,13 +8,13 @@
 </head>
 <body>
 <div class="row row-cols-1 row-cols-md-3 g-4">
-        @foreach($badges as $badge)
+        @foreach($productSets as $productSet)
             <div class="col">
                 <div class="card h-100 shadow-sm">
-                    <img src="{{ asset($badge->img) }}" class="card-img-top product-img" alt="{{ $badge->name }}">
+                    <img src="{{ asset($productSet->img) }}" class="card-img-top product-img" alt="{{ $productSet->name }}">
                     <div class="card-body">
-                        <h5 class="card-title">{{ $badge->name }}</h5>
-                        <p class="card-text text-truncate" style="max-width: 100%;">{{ $badge->description }}</p>
+                        <h5 class="card-title">{{ $productSet->name }}</h5>
+                        <p class="card-text text-truncate" style="max-width: 100%;">{{ $productSet->description }}</p>
                         
                       
                     </div>

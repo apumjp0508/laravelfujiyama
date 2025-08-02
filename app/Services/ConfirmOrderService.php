@@ -3,24 +3,20 @@
 namespace App\Services;
 
 use App\Models\OrderItem;
-use App\Models\SelectedBadge;
+use App\Models\ProductSet;
 use App\Traits\ErrorHandlingTrait;
 
 class ConfirmOrderService
 {
     use ErrorHandlingTrait;
 
-    public function getPaidOrderItemsWithBadges()
+    public function getPaidOrderItemsWithProductSets()
     {
         return $this->executeWithErrorHandling(
             function() {
                 return OrderItem::where('statusItem', 'paid')
                     ->with('user')
-                    ->get()
-                    ->map(function ($orderItem) {
-                        $orderItem->selected_badges = json_decode($orderItem->selected_badges, true);
-                        return $orderItem;
-                    });
+                    ->get();
             },
             'paid_order_retrieval'
         );
@@ -45,30 +41,26 @@ class ConfirmOrderService
             function() {
                 return OrderItem::where('statusItem', 'shipped')
                     ->with('user')
-                    ->get()
-                    ->map(function ($orderItem) {
-                        $orderItem->selected_badges = json_decode($orderItem->selected_badges, true);
-                        return $orderItem;
-                    });
+                    ->get();
             },
             'shipped_order_retrieval'
         );
     }
 
-    public function getSelectedBadgesForOrderItem($orderItemId)
+    public function getSelectedProductSetsForOrderItem($orderItemId)
     {
         return $this->executeWithErrorHandling(
             function() use ($orderItemId) {
                 $orderItem = OrderItem::findOrFail($orderItemId);
-                $selectedBadges = json_decode($orderItem->selected_badges, true);
+                $selectedProductSetIds = $orderItem->selected_product_sets;
                 
-                if (!$selectedBadges) {
+                if (!$selectedProductSetIds || empty($selectedProductSetIds)) {
                     return collect();
                 }
                 
-                return SelectedBadge::whereIn('id', $selectedBadges)->get();
+                return ProductSet::whereIn('id', $selectedProductSetIds)->get();
             },
-            'selected_badges_retrieval',
+            'selected_product_sets_retrieval',
             ['order_item_id' => $orderItemId]
         );
     }

@@ -5,8 +5,9 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Badge extends Model
+class ProductSet extends Model
 {
+    protected $table = 'product_sets';
     protected $fillable = ['name', 'description', 'stock', 'img', 'widthSize', 'heightSize'];
     use HasFactory;
 

@@ -2,8 +2,8 @@
 
 namespace App\Services;
 
-use App\Models\Badge;
-use App\Models\BeforeBuySelectedBadge;
+use App\Models\ProductSet;
+use App\Models\BeforeBuySelectedProductSet;
 use App\Models\Product;
 use App\Traits\ErrorHandlingTrait;
 use Illuminate\Support\Facades\Auth;
@@ -12,48 +12,51 @@ class SelectProductService
 {
     use ErrorHandlingTrait;
 
-    public function getBadgesAndUser(Product $product)
+    public function getProductSetsAndUser(Product $product)
     {
         return $this->executeWithErrorHandling(
             function() use ($product) {
-                $badges = Badge::all();
+                $productSets = ProductSet::all();
                 $user = Auth::user();
                 return [
-                    'badges' => $badges,
+                    'productSets' => $productSets,
                     'user' => $user,
                     'product' => $product,
                 ];
             },
-            'badges_and_user_retrieval',
+            'product_sets_and_user_retrieval',
             ['user_id' => Auth::user()->id ?? null, 'product_id' => $product->id]
         );
     }
 
-    public function createSelectedBadges(array $selectedBadgeIds, $productId, $userId, $setId = null)
+    public function createSelectedProductSets(array $selectedProductSetIds, $productId, $userId, $setId = null)
     {
         return $this->executeWithErrorHandling(
-            function() use ($selectedBadgeIds, $productId, $userId, $setId) {
-                $selectedBadges = [];
-                foreach ($selectedBadgeIds as $selectedBadgeId) {
-                    $badge = Badge::find($selectedBadgeId);
-                    if ($badge) {
-                        $selectedBadges[] = BeforeBuySelectedBadge::create([
+            function() use ($selectedProductSetIds, $productId, $userId, $setId) {
+                BeforeBuySelectedProductSet::where('product_id', $productId)->delete();
+                
+                $selectedProductSets = [];
+                foreach ($selectedProductSetIds as $selectedProductSetId) {
+                    $productSet = ProductSet::find($selectedProductSetId);
+                    if ($productSet) {
+                        $selectedProductSets[] = BeforeBuySelectedProductSet::create([
                             'product_id' => $productId,
-                            'badge_id' => $selectedBadgeId,
+                            'product_set_id' => $selectedProductSetId,
                             'user_id' => $userId,
-                            'widthSize' => $badge->widthSize,
-                            'heightSize' => $badge->heightSize,
+                            'widthSize' => $productSet->widthSize,
+                            'heightSize' => $productSet->heightSize,
                             'set_id' => $setId,
                         ]);
                     }
                 }
-                return $selectedBadges;
+              
+                return $selectedProductSets;
             },
-            'selected_badges_creation',
+            'selected_product_sets_creation',
             [
                 'user_id' => $userId,
                 'product_id' => $productId,
-                'selected_badge_ids' => $selectedBadgeIds,
+                'selected_product_set_ids' => $selectedProductSetIds,
                 'set_id' => $setId
             ]
         );

@@ -3,8 +3,12 @@
     "allow": [
       "Bash(php artisan config:clear:*)",
       "Bash(php artisan:*)",
-      "Bash(php:*)"
+      "Bash(php:*)",
+      "Bash(mv:*)",
+      "Bash(mkdir:*)",
+      "Bash(rmdir:*)"
     ],
     "deny": []
-  }
+  },
+  "$schema": "https://json.schemastore.org/claude-code-settings.json"
 }

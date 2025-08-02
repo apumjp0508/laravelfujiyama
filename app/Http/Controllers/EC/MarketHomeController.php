@@ -37,13 +37,14 @@ class MarketHomeController extends Controller
     {
         return $this->executeControllerWithErrorHandling(
             function() use ($request, $productId) {
-                $selectedBadges = $request->query('selectedBadges');
+                $selectedProductSets = $request->query('selectedProductSets');
+                
                 $userId = $request->query('userId');
                 $setId = $request->query('setId');
                 
                 $result = $this->productDisplayService->getProductDetails(
                     $productId, 
-                    $selectedBadges, 
+                    $selectedProductSets, 
                     $userId, 
                     $setId
                 );
@@ -54,7 +55,7 @@ class MarketHomeController extends Controller
                     'categories' => $result['categories'],
                     'keywords' => $result['keywords'],
                     'reviews' => $result['reviews'],
-                    'selectedBadges' => $result['selectedBadges'],
+                    'selectedProductSets' => $result['selectedProductSets'],
                     'userId' => $result['userId'],
                     'setId' => $result['setId']
                 ]);
@@ -62,7 +63,7 @@ class MarketHomeController extends Controller
             'product_details_display',
             [
                 'product_id' => $productId,
-                'selected_badges' => $request->query('selectedBadges'),
+                'selected_product_sets' => $request->query('selectedProductSets'),
                 'user_id' => $request->query('userId')
             ]
         );

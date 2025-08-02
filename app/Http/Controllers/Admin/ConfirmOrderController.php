@@ -23,7 +23,7 @@ class ConfirmOrderController extends Controller
     {
         return $this->executeControllerWithErrorHandling(
             function() {
-                $orderItems = $this->confirmOrderService->getPaidOrderItemsWithBadges();
+                $orderItems = $this->confirmOrderService->getPaidOrderItemsWithProductSets();
                 return view('manageView.confirmOrder', compact('orderItems'));
             },
             'order_confirmation_page_display'
@@ -57,10 +57,10 @@ class ConfirmOrderController extends Controller
     {
         return $this->executeControllerWithErrorHandling(
             function() use ($orderItemId) {
-                $selectedBadges = $this->confirmOrderService->getSelectedBadgesForOrderItem($orderItemId);
-                return view('manageView.confirmSelectedBadges', compact('selectedBadges'));
+                $selectedProductSets = $this->confirmOrderService->getSelectedProductSetsForOrderItem($orderItemId);
+                return view('manageView.confirmSelectedProductSets', compact('selectedProductSets'));
             },
-            'selected_badges_page_display',
+            'selected_product_sets_page_display',
             ['order_item_id' => $orderItemId]
         );
     }

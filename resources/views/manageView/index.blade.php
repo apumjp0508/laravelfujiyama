@@ -28,7 +28,7 @@
           </a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" href="{{ route('badge.index') }}">
+          <a class="nav-link" href="{{ route('productSets.index') }}">
             <i class="fas fa-th-large"></i> セット用缶バッチ管理
           </a>
         </li>

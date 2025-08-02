@@ -91,7 +91,7 @@ class CheckoutService
                     ];
                 }
 
-                Stripe::setApiKey(env('STRIPE_SECRET'));
+                Stripe::setApiKey(config('services.stripe.secret'));
                 $checkout_session = Session::create([
                     'line_items' => $line_items,
                     'mode' => 'payment',
@@ -110,8 +110,9 @@ class CheckoutService
 
     public function finalizeOrder($userId)
     {
+        $cart = Cart::instance($userId)->content();
         return $this->executeWithErrorHandling(
-            function() use ($userId) {
+            function() use ($userId, $cart) {
                 DB::beginTransaction();
                 
                 $cart = Cart::instance($userId)->content();
@@ -160,7 +161,7 @@ class CheckoutService
                         'total_price'  => $price_total,
                         'statusItem'   => 'paid',
                         'productType'  => $product->options->productType,
-                        'selected_badges' => $product->options->selectedBadges ?? [],
+                        'selected_product_sets' => $product->options->selectedProductSets ?? [],
                     ]);
                 }
 

@@ -24,7 +24,7 @@ class SelectProductController extends Controller
     {
         return $this->executeControllerWithErrorHandling(
             function() use ($product) {
-                $data = $this->selectProductService->getBadgesAndUser($product);
+                $data = $this->selectProductService->getProductSetsAndUser($product);
                 return view('ec.select', $data);
             },
             'product_selection_page_display',
@@ -36,22 +36,23 @@ class SelectProductController extends Controller
     {
         return $this->executeControllerWithErrorHandlingAndInput(
             function() use ($request) {
-                $selectedBadgeIds = $request->input('selected_badges', []);
+                $selectedProductSetIds = $request->input('selected_product_sets', []);
+                
                 $productId = $request->input('product_id');
                 $userId = Auth::user()->id;
                 
-                // Generate a unique set ID for this badge selection
+                // Generate a unique set ID for this product set selection
                 $setId = uniqid('set_' . $productId . '_' . $userId . '_');
                 
-                $this->selectProductService->createSelectedBadges($selectedBadgeIds, $productId, $userId, $setId);
+                $this->selectProductService->createSelectedProductSets($selectedProductSetIds, $productId, $userId, $setId);
                 
-                return redirect()->route('mart.show', $productId)->with('success', 'バッジを選択しました。');
+                return redirect()->route('mart.show', $productId)->with('success', 'プロダクトセットを選択しました。');
             },
-            'selected_badges_creation',
+            'selected_product_sets_creation',
             [
                 'user_id' => Auth::user()->id ?? null,
                 'product_id' => $request->input('product_id'),
-                'selected_badge_ids' => $request->input('selected_badges', [])
+                'selected_product_set_ids' => $request->input('selected_product_sets', [])
             ]
         );
     }

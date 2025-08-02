@@ -3,10 +3,10 @@
 namespace App\Http\Controllers\AdminItems;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\Admin\Badge\StoreBadgeRequest;
-use App\Http\Requests\Admin\Badge\UpdateBadgeRequest;
-use App\Models\Badge;
-use App\Services\BadgeService;
+use App\Http\Requests\Admin\ProductSet\StoreProductSetRequest;
+use App\Http\Requests\Admin\ProductSet\UpdateProductSetRequest;
+use App\Models\ProductSet;
+use App\Services\ProductSetService;
 use App\Traits\ErrorHandlingTrait;
 use Illuminate\Http\Request;
 
@@ -14,21 +14,21 @@ class InsertPinbackButtonController extends Controller
 {
     use ErrorHandlingTrait;
 
-    protected $badgeService;
+    protected $productSetService;
 
-    public function __construct(BadgeService $badgeService)
+    public function __construct(ProductSetService $productSetService)
     {
-        $this->badgeService = $badgeService;
+        $this->productSetService = $productSetService;
     }
 
     public function index()
     {
         return $this->executeControllerWithErrorHandling(
             function() {
-                $badges = $this->badgeService->getAllBadges();
-                return view('badge.index', compact('badges'));
+                $productSets = $this->productSetService->getAllProductSets();
+                return view('productSets.index', compact('productSets'));
             },
-            'badge_list_display'
+            'productSet_list_display'
         );
     }
 
@@ -36,63 +36,63 @@ class InsertPinbackButtonController extends Controller
     {
         return $this->executeControllerWithErrorHandling(
             function() {
-                return view('badge.create');
+                return view('productSets.create');
             },
-            'badge_creation_page_display'
+            'productSet_creation_page_display'
         );
     }
 
-    public function store(StoreBadgeRequest $request)
+    public function store(StoreProductSetRequest $request)
     {
         return $this->executeControllerWithErrorHandlingAndInput(
             function() use ($request) {
                 $validated = $request->validated();
-                $validated['img'] = $this->badgeService->handleImageUpload($request);
-                $this->badgeService->createBadge($validated);
-                return to_route('badge.index');
+                $validated['img'] = $this->productSetService->handleImageUpload($request);
+                $this->productSetService->createProductSet($validated);
+                return to_route('productSets.index');
             },
-            'badge_creation',
+            'productSet_creation',
             ['validated_data' => $request->validated()]
         );
     }
 
-    public function edit(Badge $badge)
+    public function edit(ProductSet $productSet)
     {
         return $this->executeControllerWithErrorHandling(
-            function() use ($badge) {
-                return view('badge.edit', compact('badge'));
+            function() use ($productSet) {
+                return view('productSets.edit', compact('productSet'));
             },
-            'badge_edit_page_display',
-            ['badge_id' => $badge->id]
+            'productSet_edit_page_display',
+            ['productSet_id' => $productSet->id]
         );
     }
 
-    public function update(UpdateBadgeRequest $request, Badge $badge)
+    public function update(UpdateProductSetRequest $request, ProductSet $productSet)
     {
         return $this->executeControllerWithErrorHandlingAndInput(
-            function() use ($request, $badge) {
+            function() use ($request, $productSet) {
                 $validated = $request->validated();
-                $validated['img'] = $this->badgeService->handleImageUpload($request, $badge);
-                $this->badgeService->updateBadge($badge, $validated);
-                return to_route('badge.index');
+                $validated['img'] = $this->productSetService->handleImageUpload($request, $productSet);
+                $this->productSetService->updateProductSet($productSet, $validated);
+                return to_route('productSets.index');
             },
-            'badge_update',
+            'productSet_update',
             [
-                'badge_id' => $badge->id,
+                'productSet_id' => $productSet->id,
                 'validated_data' => $request->validated()
             ]
         );
     }
 
-    public function destroy(Badge $badge)
+    public function destroy(ProductSet $productSet)
     {
         return $this->executeControllerWithErrorHandling(
-            function() use ($badge) {
-                $this->badgeService->deleteBadge($badge);
-                return to_route('badge.index');
+            function() use ($productSet) {
+                $this->productSetService->deleteProductSet($productSet);
+                return to_route('productSets.index');
             },
-            'badge_deletion',
-            ['badge_id' => $badge->id]
+            'productSet_deletion',
+            ['productSet_id' => $productSet->id]
         );
     }
 }

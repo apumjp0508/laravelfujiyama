@@ -40,7 +40,6 @@
                     <h3 class="card-title fw-bold">{{ $product->name }}</h3>
                     <p class="card-text">{{ $product->description }}</p>
                     <p class="fw-bold text-danger fs-4">¥{{ number_format($product->price) }}</p>
-
                         <p class="text-muted">送料：¥{{ number_format($product->shippingFee) }}</p>
 
                     <div class="d-grid gap-2 mt-4">
@@ -55,15 +54,15 @@
                             <input type="hidden" name="stock" value="{{ $product->stock }}">
                             <input type="hidden" name="setNum" value="{{ $product->setNum }}">
                             <input type="hidden" name="productType" value="{{ $product->productType }}">
-                            @if($selectedBadges)
-                                @foreach($selectedBadges as $badge)
-                                    <input type="hidden" name="selectedBadges[]" value="{{ $badge }}">
+                            @if($selectedProductSets)
+                                @foreach($selectedProductSets as $productSet)
+                                    <input type="hidden" name="selectedProductSets[]" value="{{ $productSet }}">
                                 @endforeach
                             @endif
                             <input type="hidden" name="weight" value="1">
-
+                            
                             @if($product->productType === 'set')
-                                <a href="{{ route('confirmItems', ['product' => $product->id, 'selectedBadges' => $selectedBadges]) }}" class="btn btn-secondary mb-3">
+                                <a href="{{ route('confirmItems', [$product->id, 'selectedProductSets' => $selectedProductSets, 'setId' => $setId]) }}">
                                     セット内容を見る
                                 </a>
                             @endif

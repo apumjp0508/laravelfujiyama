@@ -38,8 +38,8 @@
                    @if($product->options->productType == 'set' && $product->options->setNum)
                        <p class="text-muted">セット商品 ({{ $product->options->setNum }}個選択)</p>
                    @endif
-                   @if($product->options->selectedBadges)
-                       <p class="text-info small">選択済みバッジ: {{ count($product->options->selectedBadges) }}個</p>
+                   @if($product->options->selectedProductSets)
+                       <p class="text-info small">選択済みプロダクトセット: {{ count($product->options->selectedProductSets) }}個</p>
                    @endif
                </a>
            </div>

@@ -23,26 +23,25 @@ class ConfirmItemsController extends Controller
     {
         return $this->executeControllerWithErrorHandling(
             function() use ($request, $product) {
-                $selectedBadgeIds = $request->query('selectedBadges');
-                dd($selectedBadgeIds);
+                
+                $selectedProductSetIds = $request->query('selectedProductSets');
                 $setId = $request->query('setId');
-                
-                // If setId is provided, clear previous selected badges for this set and update with new selection
-                if ($setId !== null && !empty($selectedBadgeIds)) {
-                    $this->confirmItemsService->updateSelectedBadgesForSet($product->id, $selectedBadgeIds, $setId);
+                // If setId is provided, clear previous selected product sets for this set and update with new selection
+                if ($setId !== null && !empty($selectedProductSetIds)) {
+                    $this->confirmItemsService->updateSelectedProductSetsForSet($product->id, $selectedProductSetIds, $setId);
                 }
-                
-                $result = $this->confirmItemsService->getConfirmItemsData($product->id, $selectedBadgeIds, $setId);
+      
+                $result = $this->confirmItemsService->getConfirmItemsData($product->id, $selectedProductSetIds, $setId);
                 return view('ec.confirmItems', [
                     'product' => $result['product'],
-                    'badges' => $result['badges'],
+                    'productSets' => $result['productSets'],
                     'setId' => $setId
                 ]);
             },
             'confirm_items_display',
             [
                 'product_id' => $product->id,
-                'selected_badge_ids' => $request->query('selectedBadges'),
+                'selected_product_set_ids' => $request->query('selectedProductSets'),
                 'set_id' => $request->query('setId')
             ]
         );

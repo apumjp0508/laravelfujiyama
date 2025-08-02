@@ -54,7 +54,7 @@ class CartService
                         'img' => $itemData['img'] ?? null,
                         'setNum' => $itemData['setNum'] ?? null,
                         'productType' => $itemData['productType'] ?? null,
-                        'selectedBadges' => $itemData['selectedBadges'] ?? null,
+                        'selectedProductSets' => $itemData['selectedProductSets'] ?? null,
                         'shippingFee' => $itemData['shipping_fee'] ?? 0,
                     ]
                 ]);

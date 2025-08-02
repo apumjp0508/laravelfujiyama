@@ -2,7 +2,7 @@
 
 namespace App\Services;
 
-use App\Models\BeforeBuySelectedBadge;
+use App\Models\BeforeBuySelectedProductSet;
 use App\Models\Product;
 use App\Traits\ErrorHandlingTrait;
 use Illuminate\Support\Facades\Auth;
@@ -28,27 +28,27 @@ class ProductDisplayService
         );
     }
 
-    public function getProductDetails($productId, $selectedBadges = null, $userId = null, $setId = null)
+    public function getProductDetails($productId, $selectedProductSets = null, $userId = null, $setId = null)
     {
         return $this->executeWithErrorHandling(
-            function() use ($productId, $selectedBadges, $userId, $setId) {
+            function() use ($productId, $selectedProductSets, $userId, $setId) {
                 $product = Product::findOrFail($productId);
                 $products = Product::all();
                 $categories = $products->pluck('category')->toArray();
                 $keywords = Product::where('category', 'like', "%セット%")->get();
                 $reviews = $product->reviews()->get();
 
-                // For set products, get selected badges from database if user is logged in
-                $finalSelectedBadges = $selectedBadges;
+                // For set products, get selected product sets from database if user is logged in
+                $finalSelectedProductSets = $selectedProductSets;
                 if ($product->productType === 'set' && Auth::check()) {
-                    $userSelectedBadges = BeforeBuySelectedBadge::where('product_id', $productId)
+                    $userSelectedProductSets = BeforeBuySelectedProductSet::where('product_id', $productId)
                         ->where('user_id', Auth::id())
-                        ->pluck('badge_id')
+                        ->pluck('product_set_id')
                         ->toArray();
                     
-                    // Use database badges if available, otherwise fall back to query parameter
-                    if (!empty($userSelectedBadges)) {
-                        $finalSelectedBadges = $userSelectedBadges;
+                    // Use database product sets if available, otherwise fall back to query parameter
+                    if (!empty($userSelectedProductSets)) {
+                        $finalSelectedProductSets = $userSelectedProductSets;
                     }
                 }
 
@@ -59,7 +59,7 @@ class ProductDisplayService
                     'categories' => $categories,
                     'keywords' => $keywords,
                     'reviews' => $reviews,
-                    'selectedBadges' => $finalSelectedBadges,
+                    'selectedProductSets' => $finalSelectedProductSets,
                     'userId' => $userId,
                     'setId' => $setId
                 ];
@@ -67,7 +67,7 @@ class ProductDisplayService
             'product_details_retrieval',
             [
                 'product_id' => $productId,
-                'selected_badges' => $selectedBadges,
+                'selected_product_sets' => $selectedProductSets,
                 'user_id' => $userId
             ]
         );

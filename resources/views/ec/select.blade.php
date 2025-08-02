@@ -15,20 +15,20 @@
         </div>
     @endguest
         <div class="row row-cols-1 row-cols-md-3 g-4">
-            @foreach($badges as $badge)
+            @foreach($productSets as $productSet)
                 <div class="col">
                     <div class="card h-100 shadow-sm">
-                        <img src="{{ asset($badge->img) }}" class="card-img-top product-img" alt="{{ $badge->name }}" style="object-fit: contain; height: 200px;">
+                        <img src="{{ asset($productSet->img) }}" class="card-img-top product-img" alt="{{ $productSet->name }}" style="object-fit: contain; height: 200px;">
                         <div class="card-body">
-                            <h5 class="card-title">{{ $badge->name }}</h5>
-                            <p class="card-text text-truncate">{{ $badge->description }}</p>
-                            <p><strong>横幅:</strong> {{ $badge->widthSize }} mm</p>
-                            <p><strong>縦幅:</strong> {{ $badge->heightSize }} mm</p>
+                            <h5 class="card-title">{{ $productSet->name }}</h5>
+                            <p class="card-text text-truncate">{{ $productSet->description }}</p>
+                            <p><strong>横幅:</strong> {{ $productSet->widthSize }} mm</p>
+                            <p><strong>縦幅:</strong> {{ $productSet->heightSize }} mm</p>
 
                             @auth
                             <div class="form-check">
-                                <input type="checkbox" name="selected_badges[]" value="{{ $badge->id }}" class="form-check-input checkbox" id="badge-{{ $badge->id }}">
-                                <label class="form-check-label" for="badge-{{ $badge->id }}">選択する</label>
+                                <input type="checkbox" name="selected_product_sets[]" value="{{ $productSet->id }}" class="form-check-input checkbox" id="product-set-{{ $productSet->id }}">
+                                <label class="form-check-label" for="product-set-{{ $productSet->id }}">選択する</label>
                             </div>
                             @endauth
                         </div>

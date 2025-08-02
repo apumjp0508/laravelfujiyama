@@ -108,11 +108,11 @@ trait ErrorHandlingTrait
             'image_upload' => '画像のアップロードに失敗しました。',
 
             // バッジ管理
-            'badge_retrieval' => 'バッジ一覧の取得に失敗しました。',
-            'badge_creation' => 'バッジの作成に失敗しました。',
-            'badge_update' => 'バッジの更新に失敗しました。',
-            'badge_deletion' => 'バッジの削除に失敗しました。',
-            'badge_image_upload' => 'バッジ画像のアップロードに失敗しました。',
+            'product_set_retrieval' => 'プロダクトセット一覧の取得に失敗しました。',
+            'product_set_creation' => 'プロダクトセットの作成に失敗しました。',
+            'product_set_update' => 'プロダクトセットの更新に失敗しました。',
+            'product_set_deletion' => 'プロダクトセットの削除に失敗しました。',
+            'product_set_image_upload' => 'プロダクトセット画像のアップロードに失敗しました。',
 
             // カート管理
             'cart_view_data_retrieval' => 'カート表示データの取得に失敗しました。',
@@ -130,12 +130,12 @@ trait ErrorHandlingTrait
             'paid_order_retrieval' => '支払い済み注文の取得に失敗しました。',
             'order_item_shipping' => '注文商品の発送処理に失敗しました。',
             'shipped_order_retrieval' => '発送済み注文の取得に失敗しました。',
-            'selected_badges_retrieval' => '選択されたバッジの取得に失敗しました。',
-            'selected_badges_creation' => '選択されたバッジの作成に失敗しました。',
+            'selected_product_sets_retrieval' => '選択されたプロダクトセットの取得に失敗しました。',
+            'selected_product_sets_creation' => '選択されたプロダクトセットの作成に失敗しました。',
 
             // 商品選択
             'product_selection' => '商品選択に失敗しました。',
-            'badges_and_user_retrieval' => 'バッジとユーザー情報の取得に失敗しました。',
+            'product_sets_and_user_retrieval' => 'プロダクトセットとユーザー情報の取得に失敗しました。',
 
             // ページ表示
             'page_display' => 'ページの表示に失敗しました。',
@@ -145,7 +145,7 @@ trait ErrorHandlingTrait
             'product_selection_page_display' => '商品選択ページの表示に失敗しました。',
             'order_confirmation_page_display' => '注文確認ページの表示に失敗しました。',
             'shipped_orders_page_display' => '発送済み注文ページの表示に失敗しました。',
-            'selected_badges_page_display' => '選択バッジ確認ページの表示に失敗しました。',
+            'selected_product_sets_page_display' => '選択プロダクトセット確認ページの表示に失敗しました。',
             'checkout_success_page_display' => '決済完了ページの表示に失敗しました。',
 
             // 認証関連
@@ -201,9 +201,9 @@ trait ErrorHandlingTrait
             'admin_review_display' => '管理者レビューページの表示に失敗しました。',
 
             // バッジ管理
-            'badge_list_display' => 'バッジ一覧ページの表示に失敗しました。',
-            'badge_creation_page_display' => 'バッジ作成ページの表示に失敗しました。',
-            'badge_edit_page_display' => 'バッジ編集ページの表示に失敗しました。',
+            'product_set_list_display' => 'プロダクトセット一覧ページの表示に失敗しました。',
+            'product_set_creation_page_display' => 'プロダクトセット作成ページの表示に失敗しました。',
+            'product_set_edit_page_display' => 'プロダクトセット編集ページの表示に失敗しました。',
 
             // 商品確認機能
             'confirm_items_data_retrieval' => '商品確認データの取得に失敗しました。',
@@ -288,6 +288,9 @@ trait ErrorHandlingTrait
             if ($e->getCode() == 400) {
                 return redirect()->back()->with('error', $e->getMessage());
             } else {
+
+                dd($e->getTraceAsString());
+                
                 return $this->handleControllerError($e, $operationName, $context);
             }
         }

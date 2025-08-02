@@ -23,7 +23,7 @@ class AddToCartRequest extends FormRequest
             'img' => 'nullable|string',
             'setNum' => 'nullable|integer',
             'productType' => 'nullable|string',
-            'selectedBadges' => 'nullable',
+            'selectedProductSets' => 'nullable',
         ];
     }
 }

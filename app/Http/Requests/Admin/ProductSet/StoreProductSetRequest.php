@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Http\Requests\Admin\Badge;
+namespace App\Http\Requests\Admin\ProductSet;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class StoreBadgeRequest extends FormRequest
+class StoreProductSetRequest extends FormRequest
 {
     public function authorize()
     {
