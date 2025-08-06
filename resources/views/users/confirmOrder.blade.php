@@ -48,6 +48,13 @@
                     @if($item->shippingFee > 0)
                         <p class="text-muted small">送料：¥{{ number_format($item->shippingFee) }}</p>
                     @endif
+                    <div class="mt-2">
+                        @if($item->statusItem === 'shipped')
+                            <span class="badge bg-success">発送済み</span>
+                        @else
+                            <span class="badge bg-warning">未発送</span>
+                        @endif
+                    </div>
                 </div>
             </div>
         </div>

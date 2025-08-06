@@ -1,4 +1,5 @@
 {
+  "$schema": "https://json.schemastore.org/claude-code-settings.json",
   "permissions": {
     "allow": [
       "Bash(php artisan config:clear:*)",
@@ -6,9 +7,12 @@
       "Bash(php:*)",
       "Bash(mv:*)",
       "Bash(mkdir:*)",
-      "Bash(rmdir:*)"
+      "Bash(rmdir:*)",
+      "Bash(find:*)",
+      "Bash(grep:*)",
+      "Bash(ls:*)",
+      "Bash(docker:*)"
     ],
     "deny": []
-  },
-  "$schema": "https://json.schemastore.org/claude-code-settings.json"
+  }
 }

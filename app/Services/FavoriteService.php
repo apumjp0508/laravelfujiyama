@@ -2,7 +2,7 @@
 
 namespace App\Services;
 
-use App\Models\User;
+use App\Repositories\Contracts\UserRepositoryInterface;
 use App\Traits\ErrorHandlingTrait;
 use Illuminate\Support\Facades\Auth;
 
@@ -10,12 +10,18 @@ class FavoriteService
 {
     use ErrorHandlingTrait;
 
+    protected $userRepository;
+
+    public function __construct(UserRepositoryInterface $userRepository)
+    {
+        $this->userRepository = $userRepository;
+    }
+
     public function getUserFavorites($userId)
     {
         return $this->executeWithErrorHandling(
             function() use ($userId) {
-                $user = User::findOrFail($userId);
-                $products = $user->favorite_products()->get();
+                $products = $this->userRepository->getUserFavoriteProducts($userId);
 
                 return [
                     'success' => true,
@@ -31,8 +37,13 @@ class FavoriteService
     {
         return $this->executeWithErrorHandling(
             function() use ($userId, $productId) {
-                $user = User::findOrFail($userId);
-                $user->favorite_products()->attach($productId);
+                $user = $this->userRepository->findById($userId);
+                
+                if (!$user) {
+                    throw new \Illuminate\Database\Eloquent\ModelNotFoundException();
+                }
+                
+                $this->userRepository->addToFavorites($userId, $productId);
 
                 return [
                     'success' => true,
@@ -51,8 +62,13 @@ class FavoriteService
     {
         return $this->executeWithErrorHandling(
             function() use ($userId, $productId) {
-                $user = User::findOrFail($userId);
-                $user->favorite_products()->detach($productId);
+                $user = $this->userRepository->findById($userId);
+                
+                if (!$user) {
+                    throw new \Illuminate\Database\Eloquent\ModelNotFoundException();
+                }
+                
+                $this->userRepository->removeFromFavorites($userId, $productId);
 
                 return [
                     'success' => true,

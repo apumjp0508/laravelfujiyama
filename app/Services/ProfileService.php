@@ -3,6 +3,7 @@
 namespace App\Services;
 
 use App\Models\User;
+use App\Repositories\Contracts\UserRepositoryInterface;
 use App\Traits\ErrorHandlingTrait;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
@@ -10,6 +11,13 @@ use Illuminate\Support\Facades\Hash;
 class ProfileService
 {
     use ErrorHandlingTrait;
+
+    protected UserRepositoryInterface $userRepository;
+
+    public function __construct(UserRepositoryInterface $userRepository)
+    {
+        $this->userRepository = $userRepository;
+    }
 
     public function updateProfile(User $user, array $data)
     {
@@ -42,11 +50,8 @@ class ProfileService
     {
         return $this->executeWithErrorHandling(
             function() use ($user, $password) {
-                // パスワード確認
-                if (!Hash::check($password, $user->password)) {
-                    throw new \Exception('パスワードが正しくありません。', 400);
-                }
-
+                // パスワード確認は既にコントローラーで実行済み
+                
                 // ログアウト
                 Auth::logout();
 
@@ -67,7 +72,7 @@ class ProfileService
     {
         return $this->executeWithErrorHandling(
             function() use ($userId) {
-                $user = User::findOrFail($userId);
+                $user = $this->userRepository->findByIdOrFail($userId);
                 return [
                     'success' => true,
                     'user' => $user

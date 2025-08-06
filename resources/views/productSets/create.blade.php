@@ -18,6 +18,18 @@
             <input type="text" id="description" name="description" class="form-control" placeholder="商品説明を入力">
         </div>
         <div class="mb-3">
+            <label for="product_id" class="form-label"><strong>関連商品</strong></label>
+            <select id="product_id" name="product_id" class="form-control">
+                <option value="">全商品共通（商品を選択しない）</option>
+                @foreach($products as $product)
+                    @if($product->productType === 'set')
+                        <option value="{{ $product->id }}">{{ $product->name }} (ID: {{ $product->id }})</option>
+                    @endif
+                @endforeach
+            </select>
+            <small class="form-text text-muted">特定の商品専用にする場合は商品を選択してください。空白の場合は全商品で共通利用できます。</small>
+        </div>
+        <div class="mb-3">
             <label for="stock" class="form-label"><strong>在庫数</strong></label>
             <input type="number" id="stock" name="stock" class="form-control" placeholder="在庫数を入力">
         </div>

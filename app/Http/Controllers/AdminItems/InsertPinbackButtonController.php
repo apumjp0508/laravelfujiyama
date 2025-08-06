@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\ProductSet\StoreProductSetRequest;
 use App\Http\Requests\Admin\ProductSet\UpdateProductSetRequest;
 use App\Models\ProductSet;
+use App\Models\Product;
 use App\Services\ProductSetService;
 use App\Traits\ErrorHandlingTrait;
 use Illuminate\Http\Request;
@@ -36,7 +37,8 @@ class InsertPinbackButtonController extends Controller
     {
         return $this->executeControllerWithErrorHandling(
             function() {
-                return view('productSets.create');
+                $products = Product::where('productType', 'set')->get();
+                return view('productSets.create', compact('products'));
             },
             'productSet_creation_page_display'
         );
@@ -60,7 +62,8 @@ class InsertPinbackButtonController extends Controller
     {
         return $this->executeControllerWithErrorHandling(
             function() use ($productSet) {
-                return view('productSets.edit', compact('productSet'));
+                $products = Product::where('productType', 'set')->get();
+                return view('productSets.edit', compact('productSet', 'products'));
             },
             'productSet_edit_page_display',
             ['productSet_id' => $productSet->id]

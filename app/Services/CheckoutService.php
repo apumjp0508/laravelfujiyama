@@ -3,8 +3,8 @@
 namespace App\Services;
 
 use Gloudemans\Shoppingcart\Facades\Cart;
-use App\Models\OrderItem;
-use App\Models\Product;
+use App\Repositories\Contracts\ProductRepositoryInterface;
+use App\Repositories\Contracts\OrderItemRepositoryInterface;
 use App\Traits\ErrorHandlingTrait;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -14,6 +14,17 @@ use Stripe\Checkout\Session;
 class CheckoutService
 {
     use ErrorHandlingTrait;
+
+    protected $productRepository;
+    protected $orderItemRepository;
+
+    public function __construct(
+        ProductRepositoryInterface $productRepository,
+        OrderItemRepositoryInterface $orderItemRepository
+    ) {
+        $this->productRepository = $productRepository;
+        $this->orderItemRepository = $orderItemRepository;
+    }
 
     public function getCartSummary($userId)
     {
@@ -118,7 +129,7 @@ class CheckoutService
                 $cart = Cart::instance($userId)->content();
                 $cartItems = Cart::content();
                 $cartIds = $cartItems->pluck('id')->toArray();
-                $products = Product::whereIn('id', $cartIds)->get();
+                $products = $this->productRepository->findByIds($cartIds);
 
                 // 在庫減算
                 foreach ($products as $product) {
@@ -128,8 +139,8 @@ class CheckoutService
                         if ($product->stock < $quantityInCart) {
                             throw new \Exception("商品「{$product->name}」の在庫が不足しています。", 400);
                         }
-                        $product->stock -= $quantityInCart;
-                        $product->save();
+                        $newStock = $product->stock - $quantityInCart;
+                        $this->productRepository->updateStock($product->id, $newStock);
                     }
                 }
 
@@ -151,7 +162,7 @@ class CheckoutService
                 }
 
                 foreach (Cart::content() as $product) {
-                    OrderItem::create([
+                    $this->orderItemRepository->create([
                         'product_id'   => $product->id,
                         'product_name' => $product->name,
                         'price'        => $product->price,

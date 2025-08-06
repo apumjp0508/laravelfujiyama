@@ -2,8 +2,8 @@
 
 namespace App\Services;
 
-use App\Models\BeforeBuySelectedProductSet;
-use App\Models\Product;
+use App\Repositories\Contracts\ProductRepositoryInterface;
+use App\Repositories\Contracts\BeforeBuySelectedProductSetRepositoryInterface;
 use App\Traits\ErrorHandlingTrait;
 use Illuminate\Support\Facades\Auth;
 
@@ -11,11 +11,22 @@ class ProductDisplayService
 {
     use ErrorHandlingTrait;
 
+    protected $productRepository;
+    protected $beforeBuySelectedProductSetRepository;
+
+    public function __construct(
+        ProductRepositoryInterface $productRepository,
+        BeforeBuySelectedProductSetRepositoryInterface $beforeBuySelectedProductSetRepository
+    ) {
+        $this->productRepository = $productRepository;
+        $this->beforeBuySelectedProductSetRepository = $beforeBuySelectedProductSetRepository;
+    }
+
     public function getAllProducts()
     {
         return $this->executeWithErrorHandling(
             function() {
-                $products = Product::all();
+                $products = $this->productRepository->all();
                 $categories = $products->pluck('category')->toArray();
 
                 return [
@@ -32,19 +43,19 @@ class ProductDisplayService
     {
         return $this->executeWithErrorHandling(
             function() use ($productId, $selectedProductSets, $userId, $setId) {
-                $product = Product::findOrFail($productId);
-                $products = Product::all();
+                $product = $this->productRepository->findById($productId);
+                if (!$product) {
+                    throw new \Illuminate\Database\Eloquent\ModelNotFoundException();
+                }
+                $products = $this->productRepository->all();
                 $categories = $products->pluck('category')->toArray();
-                $keywords = Product::where('category', 'like', "%セット%")->get();
+                $keywords = $this->productRepository->findByCategory('セット');
                 $reviews = $product->reviews()->get();
 
                 // For set products, get selected product sets from database if user is logged in
                 $finalSelectedProductSets = $selectedProductSets;
                 if ($product->productType === 'set' && Auth::check()) {
-                    $userSelectedProductSets = BeforeBuySelectedProductSet::where('product_id', $productId)
-                        ->where('user_id', Auth::id())
-                        ->pluck('product_set_id')
-                        ->toArray();
+                    $userSelectedProductSets = $this->beforeBuySelectedProductSetRepository->getByProductAndUser($productId, Auth::id());
                     
                     // Use database product sets if available, otherwise fall back to query parameter
                     if (!empty($userSelectedProductSets)) {
@@ -77,7 +88,7 @@ class ProductDisplayService
     {
         return $this->executeWithErrorHandling(
             function() use ($category) {
-                $products = Product::where('category', $category)->get();
+                $products = $this->productRepository->findByCategory($category);
 
                 return [
                     'success' => true,

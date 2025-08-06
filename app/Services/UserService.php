@@ -3,7 +3,8 @@
 namespace App\Services;
 
 use App\Models\User;
-use App\Models\OrderItem;
+use App\Repositories\Contracts\UserRepositoryInterface;
+use App\Repositories\Contracts\OrderItemRepositoryInterface;
 use App\Traits\ErrorHandlingTrait;
 use Illuminate\Support\Facades\Auth;
 
@@ -11,11 +12,27 @@ class UserService
 {
     use ErrorHandlingTrait;
 
+    protected $userRepository;
+    protected $orderItemRepository;
+
+    public function __construct(
+        UserRepositoryInterface $userRepository,
+        OrderItemRepositoryInterface $orderItemRepository
+    ) {
+        $this->userRepository = $userRepository;
+        $this->orderItemRepository = $orderItemRepository;
+    }
+
     public function getUserProfile($userId)
     {
         return $this->executeWithErrorHandling(
             function() use ($userId) {
-                $user = User::findOrFail($userId);
+                $user = $this->userRepository->findById($userId);
+                
+                if (!$user) {
+                    throw new \Illuminate\Database\Eloquent\ModelNotFoundException();
+                }
+                
                 return [
                     'success' => true,
                     'user' => $user
@@ -30,9 +47,7 @@ class UserService
     {
         return $this->executeWithErrorHandling(
             function() use ($userId) {
-                $orderItems = OrderItem::where('user_id', $userId)
-                    ->with('product')
-                    ->get();
+                $orderItems = $this->orderItemRepository->findByUserIdWithProduct($userId);
 
                 return [
                     'success' => true,
@@ -49,13 +64,15 @@ class UserService
         return $this->executeWithErrorHandling(
             function() use ($user, $data) {
                 // 各フィールドを個別に更新（nullの場合は既存値を保持）
-                $user->name = $data['name'] ?? $user->name;
-                $user->email = $data['email'] ?? $user->email;
-                $user->postal_code = $data['postal_code'] ?? $user->postal_code;
-                $user->address = $data['address'] ?? $user->address;
-                $user->phone = $data['phone'] ?? $user->phone;
+                $updateData = [
+                    'name' => $data['name'] ?? $user->name,
+                    'email' => $data['email'] ?? $user->email,
+                    'postal_code' => $data['postal_code'] ?? $user->postal_code,
+                    'address' => $data['address'] ?? $user->address,
+                    'phone' => $data['phone'] ?? $user->phone,
+                ];
 
-                $user->save();
+                $this->userRepository->update($user, $updateData);
 
                 return [
                     'success' => true,

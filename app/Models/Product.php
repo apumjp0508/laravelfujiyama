@@ -25,4 +25,10 @@ class Product extends Model
     {
         return $this->hasMany(OrderItem::class, 'product_id', 'id');
     }
+    
+    // New relationship for product_id functionality in ProductSets
+    public function productSets()
+    {
+        return $this->hasMany(ProductSet::class);
+    }
 }

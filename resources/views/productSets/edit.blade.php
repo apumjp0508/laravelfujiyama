@@ -20,6 +20,20 @@
             <textarea name="description" style="height:150px">{{ $productSet->description}}</textarea>
         </div>
         <div>
+            <strong>関連商品変更</strong>
+            <select name="product_id" style="width: 300px; padding: 5px;">
+                <option value="">全商品共通（商品を選択しない）</option>
+                @foreach($products as $product)
+                    @if($product->productType === 'set')
+                        <option value="{{ $product->id }}" {{ $productSet->product_id == $product->id ? 'selected' : '' }}>
+                            {{ $product->name }} (ID: {{ $product->id }})
+                        </option>
+                    @endif
+                @endforeach
+            </select>
+            <br><small>特定の商品専用にする場合は商品を選択してください。空白の場合は全商品で共通利用できます。</small>
+        </div>
+        <div>
             <strong>在庫数変更</strong>
             <input type="number" name='stock' value="{{$productSet->stock}}">
         </div>

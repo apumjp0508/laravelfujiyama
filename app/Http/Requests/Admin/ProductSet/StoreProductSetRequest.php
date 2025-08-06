@@ -20,6 +20,7 @@ class StoreProductSetRequest extends FormRequest
             'widthSize' => 'required|integer|min:0',
             'heightSize' => 'required|integer|min:0',
             'img' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048',
+            'product_id' => 'nullable|exists:products,id',
         ];
     }
 }

@@ -1,13 +1,6 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>coolmart</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM" crossorigin="anonymous">
-</head>
-<body>
-@auth
+@extends('layouts.AdminApp')
+
+@section('content')
 <a href="{{route('order.shipped')}}">発送完了済商品一覧</a>
    <div class='card'>
     <div class='card-header bg-primary text-white'>
@@ -35,7 +28,11 @@
                 <td>{{ $orderItem->product_name }}</td>
                 <td>10</td>
                 <td>{{ $orderItem->price }}</td> 
-                <td>{{ $orderItem->user_id}}</td>
+                <td>
+                    <a href="{{ route('order.buyerDetails', $orderItem->user_id) }}" class="text-primary text-decoration-underline">
+                        {{ $orderItem->user_id }}
+                    </a>
+                </td>
                 <td>{{ $orderItem->productType}}</td>
                 @if($orderItem->productType==='set')
                 <td>
@@ -45,7 +42,13 @@
                 @else
                 <td>----</td>
                 @endif
-                <td>未発送</td>
+                <td>
+                    @if($orderItem->statusItem === 'shipped')
+                        <span class="badge bg-success">発送済み</span>
+                    @else
+                        <span class="badge bg-warning">未発送</span>
+                    @endif
+                </td>
                 <td>
                     <a href="{{route('order.ship',$orderItem->id)}}">発送する</a>
                 </td>
@@ -56,8 +59,4 @@
         </table>
     </div>
 </div>
-@endauth
-<script src="https://kit.fontawesome.com/a7d21f3e64.js" crossorigin="anonymous"></script>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-geWF76RCwLtnZ8qwWowPQNguL3RmwHVBC9FhGdlKrxdiJJigb/j/68SIy3Te4Bkz" crossorigin="anonymous"></script>
-</body>
-</html>
+@endsection

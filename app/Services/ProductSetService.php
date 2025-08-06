@@ -11,11 +11,22 @@ class ProductSetService
 {
     use ErrorHandlingTrait;
 
-    public function getAllProductSets()
+    public function getAllProductSets($productId = null)
     {
         return $this->executeWithErrorHandling(
-            fn() => ProductSet::all(),
-            'product_set_retrieval'
+            function() use ($productId) {
+                if ($productId) {
+                    // Return product sets specific to the product or general ones
+                    return ProductSet::where(function($query) use ($productId) {
+                        $query->where('product_id', $productId)
+                              ->orWhereNull('product_id');
+                    })->get();
+                }
+                // Return all product sets (backward compatibility)
+                return ProductSet::all();
+            },
+            'product_set_retrieval',
+            ['product_id' => $productId]
         );
     }
 

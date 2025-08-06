@@ -288,9 +288,6 @@ trait ErrorHandlingTrait
             if ($e->getCode() == 400) {
                 return redirect()->back()->with('error', $e->getMessage());
             } else {
-
-                dd($e->getTraceAsString());
-                
                 return $this->handleControllerError($e, $operationName, $context);
             }
         }

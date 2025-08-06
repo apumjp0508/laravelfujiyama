@@ -3,13 +3,20 @@
 namespace App\Services;
 
 use Gloudemans\Shoppingcart\Facades\Cart;
-use App\Models\Product;
+use App\Repositories\Contracts\ProductRepositoryInterface;
 use App\Traits\ErrorHandlingTrait;
 use Illuminate\Support\Facades\Auth;
 
 class CartService
 {
     use ErrorHandlingTrait;
+
+    protected $productRepository;
+
+    public function __construct(ProductRepositoryInterface $productRepository)
+    {
+        $this->productRepository = $productRepository;
+    }
 
     public function getCartViewData($userId)
     {
@@ -23,9 +30,9 @@ class CartService
                         $total += $c->qty * $c->options->shippingFee;
                     }
                 }
-                $products = Product::all();
+                $products = $this->productRepository->all();
                 $categories = $products->pluck('category')->toArray();
-                $keywords = Product::where('category', 'like', "%セット%") ->get();
+                $keywords = $this->productRepository->findByCategory('セット');
                 return [
                     'userId' => $userId,
                     'cart' => $cart,
@@ -84,7 +91,7 @@ class CartService
                         Cart::instance($userId)->update($cartItem->rowId, $qty);
                     }
                 }
-                $product = Product::find($productId);
+                $product = $this->productRepository->findById($productId);
                 $productTotal = $product ? $product->price * $qty : 0;
                 $cartTotal = Cart::instance($userId)->content()->sum(function ($cartItem) {
                     $itemTotal = $cartItem->qty > 0 ? $cartItem->price * $cartItem->qty : 0;

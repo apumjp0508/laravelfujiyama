@@ -64,4 +64,29 @@ class ConfirmOrderController extends Controller
             ['order_item_id' => $orderItemId]
         );
     }
+
+    public function markAsUnshipped($orderItemId)
+    {
+        return $this->executeControllerWithErrorHandling(
+            function() use ($orderItemId) {
+                $this->confirmOrderService->markAsUnshipped($orderItemId);
+                
+                return redirect()->back()->with('success', '商品を未発送に戻してアーカイブしました。');
+            },
+            'order_item_paid_deletion',
+            ['order_item_id' => $orderItemId]
+        );
+    }
+
+    public function showBuyerDetails($userId)
+    {
+        return $this->executeControllerWithErrorHandling(
+            function() use ($userId) {
+                $buyer = $this->confirmOrderService->getBuyerDetails($userId);
+                return view('manageView.buyerDetails', compact('buyer'));
+            },
+            'buyer_details_display',
+            ['user_id' => $userId]
+        );
+    }
 }

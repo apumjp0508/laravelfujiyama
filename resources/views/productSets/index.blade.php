@@ -16,6 +16,7 @@
                 <th>名前</th>
                 <th>商品説明</th>
                 <th>在庫</th>
+                <th>関連商品</th>
                 <th>画像</th>
                 <th>横幅</th>
                 <th>縦幅</th>
@@ -29,6 +30,13 @@
             <td>{{ $productSet->name }}</td>
             <td>{{ $productSet->description }}</td>
             <td>{{ $productSet->stock}}</td>
+            <td>
+                @if($productSet->product_id)
+                    <span class="badge bg-info">{{ $productSet->product->name ?? 'ID: ' . $productSet->product_id }}</span>
+                @else
+                    <span class="badge bg-secondary">全商品共通</span>
+                @endif
+            </td>
             <td><img src="{{ asset($productSet->img)}}" width="100"></td>
             <td>{{$productSet->widthSize}}</td>
             <td>{{$productSet->heightSize}}</td>

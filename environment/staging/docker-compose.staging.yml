@@ -1,0 +1,53 @@
+version: '3.8'
+
+services:
+  app:
+    build: 
+      context: ../../
+      dockerfile: Dockerfile
+    container_name: laravel_app_staging
+    working_dir: /var/www/html
+    volumes:
+      - ./:/var/www/html
+    depends_on:
+      - nginx
+    environment:
+      APP_ENV: staging
+      APP_DEBUG: "false"
+      APP_URL: https://staging.coolmart.local
+    networks:
+      - laravel_staging_network
+
+  nginx:
+    image: nginx:latest
+    container_name: laravel_nginx_staging
+    ports:
+      - "8080:80"  # 本番と競合しないようポート変更（必要に応じて）
+    volumes:
+      - ./:/var/www/html
+      - ./nginx/staging.conf:/etc/nginx/conf.d/default.conf  # ステージング用設定ファイル
+    networks:
+      - laravel_staging_network
+
+  db:
+    image: mysql:8.0
+    container_name: laravel_mysql_staging
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: staging_password
+      MYSQL_DATABASE: laravel_staging_db
+      MYSQL_USER: staging_user
+      MYSQL_PASSWORD: staging_password
+    ports:
+      - "3307:3306"  # 本番と競合しないよう変更
+    volumes:
+      - staging_dbdata:/var/lib/mysql
+    networks:
+      - laravel_staging_network
+
+networks:
+  laravel_staging_network:
+    driver: bridge
+
+volumes:
+  staging_dbdata:

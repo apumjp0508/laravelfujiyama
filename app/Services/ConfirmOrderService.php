@@ -4,6 +4,7 @@ namespace App\Services;
 
 use App\Models\OrderItem;
 use App\Models\ProductSet;
+use App\Models\User;
 use App\Traits\ErrorHandlingTrait;
 
 class ConfirmOrderService
@@ -62,6 +63,32 @@ class ConfirmOrderService
             },
             'selected_product_sets_retrieval',
             ['order_item_id' => $orderItemId]
+        );
+    }
+
+
+
+    public function markAsUnshipped($orderItemId)
+    {
+        return $this->executeWithErrorHandling(
+            function() use ($orderItemId) {
+                $orderItem = OrderItem::findOrFail($orderItemId);
+                $orderItem->update(['statusItem' => 'paid']);
+                return true;
+            },
+            'order_item_paid_deletion',
+            ['order_item_id' => $orderItemId]
+        );
+    }
+
+    public function getBuyerDetails($userId)
+    {
+        return $this->executeWithErrorHandling(
+            function() use ($userId) {
+                return User::findOrFail($userId);
+            },
+            'buyer_details_retrieval',
+            ['user_id' => $userId]
         );
     }
 }

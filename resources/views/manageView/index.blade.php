@@ -1,46 +1,7 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>coolmart</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM" crossorigin="anonymous">
-</head>
-<body>
 
-@auth
-<nav class="navbar navbar-expand-lg navbar-dark bg-primary mb-4">
-  <div class="container-fluid">
-    <a class="navbar-brand fw-bold" href="#">管理者メニュー</a>
-    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#adminNavbar" aria-controls="adminNavbar" aria-expanded="false" aria-label="Toggle navigation">
-      <span class="navbar-toggler-icon"></span>
-    </button>
-    <div class="collapse navbar-collapse" id="adminNavbar">
-      <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-        <li class="nav-item">
-          <a class="nav-link" href="{{ route('admin.products.create') }}">
-            <i class="fas fa-plus-circle"></i> 商品追加
-          </a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" href="{{ route('cmart.index') }}">
-            <i class="fas fa-store"></i> ショップへ移動
-          </a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" href="{{ route('productSets.index') }}">
-            <i class="fas fa-th-large"></i> セット用缶バッチ管理
-          </a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" href="{{ route('order.index') }}">
-            <i class="fas fa-boxes"></i> 発注管理
-          </a>
-        </li>
-      </ul>
-    </div>
-  </div>
-</nav>
+@extends('layouts.AdminApp')
+
+@section('content')
 <div class="card shadow-sm">
     <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center">
         <h2 class="mb-0">商品管理システム</h2>
@@ -109,8 +70,7 @@
         </table>
     </div>
 </div>
-
-@endauth
+@endsection
 <script src="https://kit.fontawesome.com/a7d21f3e64.js" crossorigin="anonymous"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-geWF76RCwLtnZ8qwWowPQNguL3RmwHVBC9FhGdlKrxdiJJigb/j/68SIy3Te4Bkz" crossorigin="anonymous"></script>
 </body>

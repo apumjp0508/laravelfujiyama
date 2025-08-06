@@ -38,6 +38,9 @@ Route::get('/',function(){
 
 
 Route::middleware(['auth', 'admin'])->group(function () {
+    Route::get('admin/register', [AdminRegisterController::class, 'create'])
+        ->name('admin/admin.register');
+    Route::post('register', [AdminRegisterController::class, 'store']);
     Route::get('/admin/dashboard', [AdminController::class, 'index'])->name('admin.dashboard');
 });
 
@@ -47,11 +50,6 @@ Route::middleware(['auth', 'admin'])->group(function () {
 |--------------------------------------------------------------------------
 */
 Route::group(['prefix' => 'admin'], function () {
-    // 登録
-    Route::get('register', [AdminRegisterController::class, 'create'])
-        ->name('admin.register');
-
-    Route::post('register', [AdminRegisterController::class, 'store']);
 
     // ログイン
     Route::get('login', [AdminLoginController::class, 'showLoginPage'])
@@ -87,6 +85,8 @@ Route::middleware(['auth:admin'])->group(function () {
         Route::get('confirm/oreder/ship/{orderItem}','shipping')->name('order.ship');
         Route::get('confirm/order/shipped','shipped')->name('order.shipped');
         Route::get('confirm/order/selected/{orderItem}','confirmSet')->name('order.confirmSet');
+        Route::get('confirm/order/unshipped/{orderItem}','markAsUnshipped')->name('order.markAsUnshippedAndDelete');
+        Route::get('confirm/order/buyer/{user}','showBuyerDetails')->name('order.buyerDetails');
         });
     });
 });

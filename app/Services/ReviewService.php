@@ -2,8 +2,8 @@
 
 namespace App\Services;
 
-use App\Models\Review;
-use App\Models\Product;
+use App\Repositories\Contracts\ReviewRepositoryInterface;
+use App\Repositories\Contracts\ProductRepositoryInterface;
 use App\Traits\ErrorHandlingTrait;
 use Illuminate\Support\Facades\Auth;
 
@@ -11,16 +11,27 @@ class ReviewService
 {
     use ErrorHandlingTrait;
 
+    protected $reviewRepository;
+    protected $productRepository;
+
+    public function __construct(
+        ReviewRepositoryInterface $reviewRepository,
+        ProductRepositoryInterface $productRepository
+    ) {
+        $this->reviewRepository = $reviewRepository;
+        $this->productRepository = $productRepository;
+    }
+
     public function createReview(array $data)
     {
         return $this->executeWithErrorHandling(
             function() use ($data) {
-                $review = new Review();
-                $review->content = $data['content'];
-                $review->product_id = $data['product_id'];
-                $review->user_id = Auth::user()->id;
-                $review->score = $data['score'] ?? null;
-                $review->save();
+                $review = $this->reviewRepository->create([
+                    'content' => $data['content'],
+                    'product_id' => $data['product_id'],
+                    'user_id' => Auth::user()->id,
+                    'score' => $data['score'] ?? null,
+                ]);
 
                 return [
                     'success' => true,
@@ -40,8 +51,11 @@ class ReviewService
     {
         return $this->executeWithErrorHandling(
             function() use ($productId) {
-                $product = Product::findOrFail($productId);
-                $reviews = $product->reviews()->get();
+                $product = $this->productRepository->findById($productId);
+                if (!$product) {
+                    throw new \Illuminate\Database\Eloquent\ModelNotFoundException();
+                }
+                $reviews = $this->reviewRepository->findByProductId($productId);
 
                 return [
                     'success' => true,
@@ -58,8 +72,11 @@ class ReviewService
     {
         return $this->executeWithErrorHandling(
             function() use ($reviewId) {
-                $review = Review::findOrFail($reviewId);
-                $review->delete();
+                $review = $this->reviewRepository->findById($reviewId);
+                if (!$review) {
+                    throw new \Illuminate\Database\Eloquent\ModelNotFoundException();
+                }
+                $this->reviewRepository->delete($review);
 
                 return [
                     'success' => true,

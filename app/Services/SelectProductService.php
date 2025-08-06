@@ -16,7 +16,22 @@ class SelectProductService
     {
         return $this->executeWithErrorHandling(
             function() use ($product) {
-                $productSets = ProductSet::all();
+                // Check if product is of type 'set'
+                if ($product->productType !== 'set') {
+                    throw new \Exception('This product is not a set product type.', 400);
+                }
+                
+                // Get product sets that are either specific to this product or general (null product_id)
+                $productSets = ProductSet::where(function($query) use ($product) {
+                    $query->where('product_id', $product->id)
+                          ->orWhereNull('product_id');
+                })->get();
+                
+                // Check if there are any product sets available
+                if ($productSets->isEmpty()) {
+                    throw new \Exception('No product sets are available for this product. Please contact administrator to add product sets first.', 400);
+                }
+                
                 $user = Auth::user();
                 return [
                     'productSets' => $productSets,
