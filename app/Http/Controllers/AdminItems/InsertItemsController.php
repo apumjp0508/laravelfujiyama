@@ -48,6 +48,12 @@ class InsertItemsController extends Controller
         return $this->executeControllerWithErrorHandlingAndInput(
             function() use ($request) {
                 $validated = $request->validated();
+                // キー名をモデル/DBに合わせて変換
+                if (array_key_exists('shippingFee', $validated)) {
+                    $validated['shipping_fee'] = $validated['shippingFee'];
+                    unset($validated['shippingFee']);
+                }
+
                 $validated['img'] = $this->insertItemsService->handleImageUpload($request);
                 $this->insertItemsService->createProduct($validated);
                 return to_route('admin.products.list');
@@ -70,9 +76,16 @@ class InsertItemsController extends Controller
 
     public function update(UpdateProductRequest $request, Product $product)
     {
+       
         return $this->executeControllerWithErrorHandlingAndInput(
             function() use ($request, $product) {
                 $validated = $request->validated();
+                // キー名をモデル/DBに合わせて変換
+                if (array_key_exists('shippingFee', $validated)) {
+                    $validated['shipping_fee'] = $validated['shippingFee'];
+                    unset($validated['shippingFee']);
+                }
+            
                 $validated['img'] = $this->insertItemsService->handleImageUpload($request, $product);
                 $this->insertItemsService->updateProduct($product, $validated);
                 return to_route('admin.products.list');

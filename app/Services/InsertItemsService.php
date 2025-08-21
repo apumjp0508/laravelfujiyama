@@ -57,39 +57,52 @@ class InsertItemsService
     public function handleImageUpload(Request $request, ?Product $product = null)
     {
         return $this->executeWithErrorHandling(
-            function() use ($request, $product) {
-                //本番環境と開発環境でのimg保存場所変更
-                if ($request->hasFile('img')) {
-                    if ($product && $product->img) {
-                        $parsedUrl = parse_url($product->img);
-                        if (isset($parsedUrl['path'])) {
-                            $path = ltrim($parsedUrl['path'], '/');
-                            if (App::environment('production')) {
-                                Storage::disk('s3')->delete($path);
-                            } else {
-                                Storage::disk('public')->delete($path);
-                            }
-                        }
-                    }
+            function () use ($request, $product) {
+                if (!$request->hasFile('img')) {
+                    return $product ? $product->img : null;
+                }
 
-                    if (App::environment('production')) {
-                        $path = $request->file('img')->store('images', 's3');
-                        return Storage::disk('s3')->url($path);
+                $file = $request->file('img');
+                if (!$file->isValid()) {
+                    throw new \RuntimeException('画像のアップロードに失敗しました（isValid=false, code=' . $file->getError() . ')');
+                }
+
+                if ($product && $product->img) {
+                    $parsedPath = parse_url($product->img, PHP_URL_PATH) ?: $product->img;
+                    $path = ltrim($parsedPath, '/');
+
+                    if (app()->environment('production')) {
+                        $key = preg_replace('#^storage/#', '', $path);
+                        Storage::disk('s3')->delete($key);
                     } else {
-                        $path = $request->file('img')->store('img', 'public');
-                        return asset('storage/' . $path);
+                        $localKey = str_replace('storage/', 'public/', $path);
+                        Storage::disk('public')->delete($localKey);
                     }
                 }
 
-                return $product ? $product->img : null;
+                if (app()->environment('production')) {
+                    $key = $file->store('images', 's3');
+                    if (!$key) {
+                        throw new \RuntimeException('S3への画像保存に失敗しました');
+                    }
+                    return Storage::disk('s3')->url($key);
+                } else {
+                    $saved = $file->store('public/images');
+                    if (!$saved) {
+                        throw new \RuntimeException('ローカルへの画像保存に失敗しました');
+                    }
+                    return str_replace('public/', 'storage/', $saved);
+                }
             },
             'image_upload',
             [
                 'product_id' => $product ? $product->id : null,
-                'has_file' => $request->hasFile('img')
+                'has_file' => $request->hasFile('img'),
+                'environment' => app()->environment(),
             ]
         );
     }
+
 
     public function getProductReviews(Product $product)
     {

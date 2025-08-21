@@ -307,6 +307,7 @@ trait ErrorHandlingTrait
                 'method' => __METHOD__,
                 'line' => __LINE__
             ], $context);
+            dd($e->getTraceAsString());
 
             \Log::error('[500] ' . $operationName . ' failed - Controller Error', $logData);
             

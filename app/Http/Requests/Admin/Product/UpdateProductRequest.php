@@ -20,12 +20,14 @@ class UpdateProductRequest extends FormRequest
             'price' => 'required|numeric|min:0',
             'shippingFee' => 'required|integer|min:0',
             'stock' => 'required|integer|min:0',
-            'img' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048',
+            'img' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
             'productType' => 'required|string',
             'setNum' => 'nullable|integer',
         ];
     }
 }
+
+
 
 
 

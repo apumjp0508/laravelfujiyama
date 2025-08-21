@@ -1,0 +1,301 @@
+body {
+    margin: 0;
+    overflow: visible;
+    position: relative;
+    background-color: black;
+    animation: fadeBg 4s ease-in forwards;
+  }
+  
+  @keyframes fadeBg {
+    to {
+      background-color: #f0f8ff;
+    }
+  }
+
+  .page-overlay{
+    text-align: center;
+  }
+  .page-overlay h1{
+    font-size: 75px;
+    color: #f0f8ff;
+    font-family: "Oswald", sans-serif;
+  }
+  
+  .badge-container {
+    position: relative;
+    width: 100%;
+    height: 100vh;
+    overflow:hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  
+  .badge {
+    width: 100px;
+    height: auto;
+    display: block;
+    border-radius: 50%;
+    opacity: 0; /* 最初は見えない */
+    animation: float 3s ease-in-out infinite;
+    animation-play-state: paused; /* 最初は停止しておく */
+    filter: drop-shadow(0 8px 12px rgba(0, 0, 0, 0.3));
+  }
+
+  .badge-wrap {
+    display: inline-block;
+    position: absolute;
+  }
+  #wrap1{
+    top: 10%;
+    left: 10%;
+  }
+  
+  /* badge1: 左から飛んでくる */
+  .badge1 #badge1{
+    top: 10%;
+    rotate: -20deg;
+    left: 10%;
+    animation: flyInLeft 1s ease-out 4s forwards, float 3s ease-in-out 5s infinite;
+  }
+  #wrap2{
+    top: 20%;
+    left: 75%;
+  }
+  
+  /* badge2: 右から */
+  .badge2 #badge2{
+    top: 20%;
+    left: 75%;
+    animation: flyInRight 1s ease-out 4.2s forwards, float 3s ease-in-out 5.2s infinite;
+  }
+
+  #wrap3{
+    top: 75%;
+    left: 60%;
+  }
+  
+  /* badge3: 下から */
+  .badge3 #badge3{
+    top: 70%;
+    left: 40%;
+    animation: flyInBottom 1s ease-out 4.4s forwards, float 3s ease-in-out 5.4s infinite;
+  }
+
+  #wrap4{
+    top: 85%;
+    left: 85%;
+  }
+  
+  /* badge4: 上から */
+  .badge4 #badge4{
+    top: 85%;
+    left: 85%;
+    animation: flyInTop 1s ease-out 4.6s forwards, float 3s ease-in-out 5.6s infinite;
+  }
+  #wrap5{
+    top: 80%;
+    left: 5%;
+   
+  }
+  
+  /* badge5: 斜め左上から */
+  .badge5 #badge5{
+    top: 80%;
+    left: 5%;
+    animation: flyInDiagonal 1s ease-out 4.8s forwards, float 3s ease-in-out 5.8s infinite;
+  }
+ 
+  .logo{
+    width: 500px;
+  }
+  @keyframes flyInLeft {
+    0% {
+      transform: translateX(-150%) scale(0.5);
+      opacity: 0;
+    }
+    100% {
+      transform: translateX(0) scale(1);
+      opacity: 1;
+    }
+  }
+  
+  @keyframes flyInRight {
+    0% {
+      transform: translateX(150%) scale(0.5);
+      opacity: 0;
+    }
+    100% {
+      transform: translateX(0) scale(1);
+      opacity: 1;
+    }
+  }
+  
+  @keyframes flyInBottom {
+    0% {
+      transform: translateY(150%) rotate(-45deg);
+      opacity: 0;
+    }
+    100% {
+      transform: translateY(0) rotate(0deg);
+      opacity: 1;
+    }
+  }
+  
+  @keyframes flyInTop {
+    0% {
+      transform: translateY(-150%) rotate(45deg);
+      opacity: 0;
+    }
+    100% {
+      transform: translateY(0) rotate(0deg);
+      opacity: 1;
+    }
+  }
+  
+  @keyframes flyInDiagonal {
+    0% {
+      transform: translate(-100%, -100%) scale(0.3);
+      opacity: 0;
+    }
+    100% {
+      transform: translate(0, 0) scale(1);
+      opacity: 1;
+    }
+  }
+  
+  /* 浮遊アニメーション */
+  @keyframes float {
+    0%   { transform: translateY(0); }
+    50%  { transform: translateY(-20px); }
+    100% { transform: translateY(0); }
+  }
+  
+  .rotate {
+    animation: rotate-badge 1s ease-out;
+  }
+  
+  /* 実際の回転の動き */
+  @keyframes rotate-badge {
+    from {
+      transform: rotate(0deg);
+    }
+    to {
+      transform: rotate(720deg);
+    }
+  }
+
+.a{
+  margin-top: 200px;
+}
+
+.product{
+  text-decoration: none;
+  color: black;
+}
+.inst{
+  text-decoration: none;
+  color: black;
+}
+.shop{
+  text-decoration: none;
+  color: black;
+}
+.navDiv a{
+    padding: auto;
+    display: inline-block;
+}
+
+.navDiv a:hover{
+  animation: scaleUp 0.8s ease forwards;
+}
+
+@keyframes scaleUp {
+  from{
+    transform: scale(1.0);
+  }
+  to{
+    transform: scale(1.3);
+  }
+}
+.logoDiv {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  opacity: 0; /* 最初は非表示 */
+  animation: logoFadeIn 1s ease-out 4s forwards; /* 4秒後にアニメーション開始 */
+}
+@keyframes logoFadeIn {
+  0% {
+    opacity: 0;
+    transform: translate(-50%, -50%) scale(0.8);
+  }
+  100% {
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(1);
+  }
+}
+
+.logo {
+  width: 500px;
+  max-width: 80vw;
+  height: auto;
+  filter: drop-shadow(0 8px 12px rgba(0, 0, 0, 0.3));
+}
+
+/* -------- スマホ（〜599px） -------- */
+@media screen and (max-width: 599px) {
+  .logo {
+    width: 70vw; /* ロゴを画面幅に合わせて縮小 */
+  }
+
+  .badge {
+    width: 60px; /* バッジも小さめに */
+  }
+
+  .badge-wrap {
+    /* 必要であれば位置も調整（例） */
+    transform: scale(0.8); /* 全体を少し縮小 */
+  }
+
+  .page-overlay h1 {
+    font-size: 36px; /* タイトル縮小 */
+  }
+
+  .navDiv a {
+    font-size: 16px; /* ナビ文字小さく */
+    margin: 8px;
+  }
+
+  .a {
+    margin-top: 100px;
+  }
+}
+
+/* -------- タブレット（600px〜1024px） -------- */
+@media screen and (min-width: 600px) and (max-width: 1024px) {
+  .logo {
+    width: 300px;
+  }
+
+  .badge {
+    width: 80px;
+  }
+
+  .page-overlay h1 {
+    font-size: 48px;
+  }
+
+  .navDiv a {
+    font-size: 18px;
+    margin: 10px;
+  }
+
+  .a {
+    margin-top: 150px;
+  }
+}
+
+/* -------- PC（1025px〜）は現在のスタイルのままでOK -------- */

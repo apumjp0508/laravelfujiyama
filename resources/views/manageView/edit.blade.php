@@ -37,6 +37,17 @@
             <input type="number" name='stock' value="{{$product->stock}}">
         </div>
         <div>
+            <strong>商品タイプ</strong>
+            <select name="productType">
+                <option value="normal" {{ ($product->productType ?? 'normal') == 'normal' ? 'selected' : '' }}>通常商品</option>
+                <option value="set" {{ ($product->productType ?? '') == 'set' ? 'selected' : '' }}>セット商品</option>
+            </select>
+        </div>
+        <div>
+            <strong>セット数</strong>
+            <input type="number" name="setNum" value="{{$product->setNum ?? ''}}" min="1" placeholder="セット商品の場合のみ入力">
+        </div>
+        <div>
             <strong>画像変更</strong>
             <strong>変更前画像</strong>
             <img src="{{asset($product->img)}}" width="100">

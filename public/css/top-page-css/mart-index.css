@@ -1,0 +1,76 @@
+.product-img {
+    height: 250px;
+    object-fit: cover;
+}
+.categories-img{
+    width: 300px;
+    height: auto;
+    display: block;
+    border-radius: 50%;
+    filter: drop-shadow(0 8px 12px rgba(0, 0, 0, 0.3));
+}
+.category-wrapper{
+    border: none;
+}
+
+/* Category search layout */
+.Category-search{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding-top: 1.2rem; /* タイトルの上余白 */
+}
+.category-title{
+    text-align: center;
+    margin-top: 0.8rem; /* 少し上に余白を置く */
+    margin-bottom: 1rem;
+}
+.categories{
+    display: grid;
+    gap: 16px 24px;
+    width: 100%;
+    max-width: 1000px;
+    grid-template-columns: repeat(3, minmax(0, 1fr)); /* 最大3列 */
+}
+/* 折り返し＆列数可変 */
+@media (max-width: 1024px){
+    .categories{ grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+@media (max-width: 640px){
+    .categories{ grid-template-columns: 1fr; }
+}
+
+/* 各カテゴリの中央寄せ */
+.category-wrapper{
+    display: flex;
+    justify-content: center;
+}
+
+/* 枠線を消す（Bootstrapのbtn-outlineのボーダー無効化） */
+.category-btn{
+    border: none !important;
+    box-shadow: none;
+    background: transparent;
+}
+
+/* Product card custom styles */
+.product-card{
+    background-color: #f7efe8; /* 薄いベージュ */
+}
+.product-title{
+    color: #111; /* 黒字 */
+}
+.product-desc{
+    color: #777; /* 薄い灰色 */
+}
+.product-price{
+    color: #777; /* 薄い灰色 */
+}
+.product-check-btn{
+    background-color: #f28b82; /* 薄い赤 */
+    color: #fff; /* 文字は白 */
+}
+.product-check-btn:hover{
+    background-color: #ee6c63; /* ほんの少し濃く */
+    color: #fff;
+}

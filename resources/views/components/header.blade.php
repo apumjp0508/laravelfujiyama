@@ -1,14 +1,9 @@
-<nav class="navbar navbar-expand-md navbar-light bg-white shadow-sm samuraimart-header-container">
+<nav class="navbar navbar-expand-md navbar-light bg-white shadow-sm samuraimart-header-container fixed-top">
     <div class="container">
-        {{-- ロゴ --}}
-        <a class="navbar-brand fw-bold" href="{{ url('/') }}">
-            {{ config('app.name', 'MY Original Mart') }}
-        </a>
-
         {{-- 検索フォーム --}}
         <form action="{{ route('search') }}" method="GET" class="d-flex mx-auto w-50">
-            <input name="keyword" class="form-control me-2" type="search" placeholder="商品を検索" aria-label="検索">
-            <button class="btn btn-outline-primary" type="submit">検索</button>
+            <input name="keyword" class="form-control me-2" type="search" placeholder="SEARCH" aria-label="SEARCH">
+            <button class="btn" type="submit"><i class="fa fa-search"></i></button>
         </form>
 
         {{-- メニュー項目 --}}
@@ -16,10 +11,10 @@
             <ul class="navbar-nav ms-auto align-items-center">
                 @guest
                     <li class="nav-item me-3">
-                        <a class="nav-link" href="{{ route('register') }}">登録</a>
+                        <a class="nav-link" href="{{ route('register') }}">REGISTER</a>
                     </li>
                     <li class="nav-item me-3">
-                        <a class="nav-link" href="{{ route('login') }}">ログイン</a>
+                        <a class="nav-link" href="{{ route('login') }}">LOGIN</a>
                     </li>
                     <li class="nav-item me-3">
                         <a class="nav-link" href="{{ route('login') }}">
@@ -57,7 +52,7 @@
                     <li class="nav-item me-3">
                         <a class="nav-link text-danger" href="{{ route('logout') }}"
                            onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
-                            ログアウト
+                            LOGOUT
                         </a>
                         <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
                             @csrf
