@@ -65,9 +65,6 @@
                 <img src="{{ $product->img }}" class="card-img-top product-img" alt="{{ $product->name }}">
                 <div class="card-body d-flex flex-column">
                     <h5 class="card-title fw-semibold product-title">{{ $product->name }}</h5>
-                    <p class="card-text text-truncate product-desc" title="{{ $product->description }}">
-                        {{ $product->description }}
-                    </p>
                     <p class="fw-bold fs-5 mt-auto product-price">¥{{ number_format($product->price) }}</p>
                 </div>
                 <div class="card-footer bg-white border-0 text-center">

@@ -24,6 +24,7 @@
         .login-container h1 {
             margin-bottom: 20px;
             color: #333;
+            font-weight: 600;
         }
         .form-group {
             margin-bottom: 15px;
@@ -32,32 +33,44 @@
         .form-group label {
             display: block;
             margin-bottom: 5px;
+            color: #555;
+            font-weight: 500;
         }
         .form-group input {
             width: 100%;
             padding: 8px;
-            border: 1px solid #ccc;
+            border: 1px solid #ddd;
             border-radius: 4px;
+            background-color: #fafafa;
+        }
+        .form-group input:focus {
+            border-color: #666;
+            box-shadow: 0 0 0 0.2rem rgba(102, 102, 102, 0.25);
+            background-color: #fff;
+            outline: none;
         }
         .btn {
-            background-color: #007bff;
+            background-color: #333;
             color: white;
             padding: 10px;
             border: none;
             width: 100%;
             border-radius: 4px;
             cursor: pointer;
+            font-weight: 500;
         }
         .btn:hover {
-            background-color: #0056b3;
+            background-color: #555;
         }
         .forgot-password {
             display: block;
             margin-top: 10px;
-            color: #007bff;
+            color: #999;
             text-decoration: none;
+            font-size: 0.9rem;
         }
         .forgot-password:hover {
+            color: #666;
             text-decoration: underline;
         }
     </style>

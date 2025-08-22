@@ -1,7 +1,15 @@
-.product-img {
-    height: 250px;
-    object-fit: cover;
+.product-card{
+    display: flex;
+    flex-direction: column;
+    height: 100%;
 }
+.product-card .product-img{
+    flex: 0 0 70%; /* 親（カード）高さの約70%を占める */
+    width: 100%;
+    height: 70%;
+    object-fit: contain; /* 画像を切り抜かず枠内に収める */
+}
+
 .categories-img{
     width: 300px;
     height: auto;
@@ -65,12 +73,43 @@
 }
 .product-price{
     color: #777; /* 薄い灰色 */
+    padding-bottom: 0px;
+    margin-bottom: 0; /* 価格下の余白を詰める */
+}
+.product-card .card-body{
+    padding-bottom: 0.5rem; /* 本文の下余白をやや小さく */
+}
+.product-card .card-footer{
+    padding-top: 0.25rem; /* ボタン上の余白を小さく */
+    padding-bottom: 0.5rem;
 }
 .product-check-btn{
     background-color: #f28b82; /* 薄い赤 */
     color: #fff; /* 文字は白 */
+    padding-top: 0.4rem; /* ボタン自体の高さもやや抑える */
+    padding-bottom: 0.4rem;
 }
 .product-check-btn:hover{
     background-color: #ee6c63; /* ほんの少し濃く */
     color: #fff;
+}
+
+/* Ensure product card is tall enough so the button fits */
+.product-card{
+    min-height: 520px; /* desktop base */
+}
+@media (max-width: 1024px){
+    .product-card{ min-height: 480px; }
+}
+@media (max-width: 640px){
+    .product-card{ min-height: 440px; }
+}
+/* Keep footer inside card bottom within flex column layout */
+.product-card .card-footer{
+    margin-top: auto;
+}
+/* Make button block-level to avoid overflow issues */
+.product-check-btn{
+    display: block;
+    width: 100%;
 }

@@ -14,7 +14,7 @@ class ProductSetSeeder extends Seeder
             'name' => 'セット用缶バッチ1',
             'description' => 'セット用缶バッチ',
             'stock' => 10,
-            'img' => 'storage/img/uMoKXdDUV4Wj4VuUCfxaRMpO1bxhF97qgaYI575N.png',
+            'img' => 'img/like-earth-badge.png',
             'widthSize' => '50',
             'heightSize' => '50'
         ]);
@@ -22,7 +22,7 @@ class ProductSetSeeder extends Seeder
             'name' => 'セット用缶バッチ2',
             'description' => 'セット用缶バッチ',
             'stock' => 10,
-            'img' => 'storage/img/SCVhItzqW3EEttA8Evx4kPmIAm9otEw5A2fFIBOy.png',
+            'img' => 'img/yossy-badge.png',
             'widthSize' => '50',
             'heightSize' => '50'
         ]);
@@ -30,7 +30,7 @@ class ProductSetSeeder extends Seeder
             'name' => 'セット用缶バッチ3',
             'description' => 'セット用缶バッチ',
             'stock' => 10,
-            'img' => 'storage/img/x5cWBHlaomPkhO9D5KhZc8n2yX1899FWgY45xN4K.png',
+            'img' => 'img/logo-badge.png',
             'widthSize' => '50',
             'heightSize' => '50'
         ]);
@@ -38,7 +38,7 @@ class ProductSetSeeder extends Seeder
             'name' => 'セット用缶バッチ4',
             'description' => 'セット用缶バッチ',
             'stock' => 10,
-            'img' => 'storage/img/UTTyZfEivhj1cuddprIZ9nEq8YE9Pvr7mTWlDXAk.png',
+            'img' => 'img/star-badge.png',
             'widthSize' => '50',
             'heightSize' => '50'
         ]);
@@ -46,7 +46,7 @@ class ProductSetSeeder extends Seeder
             'name' => 'セット用缶バッチ5',
             'description' => 'セット用缶バッチ',
             'stock' => 10,
-            'img' => 'storage/img/WVDVl86DUfaO9slQZqwxEtbMkV9R9N1rbwQ8VFqn.png',
+            'img' => 'img/pink-and-blue-badge.png',
             'widthSize' => '50',
             'heightSize' => '50'
         ]);

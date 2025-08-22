@@ -1,16 +1,19 @@
 document.addEventListener('DOMContentLoaded', function () {
     const cartBtn = document.getElementById('cartBtn');
-    console.log("aaa");
     if (cartBtn) {
-        console.log('nnn');
+        // 元の背景色を保存
+        const originalBackgroundColor = cartBtn.style.backgroundColor || 'white';
+        const originalText = cartBtn.innerHTML;
+        
         cartBtn.addEventListener('click', () => {
-            cartBtn.style.backgroundColor = 'green';
+            // ボタンの背景色を変更
+            cartBtn.style.backgroundColor = 'rgb(231, 108, 108)';
             cartBtn.innerHTML = 'カートに追加しました';
-            console.log('カートに追加しました');
 
+            // 1.5秒後に元の状態に戻す
             setTimeout(() => {
-                cartBtn.style.backgroundColor = 'blue';
-                cartBtn.innerHTML = 'カートに追加する';
+                cartBtn.style.backgroundColor = originalBackgroundColor;
+                cartBtn.innerHTML = originalText;
             }, 1500);
         });
     }

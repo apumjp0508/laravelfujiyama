@@ -22,7 +22,7 @@
 
                             <p style="text-align: center; margin: 30px 0;">
                                 <a href="{{ $url }}"
-                                   style="display: inline-block; padding: 12px 24px; background-color: #007bff; color: #fff;
+                                   style="display: inline-block; padding: 12px 24px; background-color: #333; color: #fff;
                                    text-decoration: none; border-radius: 5px; font-weight: bold;">
                                     メールアドレスを確認する
                                 </a>

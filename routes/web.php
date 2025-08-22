@@ -114,7 +114,7 @@ Route::middleware(['verified'])->group(function () {
 
     Route::controller(CartController::class)->group(function () {
         Route::get('users/carts', 'index')->name('carts.index');
-        Route::post('users/carts/add', 'store')->name('carts.store');
+        Route::post('carts/add', 'store')->name('carts.add');
         Route::delete('users/carts/{product}','destroy')->name('carts.destroy');
         Route::post('carts/update', 'update')->name('carts.update');
         Route::get('carts/confirm/{product}','confirmItems')->name('carts.confirmItems');

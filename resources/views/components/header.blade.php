@@ -26,6 +26,11 @@
                             <i class="fas fa-shopping-cart"></i>
                         </a>
                     </li>
+                    <li class="nav-item me-3">
+                        <a href="https://www.instagram.com/c_official_shop?utm_source=ig_web_button_share_sheet&igsh=ZDNlZDc0MzIxNw==" class="inst">
+                            <i class="fa fa-instagram"></i>
+                        </a>
+                    </li>
                 @else
                     <li class="nav-item me-3">
                         <a class="nav-link" href="{{ route('mypage') }}">
@@ -47,6 +52,11 @@
                             <i class="fas fa-shopping-cart"></i>
                             {{-- ここにバッジを表示したい場合は↓ --}}
                             {{-- <span class="badge bg-danger position-absolute top-0 start-100 translate-middle">3</span> --}}
+                        </a>
+                    </li>
+                    <li class="nav-item me-3">
+                        <a href="https://www.instagram.com/c_official_shop?utm_source=ig_web_button_share_sheet&igsh=ZDNlZDc0MzIxNw==" class="inst">
+                            <i class="fa fa-instagram"></i>
                         </a>
                     </li>
                     <li class="nav-item me-3">
