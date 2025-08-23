@@ -49,9 +49,9 @@ class InsertItemsController extends Controller
             function() use ($request) {
                 $validated = $request->validated();
                 // キー名をモデル/DBに合わせて変換
-                if (array_key_exists('shippingFee', $validated)) {
-                    $validated['shipping_fee'] = $validated['shippingFee'];
-                    unset($validated['shippingFee']);
+                if (array_key_exists('shippping_fee', $validated)) {
+                    $validated['shipping_fee'] = $validated['shippping_fee'];
+                    unset($validated['shippping_fee']);
                 }
 
                 $validated['img'] = $this->insertItemsService->handleImageUpload($request);
@@ -81,9 +81,9 @@ class InsertItemsController extends Controller
             function() use ($request, $product) {
                 $validated = $request->validated();
                 // キー名をモデル/DBに合わせて変換
-                if (array_key_exists('shippingFee', $validated)) {
-                    $validated['shipping_fee'] = $validated['shippingFee'];
-                    unset($validated['shippingFee']);
+                if (array_key_exists('shippping_fee', $validated)) {
+                    $validated['shipping_fee'] = $validated['shippping_fee'];
+                    unset($validated['shippping_fee']);
                 }
             
                 $validated['img'] = $this->insertItemsService->handleImageUpload($request, $product);

@@ -22,8 +22,8 @@ class PayService
 
                 foreach ($cart as $c) {
                     $total += $c->qty * $c->price;
-                    if (isset($c->options->shippingFee)) {
-                        $total += $c->qty * $c->options->shippingFee;
+                    if ($c->options->shipping_fee>0) {
+                        $total += $c->qty * $c->options->shipping_fee;
                     }
                     if ($c->options->carriage) {
                         $hasCarriageCost = true;
@@ -59,8 +59,8 @@ class PayService
                         $hasCarriageCost = true;
                     }
                     $unitAmount = $product->price;
-                    if (isset($product->options->shippingFee)) {
-                        $unitAmount += $product->options->shippingFee;
+                    if (isset($product->options->shipping_fee)) {
+                        $unitAmount += $product->options->shipping_fee;
                     }
                     $line_items[] = [
                         'price_data' => [
@@ -85,6 +85,26 @@ class PayService
                         ],
                         'quantity' => 1,
                     ];
+                }
+
+                // $line_itemsの中身をログに出力
+                \Log::info('Stripe line_items contents:', [
+                    'line_items' => $line_items,
+                    'user_id' => $userId,
+                    'cart_count' => count($cart)
+                ]);
+
+                // 開発環境でのみHTMLコメントとして出力（本番環境では削除）
+                if (app()->environment('local', 'development')) {
+                    \Log::info('DEBUG - Line items HTML comment: <!-- ' . json_encode($line_items, JSON_PRETTY_PRINT) . ' -->');
+                    
+                    // セッションに一時保存（デバッグ用）
+                    session()->flash('debug_line_items', $line_items);
+                    session()->flash('debug_cart_summary', [
+                        'cart_count' => count($cart),
+                        'has_carriage_cost' => $hasCarriageCost,
+                        'carriage_amount' => env('CARRIAGE')
+                    ]);
                 }
 
                 Stripe::setApiKey(env('STRIPE_SECRET'));

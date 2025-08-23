@@ -45,8 +45,8 @@
                     <p class="order-date">購入日時：{{ $item->created_at->format('Y年m月d日 H:i') }}</p>
                     <p class="mb-1">数量：{{ $item->quantity }}</p>
                     <p class="fw-bold text-danger">合計金額：¥{{ number_format($item->product->price * $item->quantity) }}</p>
-                    @if($item->shippingFee > 0)
-                        <p class="text-muted small">送料：¥{{ number_format($item->shippingFee) }}</p>
+                    @if($item->shippping_fee > 0)
+                        <p class="text-muted small">送料：¥{{ number_format($item->shippping_fee) }}</p>
                     @endif
                     <div class="mt-2">
                         @if($item->statusItem === 'shipped')

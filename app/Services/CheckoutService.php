@@ -37,8 +37,8 @@ class CheckoutService
 
                 foreach ($cart as $c) {
                     $total += $c->qty * $c->price;
-                    if (isset($c->options->shippingFee)) {
-                        $total += $c->qty * $c->options->shippingFee;
+                    if ($c->options->shipping_fee>0) {
+                        $total += $c->qty * $c->options->shipping_fee;
                     }
                     if ($c->options->carriage) {
                         $hasCarriageCost = true;
@@ -74,8 +74,8 @@ class CheckoutService
                         $hasCarriageCost = true;
                     }
                     $unitAmount = $product->price;
-                    if (isset($product->options->shippingFee)) {
-                        $unitAmount += $product->options->shippingFee;
+                    if ($product->options->shipping_fee>0) {
+                        $unitAmount += $product->options->shipping_fee;
                     }
                     $line_items[] = [
                         'price_data' => [
@@ -101,7 +101,6 @@ class CheckoutService
                         'quantity' => 1,
                     ];
                 }
-
                 Stripe::setApiKey(config('services.stripe.secret'));
                 $checkout_session = Session::create([
                     'line_items' => $line_items,
@@ -149,8 +148,8 @@ class CheckoutService
                 $has_carriage_cost = false;
                 foreach ($cart as $c) {
                     $price_total += $c->qty * $c->price;
-                    if (isset($c->options->shippingFee)) {
-                        $price_total += $c->qty * $c->options->shippingFee;
+                    if (isset($c->options->shipping_fee)) {
+                        $price_total += $c->qty * $c->options->shipping_fee;
                     }
                     $qty_total += $c->qty;
                     if ($c->options->carriage) {
@@ -166,13 +165,13 @@ class CheckoutService
                         'product_id'   => $product->id,
                         'product_name' => $product->name,
                         'price'        => $product->price,
-                        'shipping_fee' => $product->options->shippingFee ?? 0,
+                        'shipping_fee' => $product->options->shipping_fee ?? 0,
                         'quantity'     => $product->qty,
                         'user_id'      => $userId,
                         'total_price'  => $price_total,
                         'statusItem'   => 'paid',
                         'productType'  => $product->options->productType,
-                        'selected_product_sets' => $product->options->selectedProductSets ?? [],
+                        'selected_product_sets' => $product->options->selected_product_sets ?? [],
                     ]);
                 }
 

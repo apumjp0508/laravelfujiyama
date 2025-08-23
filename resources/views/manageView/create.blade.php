@@ -48,8 +48,8 @@
                         <input type="number" id="price" name="price" class="form-control" placeholder="値段を入力">
                     </div>
                     <div class="mb-3">
-                        <label for="shippingFee" class="form-label"><strong>送料</strong></label>
-                        <input type="number" id="shippingFee" name="shippingFee" class="form-control" placeholder="送料を入力（無料の場合は0）" value="0" min="0">
+                        <label for="shippping_fee" class="form-label"><strong>送料</strong></label>
+                        <input type="number" id="shippping_fee" name="shippping_fee" class="form-control" placeholder="送料を入力（無料の場合は0）" value="0" min="0">
                     </div>
                     <div class="mb-3">
                         <label for="stock" class="form-label"><strong>在庫数</strong></label>

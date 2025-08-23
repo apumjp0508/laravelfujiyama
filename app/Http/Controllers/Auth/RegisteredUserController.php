@@ -8,6 +8,7 @@ use App\Services\UserAuthService;
 use App\Traits\ErrorHandlingTrait;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\View\View;
+use Illuminate\Support\Facades\Auth;
 
 class RegisteredUserController extends Controller
 {
@@ -44,6 +45,12 @@ class RegisteredUserController extends Controller
             function() use ($request) {
                 $validated = $request->validated();
                 $result = $this->userAuthService->register($validated);
+                
+                // 登録成功後、ユーザーをログイン状態にしてメール認証画面に遷移
+                if ($result['success']) {
+                    Auth::login($result['user']);
+                    return redirect()->route('verification.notice');
+                }
                 
                 return redirect($result['redirect']);
             },

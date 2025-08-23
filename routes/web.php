@@ -39,8 +39,9 @@ Route::get('/',function(){
 
 Route::middleware(['auth', 'admin'])->group(function () {
     Route::get('admin/register', [AdminRegisterController::class, 'create'])
-        ->name('admin/admin.register');
-    Route::post('register', [AdminRegisterController::class, 'store']);
+        ->name('admin.register');
+    Route::post('admin/register', [AdminRegisterController::class, 'store'])
+        ->name('admin.register.store');
     Route::get('/admin/dashboard', [AdminController::class, 'index'])->name('admin.dashboard');
 });
 

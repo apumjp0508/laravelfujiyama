@@ -32,7 +32,7 @@
                     <td class="text-truncate" style="max-width: 200px;">{{ $product->description }}</td>
                     <td>{{ $product->category }}</td>
                     <td>¥{{ number_format($product->price) }}</td>
-                    <td>¥{{ number_format($product->shippingFee ?? 0) }}</td>
+                    <td>¥{{ number_format($product->shipping_fee ?? 0) }}</td>
                     <td>{{ $product->stock }}</td>
                     <td>
                         <span class="badge {{ $product->productType === 'set' ? 'bg-info' : 'bg-secondary' }}">

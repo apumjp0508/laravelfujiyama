@@ -222,10 +222,10 @@
                 </div>
 
                 <div class="d-flex flex-column align-items-end">
-                    <p class="product-price">単価: ¥{{ number_format($product->price) }}</p>
-                    <p class="product-price">小計: ¥{{ number_format($product->qty * $product->price) }}</p>
-                    @if($product->options->shippingFee > 0)
-                        <p class="product-type">送料: ¥{{ number_format($product->options->shippingFee) }}</p>
+                    <p class="product-price">単価: ¥{{ number_format($product->price + ($product->options->shipping_fee ?? 0)) }}</p>
+                    <p class="product-price">小計: ¥{{ number_format($product->qty * ($product->price + ($product->options->shipping_fee ?? 0))) }}</p>
+                    @if(($product->options->shipping_fee ?? 0) > 0)
+                        <p class="product-type">送料: ¥{{ number_format($product->options->shipping_fee) }}</p>
                     @endif
                 </div>
 

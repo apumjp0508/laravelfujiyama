@@ -46,6 +46,7 @@ class UserAuthService
 
                 event(new Registered($user));
 
+                // ユーザーをログイン状態にする
                 Auth::login($user);
 
                 return [

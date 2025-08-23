@@ -112,7 +112,7 @@
                 <img src="{{ asset($product->img) }}" class="card-img-top product-img" alt="{{ $product->name }}">
                 <div class="card-body d-flex flex-column">
                     <h5 class="card-title product-title fw-semibold">{{ $product->name }}</h5>              
-                    <p class="fw-bold fs-5 product-price mt-auto">¥{{ number_format($product->price) }}</p>
+                    <p class="fw-bold fs-5 product-price mt-auto">¥{{ number_format($product->price + $product->shipping_fee) }}</p>
                 </div>
                 <div class="card-footer bg-white border-0 text-center">
                     @if($product->productType === 'set')

@@ -63,7 +63,7 @@ class SimpleCartServiceTest extends TestCase
                     'setNum' => 1,
                     'productType' => 'single',
                     'selectedProductSets' => [],
-                    'shippingFee' => 500,
+                    'shipping_fee' => 500,
                 ]
             ])
             ->andReturn(true);
@@ -98,7 +98,14 @@ class SimpleCartServiceTest extends TestCase
             ->andReturnSelf();
 
         Cart::shouldReceive('content')
-            ->andReturn(\Illuminate\Support\Collection::make([$cartItem]));
+            ->andReturn(\Illuminate\Support\Collection::make([
+                (object)[
+                    'id' => 1,
+                    'qty' => 2,
+                    'price' => 1000,
+                    'options' => (object)['shipping_fee' => 500]
+                ]
+            ]));
 
         Cart::shouldReceive('remove')
             ->with('test-row-id')

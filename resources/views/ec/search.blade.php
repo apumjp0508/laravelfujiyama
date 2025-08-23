@@ -98,7 +98,7 @@
                         <p class="card-text product-desc text-truncate" title="{{ $product->description }}">
                             {{ $product->description }}
                         </p>
-                        <p class="fw-bold fs-5 product-price mt-auto">¥{{ number_format($product->price) }}</p>
+                        <p class="fw-bold fs-5 product-price mt-auto">¥{{ number_format($product->price + $product->shipping_fee) }}</p>
                     </div>
                     <div class="card-footer bg-white border-0 text-center">
                         <a href="{{ route('mart.show', $product->id) }}" class="btn w-100 product-check-btn">CHECK!!!</a>

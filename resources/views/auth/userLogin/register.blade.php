@@ -7,7 +7,7 @@
 
             <h2 class="mb-4 text-center register-title">新規会員登録</h2>
 
-            <form method="POST" action="{{ route('register') }}">
+            <form method="POST" action="{{ route('register.store') }}">
                 @csrf
 
                 {{-- 名前 --}}

@@ -26,8 +26,8 @@ class CartService
                 $total = 0;
                 foreach ($cart as $c) {
                     $total += $c->qty * $c->price;
-                    if (isset($c->options->shippingFee)) {
-                        $total += $c->qty * $c->options->shippingFee;
+                    if ($c->options->shipping_fee>0) {
+                        $total += $c->qty * $c->options->shipping_fee;
                     }
                 }
                 $products = $this->productRepository->all();
@@ -62,7 +62,7 @@ class CartService
                         'setNum' => $itemData['setNum'] ?? null,
                         'productType' => $itemData['productType'] ?? null,
                         'selectedProductSets' => $itemData['selectedProductSets'] ?? null,
-                        'shippingFee' => $itemData['shipping_fee'] ?? 0,
+                        'shipping_fee' => $itemData['shipping_fee'] ?? 0,
                     ]
                 ]);
                 return [
@@ -95,8 +95,8 @@ class CartService
                 $productTotal = $product ? $product->price * $qty : 0;
                 $cartTotal = Cart::instance($userId)->content()->sum(function ($cartItem) {
                     $itemTotal = $cartItem->qty > 0 ? $cartItem->price * $cartItem->qty : 0;
-                    if (isset($cartItem->options->shippingFee)) {
-                        $itemTotal += $cartItem->qty * $cartItem->options->shippingFee;
+                    if (isset($cartItem->options->shipping_fee)) {
+                        $itemTotal += $cartItem->qty * $cartItem->options->shipping_fee;
                     }
                     return $itemTotal;
                 });

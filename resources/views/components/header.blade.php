@@ -6,6 +6,11 @@
             <button class="btn" type="submit"><i class="fa fa-search"></i></button>
         </form>
 
+        {{-- ハンバーガーボタン（SP表示用） --}}
+        <button class="navbar-toggler ms-auto" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <i class="fas fa-bars"></i>
+        </button>
+
         {{-- メニュー項目 --}}
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
             <ul class="navbar-nav ms-auto align-items-center">
@@ -51,7 +56,7 @@
                         <a class="nav-link position-relative" href="{{ route('carts.index') }}">
                             <i class="fas fa-shopping-cart"></i>
                             {{-- ここにバッジを表示したい場合は↓ --}}
-                            {{-- <span class="badge bg-danger position-absolute top-0 start-100 translate-middle">3</span> --}}
+                            {{-- <span class="badge bg-danger position-0 start-100 translate-middle">3</span> --}}
                         </a>
                     </li>
                     <li class="nav-item me-3">

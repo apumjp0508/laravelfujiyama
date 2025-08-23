@@ -45,7 +45,7 @@ class SimpleCheckoutServiceTest extends TestCase
                 'qty' => 2,
                 'price' => 1000,
                 'options' => (object)[
-                    'shippingFee' => 500,
+                    'shipping_fee' => 500,
                     'carriage' => false
                 ]
             ]
@@ -78,7 +78,7 @@ class SimpleCheckoutServiceTest extends TestCase
                 'qty' => 1,
                 'price' => 1000,
                 'options' => (object)[
-                    'shippingFee' => 500,
+                    'shipping_fee' => 500,
                     'carriage' => true
                 ]
             ]
@@ -134,7 +134,7 @@ class SimpleCheckoutServiceTest extends TestCase
                 'qty' => 1,
                 'price' => 1000,
                 'options' => (object)[
-                    'shippingFee' => 500,
+                    'shipping_fee' => 500,
                     'carriage' => false
                 ]
             ]

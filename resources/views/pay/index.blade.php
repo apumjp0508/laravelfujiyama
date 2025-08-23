@@ -49,9 +49,9 @@
                                                    数量：{{ number_format($product->qty) }}
                                                </div>
                                                <div class="col-xxl-9">
-                                                   合計：￥{{ number_format($product->qty * $product->price) }}
-                                                   @if($product->options->shippingFee > 0)
-                                                       <br><small class="text-muted">送料：￥{{ number_format($product->options->shippingFee) }}</small>
+                                                   合計：￥{{ number_format($product->qty * ($product->price + ($product->options->shipping_fee ?? 0))) }}
+                                                   @if($product->options->shippping_fee > 0)
+                                                       <br><small class="text-muted">送料：￥{{ number_format($product->options->shippping_fee) }}</small>
                                                    @endif
                                                </div>
                                            </div>
@@ -84,14 +84,6 @@
                            </div>
                        </div>
 
-                       <div class="row mb-3">
-                           <div class="col-md-5">
-                               送料
-                           </div>
-                           <div class="col-md-7">
-                               ￥{{ number_format($carriage_cost) }}
-                           </div>
-                       </div>
 
                        <div class="row">
                            <div class="col-5">

@@ -7,19 +7,30 @@ trait ErrorHandlingTrait
     /**
      * Service層でのエラーハンドリング
      */
-    protected function handleServiceError(\Exception $e, string $operation, array $context = [])
+    protected function handleServiceError(\Throwable $e, string $operation, array $context = []): never
     {
         $logData = array_merge([
-            'error' => $e->getMessage(),
-            'operation' => $operation,
-            'method' => __METHOD__,
-            'line' => __LINE__
+            'operation'      => $operation,
+            'exception'      => get_class($e),
+            'message'        => $e->getMessage(),
+            'code'           => $e->getCode(),
+            'file'           => $e->getFile(),
+            'line'           => $e->getLine(),
+            // トレースは長くなりがちなので先頭だけ
+            'trace_top'      => collect($e->getTrace())->take(10)->toArray(),
         ], $context);
 
-        \Log::error('[500] ' . $operation . ' failed - Service Error', $logData);
-        
-        throw new \Exception($this->getUserFriendlyMessage($operation), 500);
+        \Log::error('[500] '.$operation.' failed - Service Error', $logData);
+
+        // 開発/テスト時は原因を握りつぶさず、そのまま再スローして PHPUnit に出す
+        if (app()->environment(['local', 'testing']) || config('app.debug')) {
+            throw $e;
+        }
+
+        // 本番はユーザー向け文言でラップしつつ previous を保持
+        throw new \Exception($this->getUserFriendlyMessage($operation), 500, $e);
     }
+
 
     /**
      * Controller層でのエラーハンドリング
@@ -307,7 +318,6 @@ trait ErrorHandlingTrait
                 'method' => __METHOD__,
                 'line' => __LINE__
             ], $context);
-            dd($e->getTraceAsString());
 
             \Log::error('[500] ' . $operationName . ' failed - Controller Error', $logData);
             

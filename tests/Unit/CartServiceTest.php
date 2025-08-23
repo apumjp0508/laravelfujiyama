@@ -69,7 +69,7 @@ class CartServiceTest extends TestCase
                     'id' => 1,
                     'qty' => 2,
                     'price' => 1000,
-                    'options' => (object)['shippingFee' => 500]
+                    'options' => (object)['shipping_fee' => 500]
                 ]
             ]));
 
@@ -120,7 +120,7 @@ class CartServiceTest extends TestCase
                     'setNum' => 1,
                     'productType' => 'single',
                     'selectedProductSets' => [],
-                    'shippingFee' => 500,
+                    'shipping_fee' => 500,
                 ]
             ])
             ->andReturn(true);
@@ -160,7 +160,7 @@ class CartServiceTest extends TestCase
             'id' => $productId,
             'qty' => 2,
             'price' => 1000,
-            'options' => (object)['shippingFee' => 500]
+            'options' => (object)['shipping_fee' => 500]
         ];
 
         Cart::shouldReceive('instance')
@@ -283,7 +283,7 @@ class CartServiceTest extends TestCase
                     'setNum' => 3,
                     'productType' => 'set',
                     'selectedProductSets' => [1, 2, 3],
-                    'shippingFee' => 800,
+                    'shipping_fee' => 800,
                 ]
             ])
             ->andReturn(true);
@@ -335,7 +335,7 @@ class CartServiceTest extends TestCase
                     'qty' => 1,
                     'price' => 2000,
                     'options' => (object)[
-                        'shippingFee' => 800,
+                        'shipping_fee' => 800,
                         'productType' => 'set',
                         'selectedProductSets' => [1, 2, 3],
                         'setNum' => 3
@@ -395,7 +395,7 @@ class CartServiceTest extends TestCase
                     'qty' => 1,
                     'price' => 2000,
                     'options' => (object)[
-                        'shippingFee' => 800,
+                        'shipping_fee' => 800,
                         'productType' => 'set'
                     ]
                 ],
@@ -404,7 +404,7 @@ class CartServiceTest extends TestCase
                     'qty' => 2,
                     'price' => 1000,
                     'options' => (object)[
-                        'shippingFee' => 500,  
+                        'shipping_fee' => 500,  
                         'productType' => 'single'
                     ]
                 ]
@@ -451,7 +451,7 @@ class CartServiceTest extends TestCase
                     'setNum' => 0,
                     'productType' => 'set',
                     'selectedProductSets' => [],
-                    'shippingFee' => 800,
+                    'shipping_fee' => 800,
                 ]
             ])
             ->andReturn(true);

@@ -277,8 +277,8 @@
                     <div class="card-body text-center">
                         <h3 class="card-title product-title">{{ $product->name }}</h3>
                         <p class="card-text product-description">{{ $product->description }}</p>
-                        <p class="fw-bold product-price fs-4">¥{{ number_format($product->price) }}</p>
-                            <p class="shipping-fee">送料：¥{{ number_format($product->shippingFee) }}</p>
+                        <p class="fw-bold product-price fs-4">¥{{ number_format($product->price+$product->shipping_fee) }}</p>
+                            <p class="shipping-fee">内送料：¥{{ number_format($product->shipping_fee) }}</p>
 
                         <div class="d-grid gap-2 mt-4">
                             @auth
@@ -288,7 +288,7 @@
                                 <input type="hidden" name="img" value="{{ $product->img }}">
                                 <input type="hidden" name="name" value="{{ $product->name }}">
                                 <input type="hidden" name="price" value="{{ $product->price }}">
-                                <input type="hidden" name="shipping_fee" value="{{ $product->shippingFee ?? 0 }}">
+                                <input type="hidden" name="shipping_fee" value="{{ $product->shipping_fee ?? 0 }}">
                                 <input type="hidden" name="stock" value="{{ $product->stock }}">
                                 <input type="hidden" name="setNum" value="{{ $product->setNum }}">
                                 <input type="hidden" name="productType" value="{{ $product->productType }}">
@@ -365,7 +365,7 @@
         <div class="row mt-5">
             <div class="col-12">
                 <hr>
-                <h3 class="text-center review-title">WRITE REVIEW!!!!</h3>
+                <h3 class="text-center review-title">REVIEW!!!!</h3>
             </div>
 
             @foreach($reviews as $review)
