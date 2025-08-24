@@ -12,3 +12,34 @@
 また、このECサイトはプログラミングスクール侍のlaravelでAmazon風アプリを作ろうを参考にしています。<br/>
 友人の方から、缶バッチをセット形式で販売したいため、数ある缶バッチの中から、4つ選んで購入できるようにしてほしいとの要望があり、それを実装しました。
 # ECサイト　画面構成
+
+
+
+
+# CoolMart Staging – Phase 1 Decision Sheet
+
+[DB]
+- Engine: Aurora MySQL v3 (MySQL 8.0)
+- Capacity: 0.5 ~ 1.0 ACU
+- Charset/Collation: utf8mb4 / utf8mb4_0900_ai_ci
+- SQL_MODE: default (ONLY_FULL_GROUP_BY kept)
+- Timezone: Asia/Tokyo (App=UTC)
+
+[VPC]
+- NAT: none (use VPC endpoints for ssm/kms)
+- Subnets: PrivateA / PrivateC
+- SG: sg-cm-stg-aurora (in 3306 from sg-cm-stg-lambda), sg-cm-stg-lambda (egress allow)
+
+[Naming]
+- Cluster: aurora-cm-stg
+- DB name: coolmart_stg
+- Admin: cmart_admin
+
+[Secrets via SSM]
+- /coolmart/staging/DB_PASSWORD
+- /coolmart/staging/MAILTRAP_USER
+- /coolmart/staging/MAILTRAP_PASS
+
+[Domains]
+- Front: https://staging.example.com
+- API:   https://api-staging.example.com

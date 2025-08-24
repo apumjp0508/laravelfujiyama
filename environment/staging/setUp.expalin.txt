@@ -1,0 +1,20 @@
+# 初回セットアップ＆起動（.env.staging が無ければ自動生成）
+./environment/staging/setUp.staging.sh
+
+# 画像や依存を変更して再ビルドしたいとき
+./environment/staging/setUp.staging.sh --rebuild
+
+# DBを初期化＆シードしてやり直し
+./environment/staging/setUp.staging.sh --fresh
+
+# シードは実行したくない
+./environment/staging/setUp.staging.sh --fresh --no-seed
+
+# 停止のみ
+./environment/staging/setUp.staging.sh --down
+
+# 停止 + ボリューム削除（DBデータ消えるので注意）
+./environment/staging/setUp.staging.sh --purge
+
+# 起動直後にログフォロー
+./environment/staging/setUp.staging.sh --logs
